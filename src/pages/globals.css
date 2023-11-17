@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+	--m-white: #fff;
+	--m-black: #000;
+	--m-bg: #121826;
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--m-bg: #121826;
+	}
+}
+
+body {
+	color: rgb(var(--white));
+}
