@@ -10,8 +10,9 @@ import {
 	Bars3BottomLeftIcon,
 	Bars3BottomRightIcon,
 } from '@heroicons/react/20/solid'
+import { Menu } from '@/type/menu.type'
 
-const menuList = [
+const defaultMenuList: Menu = [
 	{
 		title: '小张的主页',
 		path: '/',
@@ -22,7 +23,6 @@ const menuList = [
 			{
 				title: 'essay1',
 				path: '/essays/1',
-				icon: '',
 			},
 			{
 				title: 'essay2',
@@ -32,17 +32,6 @@ const menuList = [
 	},
 	{
 		title: '小张的技术文章',
-		children: [
-			{
-				id: 2,
-				title: 'Post1',
-				path: '/posts/1',
-			},
-			{
-				title: 'Post2',
-				path: '/posts/2',
-			},
-		],
 	},
 ]
 
@@ -50,6 +39,8 @@ function MinimalismMenu() {
 	const router = useRouter()
 
 	const [menuShow, setMenuShow] = useState<boolean | undefined>(true)
+
+	const [menuList, setMenuList] = useState<Menu>([])
 
 	useEffect(() => {
 		judgeDeviceSize()
@@ -64,6 +55,22 @@ function MinimalismMenu() {
 		const res = await fetch(`api/article/blogHomeGetArticleList/1/999`)
 
 		const data = await res.json()
+		const { code, result } = data
+		if (code == 0) {
+			let list =
+				result.list &&
+				result.list.map((v: any) => {
+					return {
+						id: v.id,
+						title: v.article_title,
+						path: '/posts/' + v.id,
+					}
+				})
+			defaultMenuList[2].children = list
+			console.log(defaultMenuList)
+
+			setMenuList(defaultMenuList)
+		}
 	}
 
 	const judgeDeviceSize = () => {
@@ -78,6 +85,7 @@ function MinimalismMenu() {
 	const debounceJudgeDeviceSize = debounce(judgeDeviceSize, 50)
 
 	const goTo = (path: string) => {
+		if (!path) return
 		router.push(path)
 	}
 
@@ -152,7 +160,8 @@ function MinimalismMenu() {
 															<div
 																onClick={() =>
 																	goTo(
-																		child.path,
+																		child.path ||
+																			'',
 																	)
 																}
 																className="mr-8 px-3 text-right sm:text-left text-violet-100 hover:text-violet-300 cursor-pointer"

@@ -2,6 +2,12 @@ import Image from 'next/image'
 import { Fragment } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 
+import bilibili from '@/assets/icons/bilibili.svg'
+import tengxunQQ from '@/assets/icons/tengxunQQ.svg'
+import twitter from '@/assets/icons/twitter.svg'
+import wangyiyunyinle from '@/assets/icons/wangyiyunyinle.svg'
+import weixin from '@/assets/icons/weixin.svg'
+
 export default function Footer() {
 	const goTo = (type: string) => {
 		let url: string = ''
@@ -62,8 +68,8 @@ export default function Footer() {
 					<div className="flex flex-wrap items-center py-1 cursor-pointer">
 						<Image
 							className="bg-slate-300 rounded-lg m-1 p-1 duration-300 hover:bg-white"
-							alt="main"
-							src="icons/wangyiyunyinle.svg"
+							alt="Bilibili"
+							src={bilibili}
 							width={30}
 							height={30}
 							style={{ objectFit: 'cover' }}
@@ -71,8 +77,8 @@ export default function Footer() {
 						/>
 						<Image
 							className="bg-slate-300 rounded-lg m-1 p-1 duration-300 hover:bg-white"
-							alt="main"
-							src="icons/bilibili.svg"
+							alt="NetEase Cloud"
+							src={wangyiyunyinle}
 							width={30}
 							height={30}
 							style={{ objectFit: 'cover' }}
@@ -80,8 +86,8 @@ export default function Footer() {
 						/>
 						<Image
 							className="bg-slate-300 rounded-lg m-1 p-1 duration-300 hover:bg-white"
-							alt="main"
-							src="icons/tengxunQQ.svg"
+							alt="QQ"
+							src={tengxunQQ}
 							width={30}
 							height={30}
 							style={{ objectFit: 'cover' }}
@@ -91,8 +97,8 @@ export default function Footer() {
 							<Popover.Button>
 								<Image
 									className="bg-slate-300 rounded-lg m-1 p-1 duration-300 hover:bg-white"
-									alt="main"
-									src="icons/weixin.svg"
+									alt="WeChat"
+									src={weixin}
 									width={30}
 									height={30}
 									style={{ objectFit: 'cover' }}
@@ -116,8 +122,8 @@ export default function Footer() {
 						</Popover>
 						<Image
 							className="bg-slate-300 rounded-lg m-1 p-1 duration-300 hover:bg-white"
-							alt="main"
-							src="icons/twitter.svg"
+							alt="Twitter"
+							src={twitter}
 							width={30}
 							height={30}
 							style={{ objectFit: 'cover' }}

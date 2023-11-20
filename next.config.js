@@ -6,6 +6,10 @@ const nextConfig = {
 				source: '/api/:path*',
 				destination: 'http://mrzym.top:8888/:path*',
 			},
+			{
+				source: '/posts/api/:path*',
+				destination: 'http://mrzym.top:8888/:path*',
+			},
 		]
 	},
 }
