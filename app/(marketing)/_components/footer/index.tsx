@@ -2,11 +2,11 @@ import Image from 'next/image'
 import { Fragment } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 
-import bilibili from '@/assets/icons/bilibili.svg'
-import tengxunQQ from '@/assets/icons/tengxunQQ.svg'
-import twitter from '@/assets/icons/twitter.svg'
-import wangyiyunyinle from '@/assets/icons/wangyiyunyinle.svg'
-import weixin from '@/assets/icons/weixin.svg'
+import bilibili from '/assets/icons/bilibili.svg'
+import tengxunQQ from '/assets/icons/tengxunQQ.svg'
+import twitter from '/assets/icons/twitter.svg'
+import wangyiyunyinle from '/assets/icons/wangyiyunyinle.svg'
+import weixin from '/assets/icons/weixin.svg'
 
 export default function Footer() {
 	const goTo = (type: string) => {

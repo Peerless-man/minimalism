@@ -1,16 +1,16 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 import { Disclosure, Transition } from '@headlessui/react'
-import { useRouter } from 'next/router'
+import Link from 'next/link'
 
-import { debounce } from '@/utils/tool'
+import { debounce } from '../../../../utils/tool'
 
 import {
 	ChevronDownIcon,
 	Bars3BottomLeftIcon,
 	Bars3BottomRightIcon,
 } from '@heroicons/react/20/solid'
-import { Menu } from '@/type/menu.type'
+import { Menu } from '../../../../type/menu.type'
 
 const defaultMenuList: Menu = [
 	{
@@ -36,8 +36,6 @@ const defaultMenuList: Menu = [
 ]
 
 function MinimalismMenu() {
-	const router = useRouter()
-
 	const [menuShow, setMenuShow] = useState<boolean | undefined>(true)
 
 	const [menuList, setMenuList] = useState<Menu>([])
@@ -63,11 +61,10 @@ function MinimalismMenu() {
 					return {
 						id: v.id,
 						title: v.article_title,
-						path: '/posts/' + v.id,
+						path: '/posts?id=' + v.id,
 					}
 				})
 			defaultMenuList[2].children = list
-			console.log(defaultMenuList)
 
 			setMenuList(defaultMenuList)
 		}
@@ -83,11 +80,6 @@ function MinimalismMenu() {
 	}
 
 	const debounceJudgeDeviceSize = debounce(judgeDeviceSize, 50)
-
-	const goTo = (path: string) => {
-		if (!path) return
-		router.push(path)
-	}
 
 	return (
 		<div className="p-3">
@@ -115,12 +107,12 @@ function MinimalismMenu() {
 				leaveTo="transform scale-95 opacity-0"
 			>
 				<div className="mt-1 flex flex-col justify-items-start items-end  sm:items-start  sm:ring-violet-300 sm:ring-2 sm:rounded-lg md:ring-0">
-					<button
-						onClick={() => goTo('/')}
-						className="text-lg p-3 text-violet-300"
-					>
-						总有些惊奇的际遇
-					</button>
+					<Link href="/">
+						<button className="text-lg p-3 text-violet-300">
+							总有些惊奇的际遇
+						</button>
+					</Link>
+
 					{menuList &&
 						menuList.length &&
 						menuList.map(menu => {
@@ -128,10 +120,7 @@ function MinimalismMenu() {
 								<div key={menu.title}>
 									<Disclosure>
 										<Disclosure.Button>
-											<div
-												onClick={() => goTo('/')}
-												className="flex items-center p-3 text-violet-100 hover:text-violet-300"
-											>
+											<div className="flex items-center p-3 text-violet-100 hover:text-violet-300">
 												{menu.title}
 												{menu.children &&
 												menu.children.length ? (
@@ -157,15 +146,13 @@ function MinimalismMenu() {
 													menu.children.length &&
 													menu.children.map(child => (
 														<div key={child.title}>
-															<div
-																onClick={() =>
-																	goTo(
-																		child.path ||
-																			'',
-																	)
+															<Link
+																href={
+																	child.path ||
+																	'/'
 																}
-																className="mr-8 px-3 text-right sm:text-left text-violet-100 hover:text-violet-300 cursor-pointer"
-															>
+															></Link>
+															<div className="mr-8 px-3 text-right sm:text-left text-violet-100 hover:text-violet-300 cursor-pointer">
 																{child.title}
 															</div>
 														</div>

@@ -14,6 +14,10 @@
 	}
 }
 
-body {
+html,
+body,
+:root {
+	height: 100%;
 	color: rgb(var(--white));
+	background-color: #0f172a;
 }

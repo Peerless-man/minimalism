@@ -1,16 +1,18 @@
+'use client'
+
 import { useEffect, useState } from 'react'
 
-function Post() {
-	const [post, setPost] = useState<any>(null)
+function Post({ params }: { params: { id: string | number } }) {
+	const [post, setPost] = useState<any>({ id: '' })
 
 	useEffect(() => {
-		setPost({ id: 1 })
+		setPost({ id: params.id })
 	}, [])
 
 	return (
 		<>
 			{post.id}
-			<span className="text-white">你好</span>
+			<span className="text-white">essay</span>
 		</>
 	)
 }

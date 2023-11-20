@@ -1,3 +1,6 @@
+import { type ClassValue, clsx } from 'clsx'
+import { twMerge } from 'tailwind-merge'
+
 export const debounce = (fn: Function, delay: number) => {
 	let timer: any = null
 
@@ -7,4 +10,8 @@ export const debounce = (fn: Function, delay: number) => {
 			fn()
 		}, delay)
 	}
+}
+
+export function cn(...inputs: ClassValue[]) {
+	return twMerge(clsx(inputs))
 }

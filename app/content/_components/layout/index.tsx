@@ -1,6 +1,5 @@
 import classes from './index.module.scss'
 
-import Footer from '../footer'
 import MinimalismMenu from '../menu'
 
 function Layout({ children }: any) {
@@ -15,9 +14,6 @@ function Layout({ children }: any) {
 						{children}
 					</div>
 				</div>
-			</div>
-			<div className={classes.footer}>
-				<Footer />
 			</div>
 		</div>
 	)
