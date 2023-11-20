@@ -1,9 +1,14 @@
 import React from 'react'
+import Layout from './_components/layout'
 
 export default function ContentLayout({
 	children,
 }: {
 	children: React.ReactNode
 }) {
-	return <div>{children}</div>
+	return (
+		<>
+			<Layout>{children}</Layout>
+		</>
+	)
 }

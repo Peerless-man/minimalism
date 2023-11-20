@@ -1,6 +1,7 @@
 'use client'
 import React from 'react'
 
+import Header from './_components/header'
 import Footer from './_components/footer/index'
 
 export default function MarketingLayout({
@@ -10,6 +11,7 @@ export default function MarketingLayout({
 }) {
 	return (
 		<div className="mx-auto h-full  max-w-[1080px]">
+			<Header />
 			<div className="w-full h-full text-white px-4 py-2">{children}</div>
 			<Footer />
 		</div>

@@ -61,7 +61,7 @@ function MinimalismMenu() {
 					return {
 						id: v.id,
 						title: v.article_title,
-						path: '/posts?id=' + v.id,
+						path: '/content/posts/' + v.id,
 					}
 				})
 			defaultMenuList[2].children = list
@@ -107,7 +107,7 @@ function MinimalismMenu() {
 				leaveTo="transform scale-95 opacity-0"
 			>
 				<div className="mt-1 flex flex-col justify-items-start items-end  sm:items-start  sm:ring-violet-300 sm:ring-2 sm:rounded-lg md:ring-0">
-					<Link href="/">
+					<Link href="/content">
 						<button className="text-lg p-3 text-violet-300">
 							总有些惊奇的际遇
 						</button>
@@ -151,10 +151,13 @@ function MinimalismMenu() {
 																	child.path ||
 																	'/'
 																}
-															></Link>
-															<div className="mr-8 px-3 text-right sm:text-left text-violet-100 hover:text-violet-300 cursor-pointer">
-																{child.title}
-															</div>
+															>
+																<div className="mr-8 px-3 text-right sm:text-left text-violet-100 hover:text-violet-300 cursor-pointer">
+																	{
+																		child.title
+																	}
+																</div>
+															</Link>
 														</div>
 													))}
 											</Disclosure.Panel>
