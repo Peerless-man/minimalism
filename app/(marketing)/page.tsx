@@ -6,10 +6,7 @@ import { useEffect, useState } from 'react'
 import { debounce } from '../../utils/tool'
 import localFont from 'next/font/local'
 
-import {
-	ChevronDoubleDownIcon,
-	ChevronDoubleUpIcon,
-} from '@heroicons/react/20/solid'
+import { PaperAirplaneIcon } from '@heroicons/react/20/solid'
 
 const headingFont = localFont({
 	src: '../../public/fonts/font.woff2',
@@ -88,17 +85,12 @@ export default function MarketingPage() {
 				)}
 			>
 				Contact Me
-				{isScrollBottom ? (
-					<ChevronDoubleDownIcon
-						className="mt-2 h-12 w-12 text-violet-100 hover:text-violet-300"
-						aria-hidden="true"
-					/>
-				) : (
-					<ChevronDoubleUpIcon
-						className="mt-2 h-12 w-12 text-violet-100 hover:text-violet-300"
-						aria-hidden="true"
-					/>
-				)}
+				<PaperAirplaneIcon
+					className={`mt-2 h-12 w-12 text-violet-100 hover:text-violet-300 ${
+						isScrollBottom ? '-rotate-90' : 'rotate-90'
+					}`}
+					aria-hidden="true"
+				/>
 			</button>
 		</div>
 	)

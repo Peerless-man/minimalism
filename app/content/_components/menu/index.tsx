@@ -3,20 +3,10 @@ import React, { useEffect, useState } from 'react'
 import { Disclosure, Transition } from '@headlessui/react'
 import Link from 'next/link'
 
-import { debounce } from '../../../../utils/tool'
-
-import {
-	ChevronDownIcon,
-	Bars3BottomLeftIcon,
-	Bars3BottomRightIcon,
-} from '@heroicons/react/20/solid'
+import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { Menu } from '../../../../type/menu.type'
 
 const defaultMenuList: Menu = [
-	{
-		title: '小张的主页',
-		path: '/',
-	},
 	{
 		title: '小张的随笔',
 		children: [
@@ -28,6 +18,14 @@ const defaultMenuList: Menu = [
 				title: 'essay2',
 				path: '/essays/2',
 			},
+			{
+				title: 'essay3',
+				path: '/essays/3',
+			},
+			{
+				title: 'essay4',
+				path: '/essays/4',
+			},
 		],
 	},
 	{
@@ -35,18 +33,93 @@ const defaultMenuList: Menu = [
 	},
 ]
 
-function MinimalismMenu() {
-	const [menuShow, setMenuShow] = useState<boolean | undefined>(true)
+function renderMenu({
+	menuList,
+	menuShow,
+}: {
+	menuList: Menu
+	menuShow: boolean | undefined
+}) {
+	if (!menuList.length) {
+		return <>Loading...</>
+	}
 
+	return (
+		<Transition
+			className="p-1 bg-slate-800  sm:ring-violet-300 sm:ring-2 sm:rounded-lg md:ring-0"
+			show={menuShow}
+			enter="transition duration-100 ease-out"
+			enterFrom="transform scale-95 opacity-0"
+			enterTo="transform scale-100 opacity-100"
+			leave="transition duration-75 ease-out"
+			leaveFrom="transform scale-100 opacity-100"
+			leaveTo="transform scale-95 opacity-0"
+		>
+			<Link href="/content">
+				<button className="text-2xl p-3 text-violet-300">M</button>
+			</Link>
+			{menuList &&
+				menuList.length &&
+				menuList.map(menu => {
+					return (
+						<div key={menu.title}>
+							<Disclosure>
+								<Disclosure.Button>
+									<div className="flex items-center text-lg p-3 text-violet-100 hover:text-violet-300">
+										{menu.title}
+										{menu.children &&
+										menu.children.length ? (
+											<ChevronDownIcon
+												className="ml-2 h-6 w-6 text-violet-100 hover:text-violet-300 duration-300 ui-open:rotate-180 ui-open:transform"
+												aria-hidden="true"
+											/>
+										) : (
+											<div className="w-8"></div>
+										)}
+									</div>
+								</Disclosure.Button>
+								<Transition
+									enter="transition duration-100 ease-out"
+									enterFrom="transform scale-95 opacity-0"
+									enterTo="transform scale-100 opacity-100"
+									leave="transition duration-75 ease-out"
+									leaveFrom="transform scale-100 opacity-100"
+									leaveTo="transform scale-95 opacity-0"
+								>
+									<Disclosure.Panel>
+										{menu.children &&
+											menu.children.length &&
+											menu.children.map(child => (
+												<div key={child.title}>
+													<Link
+														href={child.path || '/'}
+													>
+														<div className="px-3 py-1 text-right sm:text-left text-violet-100 hover:text-violet-300 cursor-pointer">
+															{child.title}
+														</div>
+													</Link>
+												</div>
+											))}
+									</Disclosure.Panel>
+								</Transition>
+							</Disclosure>
+						</div>
+					)
+				})}
+		</Transition>
+	)
+}
+
+function MinimalismMenu({
+	menuShow,
+}: {
+	menuShow: boolean
+	setMenuShow: Function | null
+}) {
 	const [menuList, setMenuList] = useState<Menu>([])
 
 	useEffect(() => {
-		judgeDeviceSize()
-		window.addEventListener('resize', debounceJudgeDeviceSize)
 		initMenu()
-		return () => {
-			window.removeEventListener('resize', debounceJudgeDeviceSize)
-		}
 	}, [])
 
 	const initMenu = async () => {
@@ -64,112 +137,13 @@ function MinimalismMenu() {
 						path: '/content/posts/' + v.id,
 					}
 				})
-			defaultMenuList[2].children = list
+			defaultMenuList[1].children = list
 
 			setMenuList(defaultMenuList)
 		}
 	}
 
-	const judgeDeviceSize = () => {
-		const body = document.body.offsetWidth
-		if (body <= 768) {
-			setMenuShow(false)
-		} else {
-			setMenuShow(true)
-		}
-	}
-
-	const debounceJudgeDeviceSize = debounce(judgeDeviceSize, 50)
-
-	return (
-		<div className="p-3">
-			{menuShow ? (
-				<Bars3BottomRightIcon
-					className="md:hidden h-6 w-6 text-violet-100 hover:text-violet-300 duration-300 ui-open:rotate-180 ui-open:transform"
-					aria-hidden="true"
-					onClick={() => setMenuShow(false)}
-				/>
-			) : (
-				<Bars3BottomLeftIcon
-					className="md:hidden h-6 w-6  text-violet-100 hover:text-violet-300 duration-300 ui-open:rotate-180 ui-open:transform"
-					aria-hidden="true"
-					onClick={() => setMenuShow(true)}
-				/>
-			)}
-
-			<Transition
-				show={menuShow}
-				enter="transition duration-100 ease-out"
-				enterFrom="transform scale-95 opacity-0"
-				enterTo="transform scale-100 opacity-100"
-				leave="transition duration-75 ease-out"
-				leaveFrom="transform scale-100 opacity-100"
-				leaveTo="transform scale-95 opacity-0"
-			>
-				<div className="mt-1 flex flex-col justify-items-start items-end  sm:items-start  sm:ring-violet-300 sm:ring-2 sm:rounded-lg md:ring-0">
-					<Link href="/content">
-						<button className="text-lg p-3 text-violet-300">
-							总有些惊奇的际遇
-						</button>
-					</Link>
-
-					{menuList &&
-						menuList.length &&
-						menuList.map(menu => {
-							return (
-								<div key={menu.title}>
-									<Disclosure>
-										<Disclosure.Button>
-											<div className="flex items-center p-3 text-violet-100 hover:text-violet-300">
-												{menu.title}
-												{menu.children &&
-												menu.children.length ? (
-													<ChevronDownIcon
-														className="ml-2 h-6 w-6 text-violet-100 hover:text-violet-300 duration-300 ui-open:rotate-180 ui-open:transform"
-														aria-hidden="true"
-													/>
-												) : (
-													<div className="w-8"></div>
-												)}
-											</div>
-										</Disclosure.Button>
-										<Transition
-											enter="transition duration-100 ease-out"
-											enterFrom="transform scale-95 opacity-0"
-											enterTo="transform scale-100 opacity-100"
-											leave="transition duration-75 ease-out"
-											leaveFrom="transform scale-100 opacity-100"
-											leaveTo="transform scale-95 opacity-0"
-										>
-											<Disclosure.Panel>
-												{menu.children &&
-													menu.children.length &&
-													menu.children.map(child => (
-														<div key={child.title}>
-															<Link
-																href={
-																	child.path ||
-																	'/'
-																}
-															>
-																<div className="mr-8 px-3 text-right sm:text-left text-violet-100 hover:text-violet-300 cursor-pointer">
-																	{
-																		child.title
-																	}
-																</div>
-															</Link>
-														</div>
-													))}
-											</Disclosure.Panel>
-										</Transition>
-									</Disclosure>
-								</div>
-							)
-						})}
-				</div>
-			</Transition>
-		</div>
-	)
+	return renderMenu({ menuList, menuShow })
 }
 
 export default MinimalismMenu

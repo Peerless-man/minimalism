@@ -21,3 +21,7 @@ body,
 	color: rgb(var(--white));
 	background-color: #0f172a;
 }
+
+::-webkit-scrollbar {
+	display: none;
+}

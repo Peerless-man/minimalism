@@ -1,19 +1,55 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useContext } from 'react'
+import { MdPreview, MdCatalog } from 'md-editor-rt'
+import 'md-editor-rt/lib/preview.css'
+import { CatalogContext } from '../../_components/layout'
 
 function Post({ params }: { params: { id: string | number } }) {
-	const [post, setPost] = useState<any>({ id: '' })
+	const Catalog = useContext(CatalogContext)
+	const [post, setPost] = useState<any>({ id: '', article_content: '' })
+
+	const [id] = useState('preview-only')
+	const [scrollElement, setScrollElement] = useState<any>(null)
+
+	const getPostById = async (id: string | number) => {
+		if (!id) return
+		const res = await fetch('api/article/getArticleById/' + id)
+		const data = await res.json()
+		const { code, result } = data
+
+		if (code == 0) {
+			setPost(result)
+		}
+	}
 
 	useEffect(() => {
-		setPost({ id: params.id })
-	}, [])
+		getPostById(params.id)
+		setScrollElement(document.getElementById('scrollElement'))
+	}, [id])
+
+	if (!post.id) {
+		return <>Loading...</>
+	}
 
 	return (
-		<>
-			{post.id}
-			<span className="text-white">你好</span>
-		</>
+		<div id="scrollElement" className="flex h-full overflow-scroll">
+			<MdPreview
+				className="w-[100%]"
+				editorId={id}
+				modelValue={post.article_content}
+				theme="dark"
+			/>
+			{Catalog.logShow && (
+				<div className="sm:fixed sm:top-0 sm:right-0 sm:w-[30%] h-full overflow-auto md:sticky top-0 md:w-[20%]">
+					<MdCatalog
+						style={{ maxWidth: 'inherit' }}
+						editorId={id}
+						scrollElement={scrollElement}
+					/>
+				</div>
+			)}
+		</div>
 	)
 }
 

@@ -1,16 +1,20 @@
 .layout {
 	width: 100%;
-	min-height: 100vh;
-	background-color: rgb(17 24 39);
-}
-.center {
+	height: 100vh;
+	max-width: 1280px;
 	margin: 0 auto;
+	overflow: hidden;
+	background-color: rgb(17 24 39);
 }
 
 .body {
 	display: flex;
-	min-height: 100vh;
+	justify-content: space-between;
+	height: 100vh;
+	overflow: scroll;
+	position: relative;
 }
-.footer {
-	max-width: 1080px;
+
+.menu {
+	width: inherit;
 }

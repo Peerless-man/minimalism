@@ -14,6 +14,7 @@
     "@heroicons/react": "^2.0.18",
     "clsx": "^2.0.0",
     "gasp": "^0.0.2",
+    "md-editor-rt": "^4.8.3",
     "mini-css-extract-plugin": "^2.7.6",
     "next": "14.0.1",
     "react": "^18.2.0",
