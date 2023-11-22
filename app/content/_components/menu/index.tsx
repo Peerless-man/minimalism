@@ -50,7 +50,7 @@ function renderMenu({
 
 	return (
 		<Transition
-			className="p-1 bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-white  sm:ring-violet-300 sm:ring-2 md:ring-0"
+			className="p-1 duration-300 bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-white  sm:ring-violet-300 sm:ring-2 md:ring-0"
 			show={menuShow}
 			enter="transition duration-100 ease-out"
 			enterFrom="transform scale-95 opacity-0"

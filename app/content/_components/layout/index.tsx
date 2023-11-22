@@ -21,7 +21,7 @@ function Layout({ children }: any) {
 
 	return (
 		<div
-			className={`${classes.layout} bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white`}
+			className={`${classes.layout} duration-300 bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white`}
 		>
 			<CatalogContext.Provider value={{ logShow }}>
 				<Header {...{ menuShow, setMenuShow, logShow, setLogShow }} />
