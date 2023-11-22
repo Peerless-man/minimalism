@@ -35,8 +35,8 @@ export default function Footer() {
 	}
 	return (
 		<>
-			<div className="flex items-start justify-between flex-wrap p-5 border-t-2 border-rose-200 hover:border-purple-300 rounded-lg">
-				<div className="w-[100%] md:w-[50%] text-white text-left p-5">
+			<div className="flex items-start justify-between flex-wrap p-5 duration-300 border-t-2 border-rose-200 hover:border-purple-300 rounded-lg bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white">
+				<div className="w-[100%] md:w-[50%] text-left p-5">
 					<h1 className="text-3xl leading-9">Hello</h1>
 					<h3 className="text-xl leading-9">我是小张</h3>
 					<h3 className="text-xl leading-9">欢迎来到我的小站</h3>
@@ -44,7 +44,7 @@ export default function Footer() {
 						这里装满了我的随笔、技术文章
 					</h3>
 				</div>
-				<div className="w-[100%] md:w-[50%] text-white text-left p-5 ">
+				<div className="w-[100%] md:w-[50%] text-left p-5 ">
 					<h3 className="text-3xl leading-9">More</h3>
 					<h3 className="text-xl leading-9">喜欢花里胡哨的点这里</h3>
 					<div>
@@ -114,7 +114,7 @@ export default function Footer() {
 								leaveTo="opacity-0 translate-y-1"
 							>
 								<Popover.Panel className="absolute -left-8 bottom-12 z-10">
-									<div className="px-2 py-1 bg-slate-300 rounded-lg">
+									<div className="px-2 py-1 bg-slate-300 dark:bg-slate-700 rounded-lg">
 										M2715158815
 									</div>
 								</Popover.Panel>

@@ -3,9 +3,14 @@
 import { useEffect, useState, useContext } from 'react'
 import { MdPreview, MdCatalog } from 'md-editor-rt'
 import 'md-editor-rt/lib/preview.css'
+
+import { useDark } from '../../../../hooks/use-dark'
+import { useCommonStore } from '../../../../hooks/use-common-store'
 import { CatalogContext } from '../../_components/layout'
 
 function Post({ params }: { params: { id: string | number } }) {
+	const { isDark } = useDark()
+	const { onSetCatalogIconShow, onSetCatalogIconHide } = useCommonStore()
 	const Catalog = useContext(CatalogContext)
 	const [post, setPost] = useState<any>({ id: '', article_content: '' })
 
@@ -21,24 +26,37 @@ function Post({ params }: { params: { id: string | number } }) {
 		if (code == 0) {
 			setPost(result)
 		}
+		// 当进入文章才在header上展示目录展开按钮
+		onSetCatalogIconShow()
+		setScrollElement(document.getElementById('scrollElement'))
 	}
 
 	useEffect(() => {
+		return () => {
+			// 退出关闭在头部里展示目录按钮
+			onSetCatalogIconHide()
+		}
+	}, [])
+
+	useEffect(() => {
 		getPostById(params.id)
-		setScrollElement(document.getElementById('scrollElement'))
 	}, [id])
 
 	if (!post.id) {
-		return <>Loading...</>
+		return (
+			<div className="w-full h-full flex justify-center items-center">
+				<span className="text-xl font-bold">Loading...</span>
+			</div>
+		)
 	}
 
 	return (
 		<div id="scrollElement" className="flex h-full overflow-scroll">
 			<MdPreview
-				className="w-[100%]"
+				className="w-[100%] !bg-transparent"
 				editorId={id}
 				modelValue={post.article_content}
-				theme="dark"
+				theme={isDark ? 'dark' : 'light'}
 			/>
 			{Catalog.logShow && (
 				<div className="sm:fixed sm:top-0 sm:right-0 sm:w-[30%] h-full overflow-auto md:sticky top-0 md:w-[20%]">

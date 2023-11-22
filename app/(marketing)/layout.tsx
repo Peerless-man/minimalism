@@ -12,7 +12,9 @@ export default function MarketingLayout({
 	return (
 		<div className="mx-auto h-full  max-w-[1080px]">
 			<Header />
-			<div className="w-full h-full text-white px-4 py-2">{children}</div>
+			<div className="w-full h-full text-slate-900 dark:text-white px-4 py-2">
+				{children}
+			</div>
 			<Footer />
 		</div>
 	)

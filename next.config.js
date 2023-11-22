@@ -12,6 +12,14 @@ const nextConfig = {
 			},
 		]
 	},
+	images: {
+		remotePatterns: [
+			{
+				protocol: 'http',
+				hostname: 'img.mrzym.top',
+			},
+		],
+	},
 }
 
 module.exports = nextConfig

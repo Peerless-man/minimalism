@@ -86,7 +86,7 @@ export default function MarketingPage() {
 			>
 				Contact Me
 				<PaperAirplaneIcon
-					className={`mt-2 h-12 w-12 text-violet-100 hover:text-violet-300 ${
+					className={`mt-2 h-12 w-12 duration-300 text-violet-300 dark:text-violet-100 hover:text-violet-500 dark:hover:text-violet-300 ${
 						isScrollBottom ? '-rotate-90' : 'rotate-90'
 					}`}
 					aria-hidden="true"
