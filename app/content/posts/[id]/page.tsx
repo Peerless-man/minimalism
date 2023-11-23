@@ -58,15 +58,17 @@ function Post({ params }: { params: { id: string | number } }) {
 				modelValue={post.article_content}
 				theme={isDark ? 'dark' : 'light'}
 			/>
-			{Catalog.logShow && (
-				<div className="sm:fixed sm:top-0 sm:right-0 sm:w-[30%] h-full overflow-auto md:sticky top-0 md:w-[20%]">
-					<MdCatalog
-						style={{ maxWidth: 'inherit' }}
-						editorId={id}
-						scrollElement={scrollElement}
-					/>
-				</div>
-			)}
+			<div
+				className={`sm:fixed sm:top-0 sm:right-0 sm:w-[30%] h-full overflow-auto md:sticky top-0 md:w-[20%] ${
+					Catalog.logShow ? 'block' : 'hidden'
+				}`}
+			>
+				<MdCatalog
+					style={{ maxWidth: 'inherit' }}
+					editorId={id}
+					scrollElement={scrollElement}
+				/>
+			</div>
 		</div>
 	)
 }

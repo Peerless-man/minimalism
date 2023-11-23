@@ -5,7 +5,7 @@ import { useDark } from '../../hooks/use-dark'
 import { useTheme } from '../../hooks/use-theme'
 
 export default function ToggleTheme() {
-	const { isDark } = useDark()
+	const { isDark, isInit, onSetInit } = useDark()
 	const { setLightTheme, setDarkTheme } = useTheme()
 	const [dark, setDark] = useState<boolean>(false)
 
@@ -14,8 +14,19 @@ export default function ToggleTheme() {
 	}, [isDark])
 
 	useEffect(() => {
-		if (isDark) {
-			setDarkTheme()
+		// 第一次就按照媒体来 后面就按照自己存储的主题来
+		if (!isInit) {
+			onSetInit()
+			if (
+				window.matchMedia &&
+				window.matchMedia('(prefers-color-scheme: dark)').matches
+			) {
+				setDarkTheme()
+			}
+		} else {
+			if (isDark) {
+				setDarkTheme()
+			}
 		}
 	}, [])
 

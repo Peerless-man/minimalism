@@ -42,7 +42,7 @@ function renderMenu({
 }) {
 	if (!menuList.length) {
 		return (
-			<div className="w-full h-full flex justify-center items-center">
+			<div className="w-full h-full p-2 flex justify-center items-start">
 				<span className="text-xl font-bold">Loading...</span>
 			</div>
 		)
@@ -114,12 +114,7 @@ function renderMenu({
 	)
 }
 
-function MinimalismMenu({
-	menuShow,
-}: {
-	menuShow: boolean
-	setMenuShow: Function | null
-}) {
+function MinimalismMenu({ menuShow }: { menuShow: boolean }) {
 	const [menuList, setMenuList] = useState<Menu>([])
 
 	useEffect(() => {

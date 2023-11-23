@@ -1,42 +1,19 @@
 'use client'
 import Link from 'next/link'
+import dynamic from 'next/dynamic'
 
 import {
 	Bars3BottomLeftIcon,
 	Bars3BottomRightIcon,
-	XCircleIcon,
-	DocumentTextIcon,
 	HomeIcon,
 } from '@heroicons/react/20/solid'
 import { useCommonStore } from '../../../../hooks/use-common-store'
 
 import ToggleTheme from '../../../../components/toggle-theme'
 
-function renderCatalogIcon({
-	logShow,
-	setLogShow,
-	catalogIconShow,
-}: {
-	logShow: boolean
-	setLogShow: Function
-	catalogIconShow: boolean
-}) {
-	if (!catalogIconShow) return
-
-	return logShow ? (
-		<XCircleIcon
-			className="mr-1 h-6 w-6 text-violet-300 dark:text-violet-100 hover:text-violet-500 dark:hover:text-violet-300 duration-300 ui-open:rotate-180 ui-open:transform"
-			aria-hidden="true"
-			onClick={() => setLogShow(false)}
-		/>
-	) : (
-		<DocumentTextIcon
-			className="mr-1 h-6 w-6 text-violet-300 dark:text-violet-100 hover:text-violet-500 dark:hover:text-violet-300 duration-300 ui-open:rotate-180 ui-open:transform"
-			aria-hidden="true"
-			onClick={() => setLogShow(true)}
-		/>
-	)
-}
+const RenderCatalogIcon = dynamic(() => import('./render-catalog'), {
+	ssr: false,
+})
 
 export default function Header({
 	menuShow,
@@ -73,7 +50,9 @@ export default function Header({
 				/>
 			</Link>
 			<div className="flex items-center">
-				{renderCatalogIcon({ logShow, setLogShow, catalogIconShow })}
+				<RenderCatalogIcon
+					{...{ logShow, setLogShow, catalogIconShow }}
+				/>
 				<ToggleTheme />
 			</div>
 		</div>
