@@ -1,9 +1,6 @@
 'use client'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-// import { useDark } from '../hooks/use-dark'
-// import { useTheme } from '../hooks/use-theme'
-// import { useEffect } from 'react'
 
 export default function NotFoundPage() {
 	const router = useRouter()

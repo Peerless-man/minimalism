@@ -3,8 +3,10 @@ import React, { useEffect, useState } from 'react'
 import { Disclosure, Transition } from '@headlessui/react'
 import Link from 'next/link'
 
-import { ChevronDownIcon } from '@heroicons/react/20/solid'
+import { ChevronDownIcon, HomeIcon } from '@heroicons/react/20/solid'
+
 import { Menu } from '../../../../type/menu.type'
+import { useCommonStore } from '../../../../hooks/use-common-store'
 
 const defaultMenuList: Menu = [
 	{
@@ -42,7 +44,7 @@ function renderMenu({
 }) {
 	if (!menuList.length) {
 		return (
-			<div className="w-full h-full p-2 flex justify-center items-start">
+			<div className="hidden md:flex w-full h-full p-2 justify-center items-start">
 				<span className="text-xl font-bold">Loading...</span>
 			</div>
 		)
@@ -50,7 +52,7 @@ function renderMenu({
 
 	return (
 		<Transition
-			className="p-1 duration-300 bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-white  sm:ring-violet-300 sm:ring-2 md:ring-0"
+			className="duration-300 bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-white  ring-violet-300 ring-2 md:ring-0"
 			show={menuShow}
 			enter="transition duration-100 ease-out"
 			enterFrom="transform scale-95 opacity-0"
@@ -59,9 +61,18 @@ function renderMenu({
 			leaveFrom="transform scale-100 opacity-100"
 			leaveTo="transform scale-95 opacity-0"
 		>
-			<Link href="/content">
-				<button className="text-2xl p-3 text-violet-300">M</button>
-			</Link>
+			{/* <div className="w-full h-12 fixed"> */}
+			{/* <div className="absolute left-3 top-3"> */}
+			<div className="flex items-center p-3">
+				<Link href="/">
+					<HomeIcon
+						className="h-6 w-6 text-violet-300 dark:text-violet-100 hover:text-violet-500 dark:hover:text-violet-300 duration-300"
+						aria-hidden="true"
+					/>
+				</Link>
+			</div>
+			{/* </div> */}
+
 			{menuList &&
 				menuList.length &&
 				menuList.map(menu => {
@@ -69,7 +80,7 @@ function renderMenu({
 						<div key={menu.title}>
 							<Disclosure>
 								<Disclosure.Button>
-									<div className="flex items-center text-lg p-3 hover:text-violet-500 dark:hover:text-violet-300">
+									<div className="flex items-center text-lg px-3 py-2 hover:text-violet-500 dark:hover:text-violet-300">
 										{menu.title}
 										{menu.children &&
 										menu.children.length ? (
@@ -98,7 +109,7 @@ function renderMenu({
 													<Link
 														href={child.path || '/'}
 													>
-														<div className="px-3 py-1 text-right sm:text-left hover:text-violet-500 dark:hover:text-violet-500 dark:hover:text-violet-300 cursor-pointer">
+														<div className="px-3 py-1 text-left  hover:text-violet-500 dark:hover:text-violet-300 cursor-pointer">
 															{child.title}
 														</div>
 													</Link>
@@ -114,7 +125,8 @@ function renderMenu({
 	)
 }
 
-function MinimalismMenu({ menuShow }: { menuShow: boolean }) {
+function MinimalismMenu() {
+	const { menuShow } = useCommonStore()
 	const [menuList, setMenuList] = useState<Menu>([])
 
 	useEffect(() => {
@@ -142,7 +154,15 @@ function MinimalismMenu({ menuShow }: { menuShow: boolean }) {
 		}
 	}
 
-	return renderMenu({ menuList, menuShow })
+	return (
+		menuShow && (
+			<div
+				className={`fixed left-0 top-[40px] md:top-0 w-[60%] md:sticky md:w-[25%] h-[calc(100vh-45px)] bg-transparent  z-40 overflow-auto`}
+			>
+				{renderMenu({ menuList, menuShow })}
+			</div>
+		)
+	)
 }
 
 export default MinimalismMenu
