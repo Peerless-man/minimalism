@@ -1,18 +1,12 @@
 'use client'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useDark } from '../hooks/use-dark'
-import { useTheme } from '../hooks/use-theme'
-import { useEffect } from 'react'
+// import { useDark } from '../hooks/use-dark'
+// import { useTheme } from '../hooks/use-theme'
+// import { useEffect } from 'react'
 
 export default function NotFoundPage() {
 	const router = useRouter()
-	const { isDark } = useDark()
-	const { setDarkTheme } = useTheme()
-
-	useEffect(() => {
-		isDark && setDarkTheme()
-	}, [])
 
 	return (
 		<main className="h-full w-full flex flex-col justify-center items-center p-8 duration-300 bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white">

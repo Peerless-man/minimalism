@@ -1,4 +1,5 @@
 import { useDark } from './use-dark'
+import { useTheme as nextUseTheme } from 'next-themes'
 
 type theme = {
 	setDarkTheme: () => void
@@ -6,15 +7,16 @@ type theme = {
 }
 
 export const useTheme = (): theme => {
+	const { setTheme } = nextUseTheme()
 	const { onSetDark, onSetLight } = useDark()
 
 	const setDarkTheme = () => {
-		document.documentElement.classList.add('dark')
+		setTheme('dark')
 		onSetDark()
 	}
 
 	const setLightTheme = () => {
-		document.documentElement.classList.remove('dark')
+		setTheme('light')
 		onSetLight()
 	}
 

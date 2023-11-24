@@ -26,7 +26,7 @@ export default function MarketingPage() {
 
 	const scrollListener = () => {
 		const marketing = document.getElementById('marketing')
-
+		if (!marketing) return
 		if (marketing!.getBoundingClientRect().top < -100) {
 			setIsScrollBottom(true)
 		} else {
