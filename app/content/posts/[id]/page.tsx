@@ -51,7 +51,7 @@ function Post({ params }: { params: { id: string | number } }) {
 				theme={isDark ? 'dark' : 'light'}
 			/>
 			<div
-				className={`fixed top-[40px] right-0 w-[30%] h-full overflow-auto md:sticky md:top-0 md:w-[20%] bg-slate-100 dark:bg-slate-900 ${
+				className={`fixed duration-300 top-[40px] right-0 w-[30%] h-full overflow-auto md:sticky md:top-0 md:w-[20%] bg-slate-100 dark:bg-slate-900 ${
 					catalogShow ? 'block' : 'hidden'
 				}`}
 			>
