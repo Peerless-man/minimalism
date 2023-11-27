@@ -7,34 +7,59 @@ import 'md-editor-rt/lib/preview.css'
 import { useDark } from '../../../../hooks/use-dark'
 import { useCommonStore } from '../../../../hooks/use-common-store'
 
-function Post({ params }: { params: { id: string | number } }) {
+import {
+	DiaryPosts,
+	allDiaryPosts,
+	allVuePosts,
+	allReactPosts,
+	ReactPosts,
+	VuePosts,
+} from 'contentlayer/generated'
+
+function Post({ params }: { params: { slug: string[] } }) {
 	const { isDark } = useDark()
 	const { catalogShow, onSetCatalogIconShow } = useCommonStore()
-	const [post, setPost] = useState<any>({ id: '', article_content: '' })
+	const [post, setPost] = useState<
+		VuePosts | DiaryPosts | ReactPosts | null | undefined
+	>(null)
 
 	const [id] = useState('preview-only')
 	const [scrollElement, setScrollElement] = useState<any>(null)
 
-	const getPostById = async (id: string | number) => {
-		if (!id) return
-		const res = await fetch('api/article/getArticleById/' + id)
-		const data = await res.json()
-		const { code, result } = data
-
-		if (code == 0) {
-			setPost(result)
+	useEffect(() => {
+		if (params.slug && params.slug.length) {
+			getPostById(
+				params.slug[0],
+				decodeURIComponent(params.slug.join('/') + '.mdx'),
+			)
 		}
+
 		// 当进入文章才在header上展示目录展开按钮
 		onSetCatalogIconShow()
 		// 有文章才展示目录
 		setScrollElement(document.getElementById('scrollElement'))
-	}
-
-	useEffect(() => {
-		getPostById(params.id)
 	}, [id])
 
-	if (!post.id) {
+	const getPostById = (type: string, id: string) => {
+		let post: VuePosts | DiaryPosts | ReactPosts | null | undefined = null
+		switch (type) {
+			case 'vue':
+				post = allVuePosts.find(item => item._id == id)
+				break
+			case 'react':
+				post = allReactPosts.find(item => item._id == id)
+
+				break
+			case 'diary':
+				post = allDiaryPosts.find(item => item._id == id)
+				break
+		}
+		console.log(post)
+
+		setPost(post)
+	}
+
+	if (!post?._id) {
 		return (
 			<div className="w-full h-full flex justify-center items-center">
 				<span className="text-xl font-bold">Loading...</span>
@@ -47,7 +72,7 @@ function Post({ params }: { params: { id: string | number } }) {
 			<MdPreview
 				className="w-[100%] !bg-transparent"
 				editorId={id}
-				modelValue={post.article_content}
+				modelValue={post.body.raw}
 				theme={isDark ? 'dark' : 'light'}
 			/>
 			<div

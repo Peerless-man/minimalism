@@ -1,4 +1,7 @@
 /** @type {import('next').NextConfig} */
+
+const { withContentlayer } = require('next-contentlayer')
+
 const nextConfig = {
 	async rewrites() {
 		return [
@@ -20,6 +23,8 @@ const nextConfig = {
 			},
 		],
 	},
+	reactStrictMode: true,
+	swcMinify: true,
 }
 
-module.exports = nextConfig
+module.exports = withContentlayer(nextConfig)

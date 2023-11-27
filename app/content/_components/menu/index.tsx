@@ -2,36 +2,33 @@
 import React, { useEffect, useState } from 'react'
 import { Disclosure, Transition } from '@headlessui/react'
 import Link from 'next/link'
+import {
+	DiaryPosts,
+	allDiaryPosts,
+	allVuePosts,
+	allReactPosts,
+	ReactPosts,
+	VuePosts,
+} from 'contentlayer/generated'
+import { compareDesc } from 'date-fns'
 
 import { ChevronDownIcon, HomeIcon } from '@heroicons/react/20/solid'
 
-import { Menu } from '../../../../type/menu.type'
+import { Menu, MenuItem } from '../../../../type/menu.type'
 import { useCommonStore } from '../../../../hooks/use-common-store'
 
 const defaultMenuList: Menu = [
 	{
-		title: '随笔',
-		children: [
-			{
-				title: 'essay1',
-				path: '/essays/1',
-			},
-			{
-				title: 'essay2',
-				path: '/essays/2',
-			},
-			{
-				title: 'essay3',
-				path: '/essays/3',
-			},
-			{
-				title: 'essay4',
-				path: '/essays/4',
-			},
-		],
+		title: '日记',
+		children: [],
 	},
 	{
-		title: '技术文章',
+		title: 'Vue',
+		children: [],
+	},
+	{
+		title: 'React',
+		children: [],
 	},
 ]
 
@@ -66,7 +63,7 @@ function renderMenu({
 			<div className="flex items-center p-3">
 				<Link href="/">
 					<HomeIcon
-						className="h-6 w-6 text-violet-300 dark:text-violet-100 hover:text-violet-500 dark:hover:text-violet-300 duration-300"
+						className="h-6 w-6   hover:text-violet-500 dark:hover:text-violet-300 duration-300"
 						aria-hidden="true"
 					/>
 				</Link>
@@ -133,25 +130,38 @@ function MinimalismMenu() {
 		initMenu()
 	}, [])
 
-	const initMenu = async () => {
-		const res = await fetch(`api/article/blogHomeGetArticleList/1/999`)
+	// 组装菜单子项
+	const initMenuChildren = (
+		posts: DiaryPosts[] | ReactPosts[] | VuePosts[],
+	) => {
+		let list: MenuItem[] = []
 
-		const data = await res.json()
-		const { code, result } = data
-		if (code == 0) {
-			let list =
-				result.list &&
-				result.list.map((v: any) => {
-					return {
-						id: v.id,
-						title: v.article_title,
-						path: '/content/posts/' + v.id,
-					}
-				})
-			defaultMenuList[1].children = list
+		// 排序
+		posts.sort((a, b) => compareDesc(new Date(a.date), new Date(b.date)))
+		posts.forEach((v: DiaryPosts | ReactPosts | VuePosts) => {
+			list.push({
+				id: v._id,
+				title: v.title,
+				path: '/content/posts/' + v.url,
+			})
+		})
 
-			setMenuList(defaultMenuList)
-		}
+		return list
+	}
+
+	const initMenu = () => {
+		// 日记
+		const diaryPosts = initMenuChildren(allDiaryPosts)
+		// React
+		const reactPosts = initMenuChildren(allReactPosts)
+		// Vue
+		const vuePosts = initMenuChildren(allVuePosts)
+
+		defaultMenuList[0].children = diaryPosts
+		defaultMenuList[1].children = reactPosts
+		defaultMenuList[2].children = vuePosts
+
+		setMenuList(defaultMenuList)
 	}
 
 	return (
