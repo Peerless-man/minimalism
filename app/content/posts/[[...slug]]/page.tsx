@@ -64,7 +64,6 @@ function Post({ params }: { params: { slug: string[] } }) {
 				post = allEssayPosts.find(item => item._id == id)
 				break
 		}
-		console.log(post)
 
 		setPost(post)
 	}
