@@ -3,12 +3,14 @@ import React, { useEffect, useState } from 'react'
 import { Disclosure, Transition } from '@headlessui/react'
 import Link from 'next/link'
 import {
-	DiaryPosts,
-	allDiaryPosts,
-	allVuePosts,
+	allVue2Posts,
+	allVue3Posts,
+	allEssayPosts,
 	allReactPosts,
 	ReactPosts,
-	VuePosts,
+	EssayPosts,
+	Vue2Posts,
+	Vue3Posts,
 } from 'contentlayer/generated'
 import { compareDesc } from 'date-fns'
 
@@ -19,11 +21,15 @@ import { useCommonStore } from '../../../../hooks/use-common-store'
 
 const defaultMenuList: Menu = [
 	{
-		title: '日记',
+		title: '随笔',
 		children: [],
 	},
 	{
-		title: 'Vue',
+		title: 'Vue2',
+		children: [],
+	},
+	{
+		title: 'Vue3',
 		children: [],
 	},
 	{
@@ -58,8 +64,6 @@ function renderMenu({
 			leaveFrom="transform scale-100 opacity-100"
 			leaveTo="transform scale-95 opacity-0"
 		>
-			{/* <div className="w-full h-12 fixed"> */}
-			{/* <div className="absolute left-3 top-3"> */}
 			<div className="flex items-center p-3">
 				<Link href="/">
 					<HomeIcon
@@ -68,56 +72,61 @@ function renderMenu({
 					/>
 				</Link>
 			</div>
-			{/* </div> */}
 
-			{menuList &&
-				menuList.length &&
-				menuList.map(menu => {
-					return (
-						<div key={menu.title}>
-							<Disclosure>
-								<Disclosure.Button>
-									<div className="flex items-center text-lg px-3 py-2 hover:text-violet-500 dark:hover:text-violet-300">
-										{menu.title}
-										{menu.children &&
-										menu.children.length ? (
-											<ChevronDownIcon
-												className="ml-2 h-6 w-6 hover:text-violet-500 dark:hover:text-violet-300 duration-300 ui-open:rotate-180 ui-open:transform"
-												aria-hidden="true"
-											/>
-										) : (
-											<div className="w-8"></div>
-										)}
-									</div>
-								</Disclosure.Button>
-								<Transition
-									enter="transition duration-100 ease-out"
-									enterFrom="transform scale-95 opacity-0"
-									enterTo="transform scale-100 opacity-100"
-									leave="transition duration-75 ease-out"
-									leaveFrom="transform scale-100 opacity-100"
-									leaveTo="transform scale-95 opacity-0"
-								>
-									<Disclosure.Panel>
-										{menu.children &&
-											menu.children.length &&
-											menu.children.map(child => (
-												<div key={child.title}>
-													<Link
-														href={child.path || '/'}
-													>
-														<div className="px-3 py-1 text-left  hover:text-violet-500 dark:hover:text-violet-300 cursor-pointer">
-															{child.title}
+			{menuList && menuList.length
+				? menuList.map(menu => {
+						return (
+							<div key={menu.title}>
+								<Disclosure>
+									<Disclosure.Button>
+										<div className="flex items-center text-lg px-3 py-2 hover:text-violet-500 dark:hover:text-violet-300">
+											{menu.title}
+											{menu.children &&
+											menu.children.length ? (
+												<ChevronDownIcon
+													className="ml-2 h-6 w-6 hover:text-violet-500 dark:hover:text-violet-300 duration-300 ui-open:rotate-180 ui-open:transform"
+													aria-hidden="true"
+												/>
+											) : (
+												<div className="w-8"></div>
+											)}
+										</div>
+									</Disclosure.Button>
+									<Transition
+										enter="transition duration-100 ease-out"
+										enterFrom="transform scale-95 opacity-0"
+										enterTo="transform scale-100 opacity-100"
+										leave="transition duration-75 ease-out"
+										leaveFrom="transform scale-100 opacity-100"
+										leaveTo="transform scale-95 opacity-0"
+									>
+										<Disclosure.Panel>
+											{menu.children &&
+											menu.children.length
+												? menu.children.map(child => (
+														<div key={child.title}>
+															<Link
+																href={
+																	child.path ||
+																	'/'
+																}
+															>
+																<div className="px-3 py-1 text-left  hover:text-violet-500 dark:hover:text-violet-300 cursor-pointer">
+																	{
+																		child.title
+																	}
+																</div>
+															</Link>
 														</div>
-													</Link>
-												</div>
-											))}
-									</Disclosure.Panel>
-								</Transition>
-							</Disclosure>
-						</div>
-					)
-				})}
+												  ))
+												: null}
+										</Disclosure.Panel>
+									</Transition>
+								</Disclosure>
+							</div>
+						)
+				  })
+				: null}
 		</Transition>
 	)
 }
@@ -132,13 +141,13 @@ function MinimalismMenu() {
 
 	// 组装菜单子项
 	const initMenuChildren = (
-		posts: DiaryPosts[] | ReactPosts[] | VuePosts[],
+		posts: EssayPosts[] | ReactPosts[] | Vue2Posts[] | Vue3Posts[],
 	) => {
 		let list: MenuItem[] = []
 
 		// 排序
 		posts.sort((a, b) => compareDesc(new Date(a.date), new Date(b.date)))
-		posts.forEach((v: DiaryPosts | ReactPosts | VuePosts) => {
+		posts.forEach((v: EssayPosts | ReactPosts | Vue2Posts | Vue3Posts) => {
 			list.push({
 				id: v._id,
 				title: v.title,
@@ -151,15 +160,18 @@ function MinimalismMenu() {
 
 	const initMenu = () => {
 		// 日记
-		const diaryPosts = initMenuChildren(allDiaryPosts)
+		const diaryPosts = initMenuChildren(allEssayPosts)
 		// React
 		const reactPosts = initMenuChildren(allReactPosts)
-		// Vue
-		const vuePosts = initMenuChildren(allVuePosts)
+		// Vue2
+		const vue2Posts = initMenuChildren(allVue2Posts)
+		// Vue3
+		const vue3Posts = initMenuChildren(allVue3Posts)
 
 		defaultMenuList[0].children = diaryPosts
-		defaultMenuList[1].children = reactPosts
-		defaultMenuList[2].children = vuePosts
+		defaultMenuList[1].children = vue2Posts
+		defaultMenuList[2].children = vue3Posts
+		defaultMenuList[3].children = reactPosts
 
 		setMenuList(defaultMenuList)
 	}

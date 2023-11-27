@@ -15,9 +15,32 @@ const computedFields: ComputedFields = {
 	},
 }
 
-const VuePosts = defineDocumentType(() => ({
-	name: 'VuePosts',
-	filePathPattern: `vue/**/*.mdx`,
+const Vue2Posts = defineDocumentType(() => ({
+	name: 'Vue2Posts',
+	filePathPattern: `vue2/**/*.mdx`,
+	contentType: 'mdx',
+	fields: {
+		title: {
+			type: 'string',
+			description: 'The title of the vuePost',
+			required: true,
+		},
+		date: {
+			type: 'date',
+			description: 'The date of the vuePost',
+			required: true,
+		},
+		category: {
+			type: 'string',
+			description: 'The category of the vuePost',
+			required: true,
+		},
+	},
+	computedFields,
+}))
+const Vue3Posts = defineDocumentType(() => ({
+	name: 'Vue3Posts',
+	filePathPattern: `vue3/**/*.mdx`,
 	contentType: 'mdx',
 	fields: {
 		title: {
@@ -39,9 +62,9 @@ const VuePosts = defineDocumentType(() => ({
 	computedFields,
 }))
 
-const DiaryPosts = defineDocumentType(() => ({
-	name: 'DiaryPosts',
-	filePathPattern: `diary/**/*.mdx`,
+const EssayPosts = defineDocumentType(() => ({
+	name: 'EssayPosts',
+	filePathPattern: `essay/**/*.mdx`,
 	contentType: 'mdx',
 	fields: {
 		title: {
@@ -89,5 +112,5 @@ const ReactPosts = defineDocumentType(() => ({
 
 export default makeSource({
 	contentDirPath: './posts',
-	documentTypes: [VuePosts, DiaryPosts, ReactPosts],
+	documentTypes: [Vue2Posts, Vue3Posts, EssayPosts, ReactPosts],
 })

@@ -7,6 +7,7 @@
 		"no-unused-vars": [
 			1,
 			{ "args": "after-used", "argsIgnorePattern": "^_" }
-		]
+		],
+		"no-mixed-spaces-and-tabs": "off"
 	}
 }

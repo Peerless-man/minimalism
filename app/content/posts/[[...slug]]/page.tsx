@@ -8,19 +8,21 @@ import { useDark } from '../../../../hooks/use-dark'
 import { useCommonStore } from '../../../../hooks/use-common-store'
 
 import {
-	DiaryPosts,
-	allDiaryPosts,
-	allVuePosts,
+	allEssayPosts,
+	allVue2Posts,
+	allVue3Posts,
 	allReactPosts,
+	EssayPosts,
 	ReactPosts,
-	VuePosts,
+	Vue2Posts,
+	Vue3Posts,
 } from 'contentlayer/generated'
 
 function Post({ params }: { params: { slug: string[] } }) {
 	const { isDark } = useDark()
 	const { catalogShow, onSetCatalogIconShow } = useCommonStore()
 	const [post, setPost] = useState<
-		VuePosts | DiaryPosts | ReactPosts | null | undefined
+		Vue2Posts | Vue3Posts | EssayPosts | ReactPosts | null | undefined
 	>(null)
 
 	const [id] = useState('preview-only')
@@ -41,17 +43,25 @@ function Post({ params }: { params: { slug: string[] } }) {
 	}, [id])
 
 	const getPostById = (type: string, id: string) => {
-		let post: VuePosts | DiaryPosts | ReactPosts | null | undefined = null
+		let post:
+			| Vue2Posts
+			| Vue3Posts
+			| EssayPosts
+			| ReactPosts
+			| null
+			| undefined = null
 		switch (type) {
-			case 'vue':
-				post = allVuePosts.find(item => item._id == id)
+			case 'vue2':
+				post = allVue2Posts.find(item => item._id == id)
+				break
+			case 'vue3':
+				post = allVue3Posts.find(item => item._id == id)
 				break
 			case 'react':
 				post = allReactPosts.find(item => item._id == id)
-
 				break
-			case 'diary':
-				post = allDiaryPosts.find(item => item._id == id)
+			case 'essay':
+				post = allEssayPosts.find(item => item._id == id)
 				break
 		}
 		console.log(post)
