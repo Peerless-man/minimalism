@@ -54,16 +54,7 @@ function renderMenu({
 	}
 
 	return (
-		<Transition
-			className="h-full duration-300 bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-white  ring-violet-300 ring-2 md:ring-0"
-			show={menuShow}
-			enter="transition duration-300 ease-out"
-			enterFrom="transform scale-95 opacity-0"
-			enterTo="transform scale-100 opacity-100"
-			leave="transition duration-75 ease-out"
-			leaveFrom="transform scale-100 opacity-100"
-			leaveTo="transform scale-95 opacity-0"
-		>
+		<div className="h-full duration-300 bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-white  ring-violet-300 ring-2 md:ring-0">
 			{menuList && menuList.length
 				? menuList.map(menu => {
 						return (
@@ -118,7 +109,7 @@ function renderMenu({
 						)
 				  })
 				: null}
-		</Transition>
+		</div>
 	)
 }
 
@@ -168,13 +159,18 @@ function MinimalismMenu() {
 	}
 
 	return (
-		menuShow && (
-			<div
-				className={`fixed left-0 top-16 md:top-0 w-[60%] md:sticky md:w-[25%] h-[calc(100vh-60px)] bg-transparent  z-40 overflow-auto`}
-			>
-				{renderMenu({ menuList, menuShow })}
-			</div>
-		)
+		<Transition
+			show={menuShow}
+			className={`fixed left-0 top-16 md:top-0 w-[100%] md:sticky  h-[calc(100vh-60px)] bg-transparent  z-40 overflow-auto`}
+			enter="transition duration-300 ease-out"
+			enterFrom="transform scale-95 opacity-0"
+			enterTo="transform scale-100 opacity-100"
+			leave="transition duration-75 ease-out"
+			leaveFrom="transform scale-100 opacity-100"
+			leaveTo="transform scale-95 opacity-0"
+		>
+			{renderMenu({ menuList, menuShow })}
+		</Transition>
 	)
 }
 

@@ -14,11 +14,11 @@ const RenderMenu = dynamic(() => import('../menu/index'), {
 
 function Layout({ children }: any) {
 	const {
+		menuShow,
 		onSetCatalogHide,
 		onSetCatalogShow,
 		onSetMenuShow,
 		onSetMenuHide,
-		onSetCatalogIconHide,
 	} = useCommonStore()
 
 	const judgeHideMenuOrCatalog = () => {
@@ -31,14 +31,15 @@ function Layout({ children }: any) {
 		}
 	}
 
-	const debounceJudge = debounce(judgeHideMenuOrCatalog, 50)
+	const debounceJudge = debounce(judgeHideMenuOrCatalog, 30)
 
 	useEffect(() => {
+		judgeHideMenuOrCatalog()
 		window.addEventListener('resize', debounceJudge)
 
 		return () => {
-			onSetCatalogIconHide()
 			onSetMenuShow()
+			onSetCatalogShow()
 			window.removeEventListener('resize', debounceJudge)
 		}
 	}, [])
@@ -49,7 +50,9 @@ function Layout({ children }: any) {
 		>
 			<Header />
 			<div className={`${classes.body} p-5 mt-14`}>
-				<RenderMenu />
+				<div className={`w-[0] ${menuShow ? 'md:w-[25%]' : ''} `}>
+					<RenderMenu />
+				</div>
 				<div className="w-[100%] h-[calc(100vh-60px)] overflow-auto rounded-lg">
 					{children}
 				</div>

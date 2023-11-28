@@ -2,9 +2,6 @@ import { create } from 'zustand'
 import persistMiddleware from '../middleware/store-persist'
 
 type commonStore = {
-	catalogIconShow: boolean
-	onSetCatalogIconShow: () => void
-	onSetCatalogIconHide: () => void
 	catalogShow: boolean
 	onSetCatalogShow: () => void
 	onSetCatalogHide: () => void
@@ -18,10 +15,6 @@ export const useCommonStore = create<commonStore>(
 	// 持久化useDark
 	persistMiddleware(
 		(set: any) => ({
-			// 目录icon是否展示 默认不展示
-			catalogIconShow: false,
-			onSetCatalogIconShow: () => set({ catalogIconShow: true }),
-			onSetCatalogIconHide: () => set({ catalogIconShow: false }),
 			// 目录是否展示 默认展示
 			catalogShow: true,
 			onSetCatalogShow: () => set({ catalogShow: true }),

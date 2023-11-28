@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { MdPreview, MdCatalog } from 'md-editor-rt'
+
 import 'md-editor-rt/lib/preview.css'
 
 import { useDark } from '../../../../hooks/use-dark'
@@ -20,7 +21,7 @@ import {
 
 function Post({ params }: { params: { slug: string[] } }) {
 	const { isDark } = useDark()
-	const { catalogShow, onSetCatalogIconShow } = useCommonStore()
+	const { catalogShow, onSetMenuHide } = useCommonStore()
 	const [loading, setLoading] = useState<Boolean>(false)
 	const [post, setPost] = useState<
 		Vue2Posts | Vue3Posts | EssayPosts | ReactPosts | null | undefined
@@ -38,8 +39,6 @@ function Post({ params }: { params: { slug: string[] } }) {
 			)
 		}
 
-		// 当进入文章才在header上展示目录展开按钮
-		onSetCatalogIconShow()
 		// 有文章才展示目录
 		setScrollElement(document.getElementById('scrollElement'))
 	}, [id])
@@ -69,6 +68,9 @@ function Post({ params }: { params: { slug: string[] } }) {
 
 		setPost(newPost)
 		setLoading(false)
+		if (document.body.offsetWidth < 768) {
+			onSetMenuHide()
+		}
 	}
 
 	if (loading || !post) {
