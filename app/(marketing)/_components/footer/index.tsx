@@ -73,7 +73,7 @@ export default function Footer() {
 							width={30}
 							height={30}
 							style={{ objectFit: 'cover' }}
-							onClick={() => goTo('m')}
+							onClick={() => goTo('b')}
 						/>
 						<Image
 							className="dark:bg-slate-100 rounded-lg m-1 p-1 duration-300 hover:bg-white"
@@ -82,7 +82,7 @@ export default function Footer() {
 							width={30}
 							height={30}
 							style={{ objectFit: 'cover' }}
-							onClick={() => goTo('b')}
+							onClick={() => goTo('m')}
 						/>
 						<Image
 							className="dark:bg-slate-100 rounded-lg m-1 p-1 duration-300 hover:bg-white"
