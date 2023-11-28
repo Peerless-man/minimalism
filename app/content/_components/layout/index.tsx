@@ -6,6 +6,7 @@ import { useEffect } from 'react'
 import { useCommonStore } from '../../../../hooks/use-common-store'
 
 import dynamic from 'next/dynamic'
+import { debounce } from 'utils/tool'
 
 const RenderMenu = dynamic(() => import('../menu/index'), {
 	ssr: false,
@@ -14,22 +15,31 @@ const RenderMenu = dynamic(() => import('../menu/index'), {
 function Layout({ children }: any) {
 	const {
 		onSetCatalogHide,
+		onSetCatalogShow,
 		onSetMenuShow,
 		onSetMenuHide,
 		onSetCatalogIconHide,
 	} = useCommonStore()
 
-	useEffect(() => {
+	const judgeHideMenuOrCatalog = () => {
 		if (document.body.offsetWidth < 768) {
 			onSetCatalogHide()
 			onSetMenuHide()
 		} else {
 			onSetMenuShow()
+			onSetCatalogShow()
 		}
-		onSetCatalogIconHide()
+	}
+
+	const debounceJudge = debounce(judgeHideMenuOrCatalog, 50)
+
+	useEffect(() => {
+		window.addEventListener('resize', debounceJudge)
 
 		return () => {
-			onSetMenuHide()
+			onSetCatalogIconHide()
+			onSetMenuShow()
+			window.removeEventListener('resize', debounceJudge)
 		}
 	}, [])
 
@@ -38,9 +48,9 @@ function Layout({ children }: any) {
 			className={`${classes.layout} duration-300 bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white`}
 		>
 			<Header />
-			<div className={`${classes.body} p-5 mt-8`}>
+			<div className={`${classes.body} p-5 mt-14`}>
 				<RenderMenu />
-				<div className="w-[100%] h-[calc(100vh-45px)] overflow-auto rounded-lg">
+				<div className="w-[100%] h-[calc(100vh-60px)] overflow-auto rounded-lg">
 					{children}
 				</div>
 			</div>

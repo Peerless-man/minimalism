@@ -21,6 +21,7 @@ import {
 function Post({ params }: { params: { slug: string[] } }) {
 	const { isDark } = useDark()
 	const { catalogShow, onSetCatalogIconShow } = useCommonStore()
+	const [loading, setLoading] = useState<Boolean>(false)
 	const [post, setPost] = useState<
 		Vue2Posts | Vue3Posts | EssayPosts | ReactPosts | null | undefined
 	>(null)
@@ -29,6 +30,7 @@ function Post({ params }: { params: { slug: string[] } }) {
 	const [scrollElement, setScrollElement] = useState<any>(null)
 
 	useEffect(() => {
+		setLoading(true)
 		if (params.slug && params.slug.length) {
 			getPostById(
 				params.slug[0],
@@ -43,7 +45,7 @@ function Post({ params }: { params: { slug: string[] } }) {
 	}, [id])
 
 	const getPostById = (type: string, id: string) => {
-		let post:
+		let newPost:
 			| Vue2Posts
 			| Vue3Posts
 			| EssayPosts
@@ -52,23 +54,24 @@ function Post({ params }: { params: { slug: string[] } }) {
 			| undefined = null
 		switch (type) {
 			case 'vue2':
-				post = allVue2Posts.find(item => item._id == id)
+				newPost = allVue2Posts.find(item => item._id == id)
 				break
 			case 'vue3':
-				post = allVue3Posts.find(item => item._id == id)
+				newPost = allVue3Posts.find(item => item._id == id)
 				break
 			case 'react':
-				post = allReactPosts.find(item => item._id == id)
+				newPost = allReactPosts.find(item => item._id == id)
 				break
 			case 'essay':
-				post = allEssayPosts.find(item => item._id == id)
+				newPost = allEssayPosts.find(item => item._id == id)
 				break
 		}
 
-		setPost(post)
+		setPost(newPost)
+		setLoading(false)
 	}
 
-	if (!post?._id) {
+	if (loading || !post) {
 		return (
 			<div className="w-full h-full flex justify-center items-center">
 				<span className="text-xl font-bold">Loading...</span>

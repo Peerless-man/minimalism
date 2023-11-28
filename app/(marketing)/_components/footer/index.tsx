@@ -67,7 +67,7 @@ export default function Footer() {
 					</div>
 					<div className="flex flex-wrap items-center py-1 cursor-pointer">
 						<Image
-							className="bg-slate-300 rounded-lg m-1 p-1 duration-300 hover:bg-white"
+							className="dark:bg-slate-100 rounded-lg m-1 p-1 duration-300 hover:bg-white"
 							alt="Bilibili"
 							src={bilibili}
 							width={30}
@@ -76,7 +76,7 @@ export default function Footer() {
 							onClick={() => goTo('m')}
 						/>
 						<Image
-							className="bg-slate-300 rounded-lg m-1 p-1 duration-300 hover:bg-white"
+							className="dark:bg-slate-100 rounded-lg m-1 p-1 duration-300 hover:bg-white"
 							alt="NetEase Cloud"
 							src={wangyiyunyinle}
 							width={30}
@@ -85,7 +85,7 @@ export default function Footer() {
 							onClick={() => goTo('b')}
 						/>
 						<Image
-							className="bg-slate-300 rounded-lg m-1 p-1 duration-300 hover:bg-white"
+							className="dark:bg-slate-100 rounded-lg m-1 p-1 duration-300 hover:bg-white"
 							alt="QQ"
 							src={tengxunQQ}
 							width={30}
@@ -96,7 +96,7 @@ export default function Footer() {
 						<Popover className="relative flex">
 							<Popover.Button>
 								<Image
-									className="bg-slate-300 rounded-lg m-1 p-1 duration-300 hover:bg-white"
+									className="dark:bg-slate-100 rounded-lg m-1 p-1 duration-300 hover:bg-white"
 									alt="WeChat"
 									src={weixin}
 									width={30}
@@ -114,14 +114,14 @@ export default function Footer() {
 								leaveTo="opacity-0 translate-y-1"
 							>
 								<Popover.Panel className="absolute -left-8 bottom-12 z-10">
-									<div className="px-2 py-1 bg-slate-300 dark:bg-slate-700 rounded-lg">
+									<div className="px-2 py-1 dark:bg-slate-100 dark:bg-slate-700 rounded-lg">
 										M2715158815
 									</div>
 								</Popover.Panel>
 							</Transition>
 						</Popover>
 						<Image
-							className="bg-slate-300 rounded-lg m-1 p-1 duration-300 hover:bg-white"
+							className="dark:bg-slate-100 rounded-lg m-1 p-1 duration-300 hover:bg-white"
 							alt="Twitter"
 							src={twitter}
 							width={30}

@@ -35,13 +35,13 @@ export default function ToggleTheme() {
 			{dark ? (
 				<SunIcon
 					onClick={setLightTheme}
-					className="h-6 w-6  text-white dark:hover:text-violet-400 duration-500 ui-open:rotate-180 ui-open:transform"
+					className="h-8 w-8 text-white dark:hover:text-violet-400 duration-500 ui-open:rotate-180 ui-open:transform"
 					aria-hidden="true"
 				/>
 			) : (
 				<MoonIcon
 					onClick={setDarkTheme}
-					className="h-6 w-6 text-violet-300 hover:text-violet-500  duration-500 ui-open:rotate-180 ui-open:transform"
+					className="h-8 w-8 hover:text-violet-500  duration-500 ui-open:rotate-180 ui-open:transform"
 					aria-hidden="true"
 				/>
 			)}

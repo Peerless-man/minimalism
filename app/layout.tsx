@@ -9,14 +9,14 @@ const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
 	title: {
-		default: '芜湖',
-		template: `%s | 哈哈`,
+		default: `M's Next Site`,
+		template: `%s | `,
 	},
-	description: 'dddddd',
+	description:
+		'一个由Next.js、Headless UI、Tailwind.css、md-editor-rt、contentlayer开发的文档 部署在vercel上',
 	icons: [
 		{
 			url: '/rabbit.svg',
-			href: '/rabbit.svg',
 		},
 	],
 }

@@ -22,12 +22,12 @@ export const useCommonStore = create<commonStore>(
 			catalogIconShow: false,
 			onSetCatalogIconShow: () => set({ catalogIconShow: true }),
 			onSetCatalogIconHide: () => set({ catalogIconShow: false }),
-			// 目录是否展示 默认不展示
-			catalogShow: false,
+			// 目录是否展示 默认展示
+			catalogShow: true,
 			onSetCatalogShow: () => set({ catalogShow: true }),
 			onSetCatalogHide: () => set({ catalogShow: false }),
 			// 菜单是否展示 默认展示
-			menuShow: false,
+			menuShow: true,
 			onSetMenuShow: () => set({ menuShow: true }),
 			onSetMenuHide: () => set({ menuShow: false }),
 		}),
