@@ -93,7 +93,7 @@ export default function Footer() {
 
 	return (
 		<>
-			<div className="flex items-start justify-between flex-wrap p-5 duration-300 border-t-2 border-rose-200 hover:border-purple-300 rounded-lg bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white">
+			<div className="flex items-start justify-between flex-wrap p-5 duration-300 border-t-2 border-rose-200 hover:border-purple-300 rounded-lg bg-white dark:bg-slate-900 text-black dark:text-slate-400">
 				<div className="w-[100%] md:w-[50%] text-left p-5">
 					<h3 className="text-2xl leading-9">我是小张</h3>
 					<h3 className="text-xl leading-9">欢迎来到我的小站</h3>
@@ -124,7 +124,7 @@ export default function Footer() {
 					</div>
 					<div className="flex flex-wrap items-center py-3 cursor-pointer">
 						<Image
-							className="dark:bg-slate-100 rounded-lg mr-1 p-1 duration-300 hover:-translate-y-1"
+							className="dark:bg-white rounded-lg mr-1 p-1 duration-300 hover:-translate-y-1"
 							alt="Bilibili"
 							src={bilibili}
 							width={30}
@@ -133,7 +133,7 @@ export default function Footer() {
 							onClick={() => goTo('b')}
 						/>
 						<Image
-							className="dark:bg-slate-100 rounded-lg mr-1 p-1 duration-300 hover:-translate-y-1"
+							className="dark:bg-white rounded-lg mr-1 p-1 duration-300 hover:-translate-y-1"
 							alt="NetEase Cloud"
 							src={wangyiyunyinle}
 							width={30}
@@ -142,7 +142,7 @@ export default function Footer() {
 							onClick={() => goTo('m')}
 						/>
 						<Image
-							className="dark:bg-slate-100 rounded-lg mr-1 p-1 duration-300 hover:-translate-y-1"
+							className="dark:bg-white rounded-lg mr-1 p-1 duration-300 hover:-translate-y-1"
 							alt="QQ"
 							src={tengxunQQ}
 							width={30}
@@ -153,7 +153,7 @@ export default function Footer() {
 						<Popover className="relative flex">
 							<Popover.Button>
 								<Image
-									className="dark:bg-slate-100 rounded-lg mr-1 p-1 duration-300 hover:-translate-y-1"
+									className="dark:bg-white rounded-lg mr-1 p-1 duration-300 hover:-translate-y-1"
 									alt="WeChat"
 									src={weixin}
 									width={30}
@@ -171,14 +171,14 @@ export default function Footer() {
 								leaveTo="opacity-0 translate-y-1"
 							>
 								<Popover.Panel className="absolute -left-8 bottom-12 z-10">
-									<div className="px-2 py-1 bg-slate-100  dark:bg-slate-700 rounded-lg">
+									<div className="px-2 py-1 bg-white  dark:bg-slate-700 rounded-lg">
 										M2715158815
 									</div>
 								</Popover.Panel>
 							</Transition>
 						</Popover>
 						<Image
-							className="dark:bg-slate-100 rounded-lg mr-1 p-1 duration-300 hover:-translate-y-1"
+							className="dark:bg-white rounded-lg mr-1 p-1 duration-300 hover:-translate-y-1"
 							alt="Twitter"
 							src={twitter}
 							width={30}

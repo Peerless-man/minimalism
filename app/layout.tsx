@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 		'一个由Next.js、Headless UI、Tailwind.css、md-editor-rt、contentlayer开发的文档 部署在vercel上',
 	icons: [
 		{
-			url: '/rabbit.svg',
+			url: '/m.svg',
 		},
 	],
 }
@@ -29,7 +29,7 @@ export default function RootLayout({
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<body
-				className={`${inter.className} w-full h-full duration-300 bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white`}
+				className={`${inter.className} w-full h-full duration-300 bg-white dark:bg-slate-900 text-black dark:text-slate-400`}
 			>
 				<Providers>{children}</Providers>
 			</body>

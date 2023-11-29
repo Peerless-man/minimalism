@@ -8,12 +8,6 @@
 	--m-bg: #121826;
 }
 
-@media (prefers-color-scheme: dark) {
-	:root {
-		--m-bg: #121826;
-	}
-}
-
 html,
 body,
 :root {

@@ -38,13 +38,7 @@ const defaultMenuList: Menu = [
 	},
 ]
 
-function renderMenu({
-	menuList,
-	menuShow,
-}: {
-	menuList: Menu
-	menuShow: boolean | undefined
-}) {
+function renderMenu({ menuList }: { menuList: Menu }) {
 	if (!menuList.length) {
 		return (
 			<div className="hidden md:flex w-full h-full p-2 justify-center items-start">
@@ -54,7 +48,7 @@ function renderMenu({
 	}
 
 	return (
-		<div className="h-full duration-300 bg-slate-200 dark:bg-slate-800 text-slate-900 dark:text-white  ring-violet-300 ring-2 md:ring-0">
+		<div className="h-full duration-300 bg-slate-50 dark:bg-slate-800 text-black dark:text-slate-400">
 			{menuList && menuList.length
 				? menuList.map(menu => {
 						return (
@@ -66,7 +60,7 @@ function renderMenu({
 											{menu.children &&
 											menu.children.length ? (
 												<ChevronDownIcon
-													className="ml-2 h-8 w-8 hover:text-violet-500 dark:hover:text-violet-300 duration-300 ui-open:rotate-180 ui-open:transform"
+													className="ml-2 w-6 h-6 hover:text-violet-500 dark:hover:text-violet-300 duration-300 ui-open:rotate-180 ui-open:transform"
 													aria-hidden="true"
 												/>
 											) : (
@@ -74,36 +68,24 @@ function renderMenu({
 											)}
 										</div>
 									</Disclosure.Button>
-									<Transition
-										enter="transition duration-300 ease-out"
-										enterFrom="transform scale-95 opacity-0"
-										enterTo="transform scale-00 opacity-100"
-										leave="transition duration-75 ease-out"
-										leaveFrom="transform scale-100 opacity-100"
-										leaveTo="transform scale-95 opacity-0"
-									>
-										<Disclosure.Panel>
-											{menu.children &&
-											menu.children.length
-												? menu.children.map(child => (
-														<div key={child.title}>
-															<Link
-																href={
-																	child.path ||
-																	'/'
-																}
-															>
-																<div className="px-3 py-1 text-left  hover:text-violet-500 dark:hover:text-violet-300 cursor-pointer">
-																	{
-																		child.title
-																	}
-																</div>
-															</Link>
-														</div>
-												  ))
-												: null}
-										</Disclosure.Panel>
-									</Transition>
+									<Disclosure.Panel>
+										{menu.children && menu.children.length
+											? menu.children.map(child => (
+													<div key={child.title}>
+														<Link
+															href={
+																child.path ||
+																'/'
+															}
+														>
+															<div className="px-3 py-1 text-left  hover:text-violet-500 dark:hover:text-violet-300 cursor-pointer">
+																{child.title}
+															</div>
+														</Link>
+													</div>
+											  ))
+											: null}
+									</Disclosure.Panel>
 								</Disclosure>
 							</div>
 						)
@@ -161,7 +143,7 @@ function MinimalismMenu() {
 	return (
 		<Transition
 			show={menuShow}
-			className={`fixed left-0 top-16 md:top-0 w-[100%] md:sticky  h-[calc(100vh-60px)] bg-transparent  z-40 overflow-auto`}
+			className={`fixed left-0 top-14 md:top-0 w-[100%] md:sticky  h-[calc(100vh-56px)] bg-transparent  z-40 overflow-auto`}
 			enter="transition duration-300 ease-out"
 			enterFrom="transform scale-95 opacity-0"
 			enterTo="transform scale-100 opacity-100"
@@ -169,7 +151,7 @@ function MinimalismMenu() {
 			leaveFrom="transform scale-100 opacity-100"
 			leaveTo="transform scale-95 opacity-0"
 		>
-			{renderMenu({ menuList, menuShow })}
+			{renderMenu({ menuList })}
 		</Transition>
 	)
 }

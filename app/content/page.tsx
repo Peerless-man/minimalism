@@ -1,6 +1,6 @@
 export default function ContentPage() {
 	return (
-		<div className="w-full h-full px-4">
+		<div className="w-full h-full px-4 pt-16">
 			<div className="text-2xl font-bold text-left">
 				欢迎来到小张的面经网站
 			</div>

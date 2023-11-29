@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { MoonIcon, SunIcon } from '@heroicons/react/20/solid'
+import { SunIcon } from '@heroicons/react/20/solid'
+import { MoonIcon } from '@heroicons/react/24/outline'
 
 import { useDark } from '../../hooks/use-dark'
 import { useTheme } from '../../hooks/use-theme'
@@ -35,13 +36,13 @@ export default function ToggleTheme() {
 			{dark ? (
 				<SunIcon
 					onClick={setLightTheme}
-					className="h-8 w-8 text-white dark:hover:text-violet-400 duration-500 ui-open:rotate-180 ui-open:transform"
+					className="w-5 h-5 text-white dark:hover:text-violet-400 duration-500 ui-open:rotate-180 ui-open:transform"
 					aria-hidden="true"
 				/>
 			) : (
 				<MoonIcon
 					onClick={setDarkTheme}
-					className="h-8 w-8 hover:text-violet-500  duration-500 ui-open:rotate-180 ui-open:transform"
+					className="w-5 h-5 hover:text-violet-500  duration-500 ui-open:rotate-180 ui-open:transform"
 					aria-hidden="true"
 				/>
 			)}

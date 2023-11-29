@@ -46,16 +46,18 @@ function Layout({ children }: any) {
 
 	return (
 		<div
-			className={`${classes.layout} duration-300 bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-white`}
+			className={`${classes.layout} duration-300 bg-white dark:bg-slate-900 text-black dark:text-slate-400`}
 		>
 			<Header />
-			<div className={`${classes.body} p-5 mt-14`}>
-				<div className={`w-[0] ${menuShow ? 'md:w-[25%]' : ''} `}>
+			<div className={`${classes.body}`}>
+				<div
+					className={`mt-14 md:w-[25%] ${
+						menuShow ? 'block' : 'hidden'
+					}`}
+				>
 					<RenderMenu />
 				</div>
-				<div className="w-[100%] h-[calc(100vh-60px)] overflow-auto rounded-lg">
-					{children}
-				</div>
+				<div className="w-full h-full overflow-auto">{children}</div>
 			</div>
 		</div>
 	)

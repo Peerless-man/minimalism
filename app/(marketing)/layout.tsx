@@ -12,7 +12,7 @@ export default function MarketingLayout({
 	return (
 		<div className="mx-auto h-full  max-w-[1280px]">
 			<Header />
-			<div className="w-full h-full duration-300 text-slate-900 bg-slate-100 dark:bg-slate-900 dark:text-white px-4 py-2">
+			<div className="w-full h-full duration-300 text-black bg-white dark:bg-slate-900 dark:text-slate-400 px-4 py-2">
 				{children}
 			</div>
 			<Footer />

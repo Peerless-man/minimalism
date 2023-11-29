@@ -1,0 +1,33 @@
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+article {
+	color: #000 !important;
+}
+
+.dark {
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	p,
+	article {
+		color: #94a3b8 !important;
+	}
+}
+
+#preview-only-preview-wrapper {
+	padding: 0px 20px 60px 20px;
+}
+
+@media (max-width: 768px) {
+	#preview-only-preview-wrapper {
+		padding: 0px 10px 60px 10px;
+	}
+}

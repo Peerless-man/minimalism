@@ -2,30 +2,29 @@
 
 import { useEffect, useState } from 'react'
 import { MdPreview, MdCatalog } from 'md-editor-rt'
+import Image from 'next/image'
+import { format, parseISO } from 'date-fns'
+import './index.scss'
 
 import 'md-editor-rt/lib/preview.css'
 
 import { useDark } from '../../../../hooks/use-dark'
 import { useCommonStore } from '../../../../hooks/use-common-store'
+import { CalendarDaysIcon, BookOpenIcon } from '@heroicons/react/24/outline'
 
 import {
 	allEssayPosts,
 	allVue2Posts,
 	allVue3Posts,
 	allReactPosts,
-	EssayPosts,
-	ReactPosts,
-	Vue2Posts,
-	Vue3Posts,
 } from 'contentlayer/generated'
+import { Post as PostType } from 'contentlayer.config'
 
 function Post({ params }: { params: { slug: string[] } }) {
 	const { isDark } = useDark()
 	const { catalogShow, onSetMenuHide } = useCommonStore()
 	const [loading, setLoading] = useState<Boolean>(false)
-	const [post, setPost] = useState<
-		Vue2Posts | Vue3Posts | EssayPosts | ReactPosts | null | undefined
-	>(null)
+	const [post, setPost] = useState<PostType | undefined | null>(null)
 
 	const [id] = useState('preview-only')
 	const [scrollElement, setScrollElement] = useState<any>(null)
@@ -44,13 +43,7 @@ function Post({ params }: { params: { slug: string[] } }) {
 	}, [id])
 
 	const getPostById = (type: string, id: string) => {
-		let newPost:
-			| Vue2Posts
-			| Vue3Posts
-			| EssayPosts
-			| ReactPosts
-			| null
-			| undefined = null
+		let newPost: any = null
 		switch (type) {
 			case 'vue2':
 				newPost = allVue2Posts.find(item => item._id == id)
@@ -81,24 +74,57 @@ function Post({ params }: { params: { slug: string[] } }) {
 		)
 	}
 
-	return (
-		<div id="scrollElement" className="flex h-full overflow-scroll">
-			<MdPreview
-				className="w-[100%] !bg-transparent"
-				editorId={id}
-				modelValue={post.body.raw}
-				theme={isDark ? 'dark' : 'light'}
-			/>
-			<div
-				className={`fixed duration-300 top-[40px] right-0 w-[30%] h-full overflow-auto md:sticky md:top-0 md:w-[20%] bg-slate-100 dark:bg-slate-900 ${
-					catalogShow ? 'block' : 'hidden'
-				}`}
-			>
-				<MdCatalog
-					style={{ maxWidth: 'inherit' }}
-					editorId={id}
-					scrollElement={scrollElement}
+	function renderHeader(post: PostType) {
+		if (!post.header) return
+
+		return (
+			<div className="w-[80%] h-60 relative px-[10px] md:px-[20px]">
+				<Image
+					className="w-[100%] h-[100%] object-cover"
+					alt={post.category}
+					width={1000}
+					height={600}
+					src={post.header}
+					priority
 				/>
+			</div>
+		)
+	}
+
+	return (
+		<div id="scrollElement" className="w-full h-full pt-16 overflow-auto">
+			{renderHeader(post)}
+			<div className="text-left px-[10px] md:px-[20px]">
+				<h1 className="text-3xl font-bold pt-5 pb-1">{post.title}</h1>
+				<div className="flex items-center py-1">
+					<BookOpenIcon className="w-6 h-6 mr-2" />
+					<h3 className="text-md">{post.category}</h3>
+				</div>
+				<div className="flex items-center py-1">
+					<CalendarDaysIcon className="w-6 h-6 mr-2" />
+					<h3 className="text-sm">
+						{format(parseISO(post.date), 'LLLL d, yyyy')}
+					</h3>
+				</div>
+			</div>
+			<div className="sticky top-[60px] w-full h-full overflow-y-scroll flex">
+				<MdPreview
+					className="w-[100%] !bg-transparent"
+					editorId={id}
+					modelValue={post.body.raw}
+					theme={isDark ? 'dark' : 'light'}
+				/>
+				<div
+					className={`duration-300 h-full overflow-auto w-[20%] bg-white dark:bg-slate-900 ${
+						catalogShow ? 'block' : 'hidden'
+					}`}
+				>
+					<MdCatalog
+						style={{ maxWidth: 'inherit' }}
+						editorId={id}
+						scrollElement={scrollElement}
+					/>
+				</div>
 			</div>
 		</div>
 	)

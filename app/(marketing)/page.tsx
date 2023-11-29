@@ -38,7 +38,7 @@ export default function MarketingPage() {
 			>
 				这里记录了一些前端面试资料和一些个人随笔
 			</div>
-			<button className="mt-20 px-4 py-1 duration-300 bg-slate-900 dark:bg-white text-white dark:text-slate-950 text-3xl rounded-lg hover:-translate-y-1">
+			<button className="mt-20 px-4 py-1 duration-300 bg-gradient-to-r from-pink-600 to-blue-600 hover:from-blue-600 hover:to-pink-600 text-white text-3xl rounded-lg hover:scale-105">
 				<Link href="/content">Getting Started</Link>
 			</button>
 		</div>
