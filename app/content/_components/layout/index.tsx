@@ -49,15 +49,21 @@ function Layout({ children }: any) {
 			className={`${classes.layout} duration-300 bg-white dark:bg-slate-900 text-black dark:text-slate-400`}
 		>
 			<Header />
-			<div className={`${classes.body}`}>
+			<div className={`${classes.body} overflow-scroll`}>
 				<div
-					className={`mt-14 md:w-[25%] ${
+					className={`mt-14 md:w-[15rem] relative ${
 						menuShow ? 'block' : 'hidden'
 					}`}
 				>
 					<RenderMenu />
 				</div>
-				<div className="w-full h-full overflow-auto">{children}</div>
+				<div
+					className={`flex-1 h-full overflow-auto ${
+						menuShow && 'md:pl-15rem'
+					}`}
+				>
+					{children}
+				</div>
 			</div>
 		</div>
 	)

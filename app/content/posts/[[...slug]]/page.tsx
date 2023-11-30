@@ -38,8 +38,7 @@ function Post({ params }: { params: { slug: string[] } }) {
 			)
 		}
 
-		// 有文章才展示目录
-		setScrollElement(document.getElementById('scrollElement'))
+		setScrollElement(document.documentElement)
 	}, [id])
 
 	const getPostById = (type: string, id: string) => {
@@ -68,7 +67,7 @@ function Post({ params }: { params: { slug: string[] } }) {
 
 	if (loading || !post) {
 		return (
-			<div className="w-full h-full flex justify-center items-center">
+			<div className="w-full h-[100vh] flex justify-center items-center">
 				<span className="text-xl font-bold">Loading...</span>
 			</div>
 		)
@@ -78,7 +77,7 @@ function Post({ params }: { params: { slug: string[] } }) {
 		if (!post.header) return
 
 		return (
-			<div className="w-[80%] h-60 relative px-[10px] md:px-[20px]">
+			<div className="w-[100%] h-60 md:h-96 relative px-[10px] md:px-[20px]">
 				<Image
 					className="w-[100%] h-[100%] object-cover"
 					alt={post.category}
@@ -92,36 +91,41 @@ function Post({ params }: { params: { slug: string[] } }) {
 	}
 
 	return (
-		<div id="scrollElement" className="w-full h-full pt-16 overflow-auto">
-			{renderHeader(post)}
-			<div className="text-left px-[10px] md:px-[20px]">
-				<h1 className="text-3xl font-bold pt-5 pb-1">{post.title}</h1>
-				<div className="flex items-center py-1">
-					<BookOpenIcon className="w-6 h-6 mr-2" />
-					<h3 className="text-md">{post.category}</h3>
+		<div className="pt-16 flex">
+			<div className="w-full h-full">
+				{renderHeader(post)}
+				<div className="text-left px-[10px] md:px-[20px]">
+					<h1 className="text-3xl font-bold pt-5 pb-1">
+						{post.title}
+					</h1>
+					<div className="flex items-center py-1">
+						<BookOpenIcon className="w-6 h-6 mr-2" />
+						<h3 className="text-md">{post.category}</h3>
+					</div>
+					<div className="flex items-center py-1">
+						<CalendarDaysIcon className="w-6 h-6 mr-2" />
+						<h3 className="text-sm">
+							{format(parseISO(post.date), 'LLLL d, yyyy')}
+						</h3>
+					</div>
 				</div>
-				<div className="flex items-center py-1">
-					<CalendarDaysIcon className="w-6 h-6 mr-2" />
-					<h3 className="text-sm">
-						{format(parseISO(post.date), 'LLLL d, yyyy')}
-					</h3>
-				</div>
-			</div>
-			<div className="sticky top-[60px] w-full h-full overflow-y-scroll flex">
 				<MdPreview
-					className="w-[100%] !bg-transparent"
+					className="!bg-transparent"
 					editorId={id}
 					modelValue={post.body.raw}
 					theme={isDark ? 'dark' : 'light'}
 				/>
+			</div>
+			<div className="w-[0] md:w-[10rem] relative">
 				<div
-					className={`duration-300 h-full overflow-auto w-[20%] bg-white dark:bg-slate-900 ${
+					className={`fixed duration-300  h-[calc(100vh-56px)] overflow-auto w-[10rem] bg-white dark:bg-slate-900 ${
 						catalogShow ? 'block' : 'hidden'
 					}`}
 				>
 					<MdCatalog
 						style={{ maxWidth: 'inherit' }}
 						editorId={id}
+						offsetTop={100}
 						scrollElement={scrollElement}
 					/>
 				</div>

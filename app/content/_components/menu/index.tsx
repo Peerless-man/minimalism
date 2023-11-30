@@ -143,7 +143,7 @@ function MinimalismMenu() {
 	return (
 		<Transition
 			show={menuShow}
-			className={`fixed left-0 top-14 md:top-0 w-[100%] md:sticky  h-[calc(100vh-56px)] bg-transparent  z-40 overflow-auto`}
+			className={`fixed w-[100%] md:w-[15rem]  h-[calc(100vh-56px)] bg-transparent  z-40 overflow-auto`}
 			enter="transition duration-300 ease-out"
 			enterFrom="transform scale-95 opacity-0"
 			enterTo="transform scale-100 opacity-100"
