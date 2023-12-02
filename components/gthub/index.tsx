@@ -1,8 +1,15 @@
-import { useDark } from 'hooks/use-dark'
 import Image from 'next/image'
+import { useTheme } from 'next-themes'
+import { useEffect, useState } from 'react'
 
 export default function GitHub() {
-	const { isDark } = useDark()
+	const { resolvedTheme } = useTheme()
+
+	const [isDark, setIsDark] = useState<boolean | undefined>()
+
+	useEffect(() => {
+		setIsDark(resolvedTheme == 'dark' ? true : false)
+	}, [resolvedTheme])
 
 	const goToGithub = () => {
 		window.open('https://github.com/Peerless-man/minimalism')

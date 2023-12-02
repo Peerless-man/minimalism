@@ -1,11 +1,11 @@
 'use client'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import { Disclosure, Transition } from '@headlessui/react'
+import { Listbox, Transition } from '@headlessui/react'
 
 import GitHub from 'components/gthub'
 import ToggleTheme from '../../../../components/toggle-theme'
-import { HomeIcon, ListBulletIcon } from '@heroicons/react/24/outline'
+import { HomeIcon, RocketLaunchIcon } from '@heroicons/react/24/outline'
 
 const RenderMenuIconShow = dynamic(() => import('./render-menu-icon'), {
 	ssr: false,
@@ -18,11 +18,11 @@ export default function Header() {
 				<RenderMenuIconShow />
 			</div>
 			<div className="flex items-center">
-				<Disclosure>
+				<Listbox>
 					<div className="relative w-6 h-6 mr-3">
-						<Disclosure.Button>
-							<ListBulletIcon className="w-6 h-6 dark:text-violet-100 hover:text-violet-500 dark:hover:text-violet-300" />
-						</Disclosure.Button>
+						<Listbox.Button>
+							<RocketLaunchIcon className="w-6 h-6 dark:text-violet-100 hover:text-violet-500 dark:hover:text-violet-300" />
+						</Listbox.Button>
 						<Transition
 							enter="transition duration-300 ease-out"
 							enterFrom="transform scale-95 opacity-0"
@@ -31,20 +31,24 @@ export default function Header() {
 							leaveFrom="transform scale-100 opacity-100"
 							leaveTo="transform scale-95 opacity-0"
 						>
-							<Disclosure.Panel className="absolute left-1/2 -translate-x-1/2 top-full bg-slate-50 dark:bg-slate-700 rounded-lg shadow-lg">
+							<Listbox.Options className="absolute left-1/2 -translate-x-1/2 top-full bg-slate-50 dark:bg-slate-700 rounded-lg shadow-lg">
 								<div className="px-5 py-2">
-									<Link
-										href="/"
-										className="mr-6 dark:text-violet-100 hover:text-violet-500 dark:hover:text-violet-300 duration-300 "
-									>
-										<HomeIcon />
-									</Link>
-									<GitHub />
+									<Listbox.Option value={1}>
+										<Link
+											href="/"
+											className="block mb-2 dark:text-violet-100 hover:text-violet-500 dark:hover:text-violet-300 duration-300 "
+										>
+											<HomeIcon className="w-6 h-6" />
+										</Link>
+									</Listbox.Option>
+									<Listbox.Option value={2}>
+										<GitHub />
+									</Listbox.Option>
 								</div>
-							</Disclosure.Panel>
+							</Listbox.Options>
 						</Transition>
 					</div>
-				</Disclosure>
+				</Listbox>
 				<ToggleTheme />
 			</div>
 		</div>

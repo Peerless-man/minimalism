@@ -2,6 +2,8 @@ import { create } from 'zustand'
 import persistMiddleware from '../middleware/store-persist'
 
 type commonStore = {
+	storageTheme: string
+	onSetStorageTheme: (storageTheme: string) => void
 	catalogShow: boolean
 	onSetCatalogShow: () => void
 	onSetCatalogHide: () => void
@@ -15,6 +17,9 @@ export const useCommonStore = create<commonStore>(
 	// 持久化useDark
 	persistMiddleware(
 		(set: any) => ({
+			// 主题
+			storageTheme: 'system',
+			onSetStorageTheme: (storageTheme: string) => set({ storageTheme }),
 			// 目录是否展示 默认展示
 			catalogShow: true,
 			onSetCatalogShow: () => set({ catalogShow: true }),

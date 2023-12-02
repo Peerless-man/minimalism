@@ -8,7 +8,6 @@ import './index.scss'
 
 import 'md-editor-rt/lib/preview.css'
 
-import { useDark } from '../../../../hooks/use-dark'
 import { useCommonStore } from '../../../../hooks/use-common-store'
 import { CalendarDaysIcon, BookOpenIcon } from '@heroicons/react/24/outline'
 
@@ -21,7 +20,6 @@ import {
 import { Post as PostType } from 'contentlayer.config'
 
 function Post({ params }: { params: { slug: string[] } }) {
-	const { isDark } = useDark()
 	const { catalogShow, onSetMenuHide } = useCommonStore()
 	const [loading, setLoading] = useState<Boolean>(false)
 	const [post, setPost] = useState<PostType | undefined | null>(null)
@@ -113,7 +111,6 @@ function Post({ params }: { params: { slug: string[] } }) {
 					className="!bg-transparent"
 					editorId={id}
 					modelValue={post.body.raw}
-					theme={isDark ? 'dark' : 'light'}
 				/>
 			</div>
 			<div className="w-[0] md:w-[10rem] relative">
