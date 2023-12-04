@@ -112,11 +112,12 @@ function MinimalismMenu() {
 		// 排序
 		posts.sort((a, b) => compareDesc(new Date(a.date), new Date(b.date)))
 		posts.forEach((v: EssayPosts | ReactPosts | Vue2Posts | Vue3Posts) => {
-			list.push({
-				id: v._id,
-				title: v.title,
-				path: '/content/posts/' + v.url,
-			})
+			v.show &&
+				list.push({
+					id: v._id,
+					title: v.title,
+					path: '/content/posts/' + v.url,
+				})
 		})
 
 		return list

@@ -59,6 +59,12 @@ const fields: FieldDefs = {
 		description: 'The header image of the Post',
 		required: false,
 	},
+	show: {
+		type: 'boolean',
+		description: '是否展示',
+		required: false,
+		default: true,
+	},
 }
 
 const Vue2Posts = defineDocumentType(() => ({

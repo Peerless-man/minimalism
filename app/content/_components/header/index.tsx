@@ -13,7 +13,7 @@ const RenderMenuIconShow = dynamic(() => import('./render-menu-icon'), {
 
 export default function Header() {
 	return (
-		<div className="fixed top-0 left-0 h-14 backdrop-blur-sm w-full px-2 md:px-5 py-1 duration-300 text-black dark:text-slate-400 border-b shadow-sm z-50 flex justify-between items-center text-lg">
+		<div className="fixed top-0 left-0 h-14 backdrop-blur-[1px] w-full px-2 md:px-5 py-1 duration-300 text-black dark:text-slate-400 border-b shadow-sm z-50 flex justify-between items-center text-lg">
 			<div className="flex items-center">
 				<RenderMenuIconShow />
 			</div>

@@ -9,6 +9,7 @@ import './index.scss'
 import 'md-editor-rt/lib/preview.css'
 
 import { useCommonStore } from '../../../../hooks/use-common-store'
+import { calcWorkCount } from 'utils/tool'
 import { CalendarDaysIcon, BookOpenIcon } from '@heroicons/react/24/outline'
 
 import {
@@ -99,13 +100,21 @@ function Post({ params }: { params: { slug: string[] } }) {
 					</h1>
 					<div className="flex items-center py-1">
 						<BookOpenIcon className="w-6 h-6 mr-2" />
-						<h3 className="text-md">{post.category}</h3>
+						<h3 className="text-md mr-3">{post.category}</h3>
 					</div>
-					<div className="flex items-center py-1">
-						<CalendarDaysIcon className="w-6 h-6 mr-2" />
-						<h3 className="text-sm">
-							{format(parseISO(post.date), 'LLLL d, yyyy')}
-						</h3>
+					<div className="flex justify-between items-center py-1">
+						<div className="flex items-center">
+							<CalendarDaysIcon className="w-6 h-6 mr-2" />
+							<h3 className="text-sm">
+								{format(parseISO(post.date), 'LLLL d, yyyy')}
+							</h3>
+						</div>
+						<div className="flex items-center py-1">
+							<span className="text-sm">字数：</span>
+							<h3 className="text-sm">
+								{calcWorkCount(post.wordCount)}
+							</h3>
+						</div>
 					</div>
 				</div>
 				<MdPreview
@@ -123,7 +132,6 @@ function Post({ params }: { params: { slug: string[] } }) {
 					<MdCatalog
 						style={{ maxWidth: 'inherit' }}
 						editorId={id}
-						offsetTop={100}
 						scrollElement={scrollElement}
 					/>
 				</div>
