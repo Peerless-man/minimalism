@@ -4,8 +4,8 @@ import { MoonIcon, ComputerDesktopIcon } from '@heroicons/react/24/outline'
 import { Listbox, Transition } from '@headlessui/react'
 import { useCommonStore } from 'hooks/use-common-store'
 
+// next-themes https://github.com/pacocoursey/next-themes
 import { useTheme } from 'next-themes'
-//
 
 export default function ToggleTheme() {
 	const { setTheme, systemTheme, resolvedTheme, theme } = useTheme()
@@ -24,12 +24,19 @@ export default function ToggleTheme() {
 	useEffect(() => {
 		// 初始化的时候 切换到指定的theme
 		toggleTheme(storageTheme)
+		/*判断是否处于深色模式*/
+		// 当主题变化时 dark 和light 照常设置 但是system需要设置为当前的具体是dark还是light主题 用于显示 切换的icon
+		if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+			//Do some thing
+			setThemeState('dark')
+		} else {
+			setThemeState('light')
+		}
 	}, [])
 
 	useEffect(() => {
-		// 当主题变化时 dark 和light 照常设置 但是system需要设置为当前的具体是dark还是light主题 用于显示 切换的icon
-		setThemeState(theme == 'system' ? resolvedTheme || systemTheme : theme)
-	}, [theme])
+		setThemeState(resolvedTheme)
+	}, [resolvedTheme])
 
 	return (
 		<>

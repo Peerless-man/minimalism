@@ -2,7 +2,7 @@
 import classes from './index.module.scss'
 
 import Header from '../header'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useCommonStore } from '../../../../hooks/use-common-store'
 
 import dynamic from 'next/dynamic'
@@ -21,6 +21,8 @@ function Layout({ children }: any) {
 		onSetMenuHide,
 	} = useCommonStore()
 
+	const [show, setShow] = useState<boolean>(true)
+
 	const judgeHideMenuOrCatalog = () => {
 		if (document.body.offsetWidth < 768) {
 			onSetCatalogHide()
@@ -30,6 +32,10 @@ function Layout({ children }: any) {
 			onSetCatalogShow()
 		}
 	}
+
+	useEffect(() => {
+		setShow(menuShow)
+	}, [menuShow])
 
 	const debounceJudge = debounce(judgeHideMenuOrCatalog, 30)
 
@@ -46,24 +52,16 @@ function Layout({ children }: any) {
 
 	return (
 		<div
-			className={`${classes.layout} duration-300 bg-white dark:bg-slate-900 text-black dark:text-slate-400`}
+			className={`${classes.layout} md:bg-transparent duration-300 bg-white dark:bg-slate-900 text-black dark:text-slate-400`}
 		>
 			<Header />
 			<div className={`${classes.body} overflow-scroll`}>
 				<div
-					className={`mt-14 md:w-[15rem] relative ${
-						menuShow ? 'block' : 'hidden'
-					}`}
+					className={`mt-14 ${show ? 'md:w-[15rem]' : ''}  relative`}
 				>
 					<RenderMenu />
 				</div>
-				<div
-					className={`flex-1 h-full overflow-auto ${
-						menuShow && 'md:pl-15rem'
-					}`}
-				>
-					{children}
-				</div>
+				<div className={`flex-1 h-full overflow-auto`}>{children}</div>
 			</div>
 		</div>
 	)

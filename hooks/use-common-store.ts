@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import persistMiddleware from '../middleware/store-persist'
 
-type commonStore = {
+interface commonStore {
 	storageTheme: string
 	onSetStorageTheme: (storageTheme: string) => void
 	catalogShow: boolean

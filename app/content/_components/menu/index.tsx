@@ -48,7 +48,7 @@ function renderMenu({ menuList }: { menuList: Menu }) {
 	}
 
 	return (
-		<div className="h-full duration-300 bg-slate-50 dark:bg-slate-800 text-black dark:text-slate-400">
+		<div className="h-full duration-300 bg-white dark:bg-slate-900 text-black dark:text-slate-400">
 			{menuList && menuList.length
 				? menuList.map(menu => {
 						return (

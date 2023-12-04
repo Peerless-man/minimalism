@@ -1,11 +1,11 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+// md-editor-rt https://imzbf.github.io/md-editor-rt/
 import { MdPreview, MdCatalog } from 'md-editor-rt'
 import Image from 'next/image'
 import { format, parseISO } from 'date-fns'
 import './index.scss'
-
 import 'md-editor-rt/lib/preview.css'
 
 import { useCommonStore } from '../../../../hooks/use-common-store'
@@ -37,7 +37,7 @@ function Post({ params }: { params: { slug: string[] } }) {
 		}
 
 		setScrollElement(document.documentElement)
-	}, [id])
+	}, [params.slug[0]])
 
 	const getPostById = (type: string, id: string) => {
 		let newPost: any = null
@@ -57,6 +57,7 @@ function Post({ params }: { params: { slug: string[] } }) {
 		}
 
 		setPost(newPost)
+		document.title = newPost.category + '-' + newPost.title
 		setLoading(false)
 		if (document.body.offsetWidth < 768) {
 			onSetMenuHide()
