@@ -1,0 +1,50 @@
+---
+title: Vue的生命周期
+date: 2023-12-4
+category: Vue2
+---
+
+# 什么是生命周期
+
+生命周期 简单的来说就是一个事物从出生 到 消亡的全部过程
+例如 我们打开一个网站 首先是发起网络请求获取网站的静态资源到本地 然后浏览器进行网页的加载 网站数据的获取 随着网页加载完成
+用户与网站进行交互 最后到用户关闭浏览器 网站销毁 浏览器清理内存
+
+在前端里需要注重的是 浏览器加载网站资源 用户和网站交互 用户离开网站(或某个页面) 我们能做什么
+
+在传统的html页面中 我们有四个生命周期
+
+-   DOMContentLoaded —— 浏览器已完全加载 HTML，并构建了 DOM 树，但样式表之类的外部资源可能尚未加载完成。
+-   load —— 浏览器不仅加载完成了 HTML，还加载完成了所有外部资源：图片，样式等。
+-   beforeunload —— 当用户正在离开页面时。
+-   unload —— 用户几乎已经离开了
+
+在Vue里我们有8个生命周期 意味着我们可以把生命周期分的更细 进行更多可能的事情
+
+-   beforeCreate
+-   created
+-   beforeMount
+-   mounted
+-   beforeUpdate
+-   updated
+-   beforeDestroy
+-   destroyed
+
+# 生命周期图示例
+
+![](/posts/vue2/lifecycle.png)
+
+# 提问环节
+
+问：生命周期有哪些 我们在这些生命周期中能做些什么
+
+> 答：生命周期有 beforeCreate、created、beforeMount、mounted、beforeUpdate、updated、beforeDestroy、beforeDestroy、destroyed
+> 通常我们会使用的生命周期有（比较重要的）created、mounted、beforeDestroy 其他的生命周期当然也有用 但是我们相对用的较少
+> 比如 我们会经常在created、mounted 初始化信息及使用网络请求请求数据、在beforeDestroy里做一些清理数据、保存未提交的数据或是提示用户即将离开网页的操作之类的
+
+问：created 和 mounted 有什么区别
+
+> 答：最大的区别就是created是在dom挂载之前调用的 mounted是在网页挂载之后调用的 所以不能在created里进行dom操作 当然在mounted里也不一定能获取到一些动态渲染的dom元素
+> 比如 渲染异步获取的列表数据 如果在数据获取到之前就去获取元素 就会获取不到 此时就可以在获取到数据之后 使用nextTick回调 在回调函数内进行获取元素的操作 <a href="https://v2.cn.vuejs.org/v2/api/#vm-nextTick" target="\_blank">nextTick</a>
+
+> 还是有很多童鞋会遇到获取不到dom元素的bug的 首先就是先检查一下代码是否写的又问题 其次再F12检查页面上是否有这个元素 然后再检查自己是否是在元素渲染完成后才去获取的这个元素

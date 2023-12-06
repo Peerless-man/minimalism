@@ -110,7 +110,7 @@ function MinimalismMenu() {
 		let list: MenuItem[] = []
 
 		// 排序
-		posts.sort((a, b) => compareDesc(new Date(a.date), new Date(b.date)))
+		posts.sort((a, b) => compareDesc(new Date(b.date), new Date(a.date)))
 		posts.forEach((v: EssayPosts | ReactPosts | Vue2Posts | Vue3Posts) => {
 			v.show &&
 				list.push({
