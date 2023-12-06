@@ -11,6 +11,7 @@ import 'md-editor-rt/lib/preview.css'
 import { useCommonStore } from '../../../../hooks/use-common-store'
 import { calcWorkCount } from 'utils/tool'
 import { CalendarDaysIcon, BookOpenIcon } from '@heroicons/react/24/outline'
+import { useTheme } from 'next-themes'
 
 import {
 	allEssayPosts,
@@ -27,6 +28,18 @@ function Post({ params }: { params: { slug: string[] } }) {
 
 	const [id] = useState('preview-only')
 	const [scrollElement, setScrollElement] = useState<any>(null)
+
+	const { resolvedTheme } = useTheme()
+
+	const [isDark, setIsDark] = useState<boolean>(false)
+
+	useEffect(() => {
+		if (resolvedTheme == 'dark') {
+			setIsDark(true)
+		} else {
+			setIsDark(false)
+		}
+	}, [resolvedTheme])
 
 	useEffect(() => {
 		setLoading(true)
@@ -121,6 +134,7 @@ function Post({ params }: { params: { slug: string[] } }) {
 					className="!bg-transparent"
 					editorId={id}
 					modelValue={post.body.raw}
+					theme={isDark ? 'dark' : 'light'}
 				/>
 			</div>
 			<div className="w-[0] md:w-[10rem] relative">
