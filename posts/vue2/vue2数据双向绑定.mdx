@@ -1,0 +1,155 @@
+---
+title: Vue2的数据双向绑定
+date: 2023-12-7
+category: Vue2
+---
+
+# Object.defineProperty()
+
+<a href="https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Object">
+	Object JavaScript参考
+</a>
+
+Object.defineProperty() 静态方法 会直接在一个对象上定义一个新属性，或修改其现有属性，并返回此对象。
+
+```js
+const object = {}
+
+// 简单设置新属性和值
+Object.defineProperty(object, 'age', {
+	value: 42,
+	writable: false,
+})
+
+object.age = 77
+// Throws an error in strict mode
+
+console.log(object.age)
+// Expected output: 42
+
+let name = 'xiaoming'
+
+// 重写对象的get和set方法 在get和set操作时 可以设置一些操作
+Object.defineProperty(object, 'name', {
+	get() {
+		console.log('get!')
+		return name
+	},
+	set(value) {
+		console.log('set!' + value)
+		name = value
+	},
+})
+
+console.log(object.name)
+// Expected output: get!
+//                  xiaoming
+
+object.name = 'daming'
+// Expected output: set!daming
+```
+
+# Vue中使用Object.defineProperty()实现数据双向绑定
+
+其实Object.defineProperty()在Vue2里给data函数里的数据进行绑定时 只是起到一个挟持对象数据操作的一个作用
+让用户通过`object.name = 'xxx'` 时可以知道属性的值被修改了 在页面上使用值的时候 `{{ object.name }}` 可以知道这个值被使用了
+
+其实数据双向绑定就这么简单 剩下的数据驱动视图 就是用户在设置值的时候 vue感知到了用户在修改数据 并且这个值在页面上使用了 会影响页面内容
+vue就通过这个感知 通知页面哪里需要重新渲染 （简单的逻辑 实际实现起来涉及到的东西很多）
+
+# vue2 源码解读
+
+tip: 只包含了关键代码
+
+```js
+/**
+ * Define a reactive property on an Object.
+ */
+ // 因为是ts版本的 如果不会ts的话 可以忽略类型
+export function defineReactive(
+  obj: object, // 需要被响应式的对象
+  key: string, // 对象的键
+  val?: any, // 需要设置的值 ?的意思是可以传入变量作为初始值 也可以不传入 简单理解为非必填 非必填参数一般都在必填参数后面
+  customSetter?: Function | null, // 自定义set 方法
+  shallow?: boolean, // 是否是浅的 就是对象最外层是响应式的 里面嵌套的不去挟持
+  mock?: boolean, // 暂时不知道是干嘛的 看样子应该是和ssr有关
+  observeEvenIfShallow = false // 这个变量没有使用到
+) {
+  // const dep = new Dep() 这个是依赖收集 可以先了解
+
+  const property = Object.getOwnPropertyDescriptor(obj, key)
+  // 先看看这个属性是否是可以设置的 如果被冻结了 就不可以挟持了 冻结方法 Object.freeze()
+  if (property && property.configurable === false) {
+    return
+  }
+
+  // cater for pre-defined getter/setters
+  const getter = property && property.get
+  const setter = property && property.set
+  if (
+    (!getter || setter) &&
+    (val === NO_INITIAL_VALUE || arguments.length === 2)
+  ) {
+    // 获取到初始值
+    val = obj[key]
+  }
+
+  // 如果是shadow 表示浅代理 内层嵌套的childOb就直接挂一个__ob__ 属性 表示已经被些吃过了 不需要些吃了 相对于是一个假的挟持
+  // 否则就表示需要递归挟持
+  let childOb = shallow ? val && val.__ob__ : observe(val, false, mock)
+  // observe 其实就是一个可以对数组、嵌套对象进行数据挟持的一个 defineReactive 就是加了些判读、循环、递归
+  // 然后再调defineReactive去一个一个对象、数组去劫持
+  // v2 最新源码地址 https://github.com/vuejs/vue
+
+  Object.defineProperty(obj, key, {
+    enumerable: true, // 可枚举
+    configurable: true, // 可配置
+    get: function reactiveGetter() {
+      // 有get 方法就用get取值 没有就用obj[key] 取值
+      const value = getter ? getter.call(obj) : val
+
+      // 中间是依赖收集 暂时先不看
+      // 简单来说就是这里收集了 需要在网页上展示的数据的记录/依赖 然后数据变化了就可以通过这些记录
+      // 比对哪些数据影响了网页内容 从而实现网页局部更新
+
+      // 这里使用了 isRef 应该是为了兼容V3
+      return isRef(value) && !shallow ? value.value : value
+    },
+    set: function reactiveSetter(newVal) {
+      // 同理 也是获取值
+      const value = getter ? getter.call(obj) : val
+
+      // 如果没变 直接就不修改数据了
+      if (!hasChanged(value, newVal)) {
+        return
+      }
+      if (__DEV__ && customSetter) {
+        customSetter()
+      }
+      // 有setter就直接设置值
+      if (setter) {
+        setter.call(obj, newVal)
+      } else if (getter) {
+        // #7981: for accessor properties without setter
+        return
+      } else if (!shallow && isRef(value) && !isRef(newVal)) {
+        // 兼容V3吧
+        value.value = newVal
+        return
+      } else {
+        val = newVal
+      }
+      // 这里可能会出现 用户添加了一些新的属性 这些属性没在data里 是后续通过方法调用加的 可能没被代理到 要进行重新代理
+      childOb = shallow ? newVal && newVal.__ob__ : observe(newVal, false, mock)
+
+      // 接下来就是 数据发生变化 就需要进行消息通知 通知vue数据变化了 记得更新页面
+      ...
+    }
+  })
+
+  return dep  // 返回收集的依赖
+}
+
+
+
+```

@@ -7,6 +7,7 @@ import {
 
 export type Post = {
 	title: string
+	menuTitle?: string
 	date: string
 	category: string
 	header: string
@@ -43,6 +44,11 @@ const fields: FieldDefs = {
 		type: 'string',
 		description: 'The title of the Post',
 		required: true,
+	},
+	menuTitle: {
+		type: 'string',
+		description: 'The title of the Menu',
+		required: false,
 	},
 	date: {
 		type: 'date',

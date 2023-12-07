@@ -106,16 +106,23 @@ function MinimalismMenu() {
 	// 组装菜单子项
 	const initMenuChildren = (
 		posts: EssayPosts[] | ReactPosts[] | Vue2Posts[] | Vue3Posts[],
+		order: boolean = true,
 	) => {
 		let list: MenuItem[] = []
 
 		// 排序
-		posts.sort((a, b) => compareDesc(new Date(b.date), new Date(a.date)))
+		order
+			? posts.sort((a, b) =>
+					compareDesc(new Date(b.date), new Date(a.date)),
+			  )
+			: posts.sort((a, b) =>
+					compareDesc(new Date(a.date), new Date(b.date)),
+			  )
 		posts.forEach((v: EssayPosts | ReactPosts | Vue2Posts | Vue3Posts) => {
 			v.show &&
 				list.push({
 					id: v._id,
-					title: v.title,
+					title: v.menuTitle || v.title,
 					path: '/content/posts/' + v.url,
 				})
 		})
@@ -125,7 +132,7 @@ function MinimalismMenu() {
 
 	const initMenu = () => {
 		// 日记
-		const diaryPosts = initMenuChildren(allEssayPosts)
+		const diaryPosts = initMenuChildren(allEssayPosts, false)
 		// React
 		const reactPosts = initMenuChildren(allReactPosts)
 		// Vue2
