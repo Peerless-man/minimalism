@@ -46,13 +46,13 @@ export default function ToggleTheme() {
 						<SunIcon
 							className={`${
 								themeState == 'light' ? 'block' : 'hidden'
-							} w-6 h-6 text-black dark:hover:text-violet-400 duration-500`}
+							} focus:outline-none w-6 h-6 text-black dark:hover:text-violet-400 duration-500`}
 							aria-hidden="true"
 						/>
 						<MoonIcon
 							className={`${
 								themeState == 'dark' ? 'block' : 'hidden'
-							} w-6 h-6 text-white hover:text-violet-500  duration-500`}
+							} focus:outline-none w-6 h-6 text-white hover:text-violet-500  duration-500`}
 							aria-hidden="true"
 						/>
 					</Listbox.Button>
@@ -73,7 +73,7 @@ export default function ToggleTheme() {
 								>
 									<ComputerDesktopIcon
 										onClick={() => toggleTheme('system')}
-										className={`my-1 w-6 h-6 text-black dark:text-white  dark:hover:text-violet-400 duration-500 `}
+										className={`focus:outline-none my-1 w-6 h-6 text-black dark:text-white  dark:hover:text-violet-400 duration-500 `}
 										aria-hidden="true"
 									/>
 								</div>
@@ -88,7 +88,7 @@ export default function ToggleTheme() {
 								>
 									<SunIcon
 										onClick={() => toggleTheme('light')}
-										className={`my-1 w-6 h-6 text-black dark:text-white  dark:hover:text-violet-400 duration-500 `}
+										className={`focus:outline-none my-1 w-6 h-6 text-black dark:text-white  dark:hover:text-violet-400 duration-500 `}
 										aria-hidden="true"
 									/>
 								</div>
@@ -103,7 +103,7 @@ export default function ToggleTheme() {
 								>
 									<MoonIcon
 										onClick={() => toggleTheme('dark')}
-										className={`my-1 w-6 h-6 text-black dark:text-white  hover:text-violet-500  duration-500 `}
+										className={`focus:outline-none my-1 w-6 h-6 text-black dark:text-white  hover:text-violet-500  duration-500 `}
 										aria-hidden="true"
 									/>
 								</div>

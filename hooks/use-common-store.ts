@@ -10,6 +10,8 @@ interface commonStore {
 	menuShow: boolean
 	onSetMenuShow: () => void
 	onSetMenuHide: () => void
+	activeId: string
+	onSetActiveId: (activeId: string) => void
 }
 
 // 存放一些公共状态
@@ -28,6 +30,8 @@ export const useCommonStore = create<commonStore>(
 			menuShow: true,
 			onSetMenuShow: () => set({ menuShow: true }),
 			onSetMenuHide: () => set({ menuShow: false }),
+			activeId: '',
+			onSetActiveId: (activeId: string) => set({ activeId }),
 		}),
 		'next-app-commonStore',
 	),

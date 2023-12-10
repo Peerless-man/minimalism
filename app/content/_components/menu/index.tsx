@@ -1,5 +1,6 @@
 'use client'
 import React, { useEffect, useState } from 'react'
+
 import { Disclosure, Transition } from '@headlessui/react'
 import Link from 'next/link'
 import {
@@ -38,7 +39,13 @@ const defaultMenuList: Menu = [
 	},
 ]
 
-function renderMenu({ menuList }: { menuList: Menu }) {
+function renderMenu({
+	menuList,
+	activeId,
+}: {
+	menuList: Menu
+	activeId: string
+}) {
 	if (!menuList.length) {
 		return (
 			<div className="hidden md:flex w-full h-full p-2 justify-center items-start">
@@ -54,13 +61,13 @@ function renderMenu({ menuList }: { menuList: Menu }) {
 						return (
 							<div key={menu.title}>
 								<Disclosure>
-									<Disclosure.Button>
+									<Disclosure.Button className="focus:outline-none">
 										<div className="flex text-left items-center text-lg px-3 py-2 hover:text-violet-500 dark:hover:text-violet-300">
 											{menu.title}
 											{menu.children &&
 											menu.children.length ? (
 												<ChevronDownIcon
-													className="ml-2 w-6 h-6 hover:text-violet-500 dark:hover:text-violet-300 duration-300 ui-open:rotate-180 ui-open:transform"
+													className="focus:outline-none ml-2 w-6 h-6 hover:text-violet-500 dark:hover:text-violet-300 duration-300 ui-open:rotate-180 ui-open:transform"
 													aria-hidden="true"
 												/>
 											) : (
@@ -78,7 +85,14 @@ function renderMenu({ menuList }: { menuList: Menu }) {
 																'/'
 															}
 														>
-															<div className="px-3 py-1 text-left  hover:text-violet-500 dark:hover:text-violet-300 cursor-pointer">
+															<div
+																className={`${
+																	activeId ==
+																	child.id
+																		? 'text-violet-500 dark:text-violet-300'
+																		: ''
+																} px-3 py-1 text-left  hover:text-violet-500 dark:hover:text-violet-300 cursor-pointer`}
+															>
 																{child.title}
 															</div>
 														</Link>
@@ -96,7 +110,7 @@ function renderMenu({ menuList }: { menuList: Menu }) {
 }
 
 function MinimalismMenu() {
-	const { menuShow } = useCommonStore()
+	const { menuShow, activeId } = useCommonStore()
 	const [menuList, setMenuList] = useState<Menu>([])
 
 	useEffect(() => {
@@ -159,7 +173,7 @@ function MinimalismMenu() {
 			leaveFrom="transform scale-100 opacity-100"
 			leaveTo="transform scale-95 opacity-0"
 		>
-			{renderMenu({ menuList })}
+			{renderMenu({ menuList, activeId })}
 		</Transition>
 	)
 }

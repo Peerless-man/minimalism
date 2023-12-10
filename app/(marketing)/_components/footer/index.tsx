@@ -151,7 +151,7 @@ export default function Footer() {
 							onClick={() => goTo('q')}
 						/>
 						<Popover className="relative flex">
-							<Popover.Button>
+							<Popover.Button className="focus:outline-none">
 								<Image
 									className="dark:bg-white rounded-lg mr-1 p-1 duration-300 hover:-translate-y-1"
 									alt="WeChat"

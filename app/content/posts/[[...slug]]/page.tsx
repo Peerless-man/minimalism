@@ -20,11 +20,14 @@ import {
 	allReactPosts,
 } from 'contentlayer/generated'
 import { Post as PostType } from 'contentlayer.config'
+import Link from 'next/link'
 
 function Post({ params }: { params: { slug: string[] } }) {
-	const { catalogShow, onSetMenuHide } = useCommonStore()
+	const { catalogShow, onSetMenuHide, onSetActiveId } = useCommonStore()
 	const [loading, setLoading] = useState<Boolean>(false)
 	const [post, setPost] = useState<PostType | undefined | null>(null)
+	const [prev, setPrev] = useState<PostType | undefined | null>(null)
+	const [next, setNext] = useState<PostType | undefined | null>(null)
 
 	const [id] = useState('preview-only')
 	const [scrollElement, setScrollElement] = useState<any>(null)
@@ -51,7 +54,11 @@ function Post({ params }: { params: { slug: string[] } }) {
 		}
 
 		setScrollElement(document.documentElement)
-	}, [params.slug[0]])
+
+		return () => {
+			onSetActiveId('')
+		}
+	}, [params.slug])
 
 	const getPostById = (type: string, id: string) => {
 		let newPost: any = null
@@ -71,10 +78,55 @@ function Post({ params }: { params: { slug: string[] } }) {
 		}
 
 		setPost(newPost)
+		onSetActiveId(id)
+		console.log(id)
+
+		setPrevAndNext(type, id)
 		document.title = newPost.category + '-' + newPost.title
 		setLoading(false)
 		if (document.body.offsetWidth < 768) {
 			onSetMenuHide()
+		}
+	}
+
+	const setPrevAndNext = (type: string = '', id: string = '') => {
+		if (!type || !id) return
+		let arr: any = []
+		switch (type) {
+			case 'vue2':
+				arr = allVue2Posts
+				break
+			case 'vue3':
+				arr = allVue3Posts
+				break
+			case 'react':
+				arr = allReactPosts
+				break
+			case 'essay':
+				arr = allEssayPosts
+				break
+		}
+		let next = null,
+			prev = null,
+			index = -1
+		index = arr.findIndex((item: any) => item._id == id)
+
+		if (index != -1) {
+			if (index > 0) {
+				prev = arr[index - 1]
+			}
+
+			if (index + 1 < arr.length) {
+				next = arr[index + 1]
+			}
+		}
+
+		if (prev) {
+			setPrev(prev)
+		}
+
+		if (next) {
+			setNext(next)
 		}
 	}
 
@@ -136,6 +188,28 @@ function Post({ params }: { params: { slug: string[] } }) {
 					modelValue={post.body.raw}
 					theme={isDark ? 'dark' : 'light'}
 				/>
+				<div className="flex justify-between items-center px-[10px] md:px-[20px] pb-10">
+					<div>
+						{prev && (
+							<Link
+								className="px-5 py-2 ring-2 duration-500 ring-gray-400 dark:ring-slate-500 hover:ring-green-400 dark:hover:ring-green-400 rounded-full "
+								href={'/content/posts/' + prev.url}
+							>
+								上一篇
+							</Link>
+						)}
+					</div>
+					<div>
+						{next && (
+							<Link
+								className="px-5 py-2 ring-2 duration-500 ring-gray-400 dark:ring-slate-500 hover:ring-green-400 dark:hover:ring-green-400 rounded-full "
+								href={'/content/posts/' + next.url}
+							>
+								下一篇
+							</Link>
+						)}
+					</div>
+				</div>
 			</div>
 			<div className="w-[0] md:w-[10rem] relative">
 				<div
