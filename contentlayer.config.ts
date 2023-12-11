@@ -11,6 +11,7 @@ export type Post = {
 	date: string
 	category: string
 	header: string
+	show: boolean
 	body: {
 		raw: string
 		code: string

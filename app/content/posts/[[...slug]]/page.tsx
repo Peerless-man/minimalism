@@ -79,7 +79,6 @@ function Post({ params }: { params: { slug: string[] } }) {
 
 		setPost(newPost)
 		onSetActiveId(id)
-		console.log(id)
 
 		setPrevAndNext(type, id)
 		document.title = newPost.category + '-' + newPost.title
@@ -132,8 +131,18 @@ function Post({ params }: { params: { slug: string[] } }) {
 
 	if (loading || !post) {
 		return (
-			<div className="w-full h-[100vh] flex justify-center items-center">
-				<span className="text-xl font-bold">Loading...</span>
+			<div className="w-full">
+				<div className="text-xl font-bold mt-20 ml-20">Loading...</div>
+			</div>
+		)
+	}
+
+	if (!post.show) {
+		return (
+			<div className="w-full">
+				<div className="text-xl font-bold mt-20 ml-20">
+					小张把它隐藏了起来
+				</div>
 			</div>
 		)
 	}
@@ -157,7 +166,7 @@ function Post({ params }: { params: { slug: string[] } }) {
 
 	return (
 		<div className="pt-16 flex">
-			<div className="w-full h-full">
+			<div className={`${catalogShow ? 'w-[80%]' : 'w-[100%]'}  h-full`}>
 				{renderHeader(post)}
 				<div className="text-left px-[10px] md:px-[20px]">
 					<h1 className="text-3xl font-bold pt-5 pb-1">
@@ -188,11 +197,11 @@ function Post({ params }: { params: { slug: string[] } }) {
 					modelValue={post.body.raw}
 					theme={isDark ? 'dark' : 'light'}
 				/>
-				<div className="flex justify-between items-center px-[10px] md:px-[20px] pb-10">
+				<div className="flex justify-between items-center px-[10px] md:px-[20px] pt-0 pb-24">
 					<div>
-						{prev && (
+						{prev && prev.show && (
 							<Link
-								className="px-5 py-2 ring-2 duration-500 ring-gray-400 dark:ring-slate-500 hover:ring-green-400 dark:hover:ring-green-400 rounded-full "
+								className="px-5 py-2 ring-2 duration-500 ring-gray-500 dark:ring-slate-500  hover:text-green-400 dark:hover:text-green-400 hover:ring-green-400 dark:hover:ring-green-400 rounded-full "
 								href={'/content/posts/' + prev.url}
 							>
 								上一篇
@@ -200,9 +209,9 @@ function Post({ params }: { params: { slug: string[] } }) {
 						)}
 					</div>
 					<div>
-						{next && (
+						{next && next.show && (
 							<Link
-								className="px-5 py-2 ring-2 duration-500 ring-gray-400 dark:ring-slate-500 hover:ring-green-400 dark:hover:ring-green-400 rounded-full "
+								className="px-5 py-2 ring-2 duration-500 ring-gray-500 dark:ring-slate-500 hover:text-green-400 dark:hover:text-green-400 hover:ring-green-400 dark:hover:ring-green-400 rounded-full "
 								href={'/content/posts/' + next.url}
 							>
 								下一篇
@@ -211,11 +220,12 @@ function Post({ params }: { params: { slug: string[] } }) {
 					</div>
 				</div>
 			</div>
-			<div className="w-[0] md:w-[10rem] relative">
+			<div className="w-[0] md:w-[20%] relative overflow-hidden">
 				<div
-					className={`fixed duration-300  h-[calc(100vh-56px)] overflow-auto w-[10rem] bg-white dark:bg-slate-900 ${
+					className={`fixed duration-300  h-[calc(100vh-56px)] overflow-auto bg-white dark:bg-slate-900 ${
 						catalogShow ? 'block' : 'hidden'
 					}`}
+					style={{ width: 'inherit' }}
 				>
 					<MdCatalog
 						style={{ maxWidth: 'inherit' }}

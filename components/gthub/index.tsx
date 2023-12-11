@@ -5,21 +5,17 @@ import { useEffect, useState } from 'react'
 export default function GitHub() {
 	const { resolvedTheme } = useTheme()
 
-	const [isDark, setIsDark] = useState<boolean>(false)
+	const [isLoad, setIsLoad] = useState<boolean>(false)
 
 	useEffect(() => {
-		if (resolvedTheme == 'dark') {
-			setIsDark(true)
-		} else {
-			setIsDark(false)
-		}
-	}, [resolvedTheme])
+		setIsLoad(true)
+	}, [])
 
 	const goToGithub = () => {
 		window.open('https://github.com/Peerless-man/minimalism')
 	}
 
-	return isDark ? (
+	return isLoad && resolvedTheme == 'dark' ? (
 		<Image
 			alt="github"
 			src="/image/githubDark.png"
