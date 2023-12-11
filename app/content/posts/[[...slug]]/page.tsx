@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 // md-editor-rt https://imzbf.github.io/md-editor-rt/
 import { MdPreview, MdCatalog } from 'md-editor-rt'
 import Image from 'next/image'
@@ -23,6 +23,8 @@ import { Post as PostType } from 'contentlayer.config'
 import Link from 'next/link'
 
 function Post({ params }: { params: { slug: string[] } }) {
+	const bottomRef = useRef<any>(null)
+	let observer: any = null
 	const { catalogShow, onSetMenuHide, onSetActiveId } = useCommonStore()
 	const [loading, setLoading] = useState<Boolean>(false)
 	const [post, setPost] = useState<PostType | undefined | null>(null)
@@ -45,6 +47,14 @@ function Post({ params }: { params: { slug: string[] } }) {
 	}, [resolvedTheme])
 
 	useEffect(() => {
+		observeNext()
+
+		return () => {
+			observer = null
+		}
+	}, [post])
+
+	useEffect(() => {
 		setLoading(true)
 		if (params.slug && params.slug.length) {
 			getPostById(
@@ -54,7 +64,6 @@ function Post({ params }: { params: { slug: string[] } }) {
 		}
 
 		setScrollElement(document.documentElement)
-
 		return () => {
 			onSetActiveId('')
 		}
@@ -80,12 +89,30 @@ function Post({ params }: { params: { slug: string[] } }) {
 		setPost(newPost)
 		onSetActiveId(id)
 
-		setPrevAndNext(type, id)
 		document.title = newPost.category + '-' + newPost.title
 		setLoading(false)
 		if (document.body.offsetWidth < 768) {
 			onSetMenuHide()
 		}
+	}
+
+	const observeNext = () => {
+		observer = new IntersectionObserver(
+			entries => {
+				const loadingEntry = entries[0]
+				if (loadingEntry.isIntersecting) {
+					setPrevAndNext(
+						params.slug[0],
+						decodeURIComponent(params.slug.join('/') + '.mdx'),
+					)
+				}
+			},
+			{
+				threshold: 0.1,
+			},
+		)
+
+		bottomRef.current && observer.observe(bottomRef.current) // 观察尾部元素
 	}
 
 	const setPrevAndNext = (type: string = '', id: string = '') => {
@@ -197,7 +224,10 @@ function Post({ params }: { params: { slug: string[] } }) {
 					modelValue={post.body.raw}
 					theme={isDark ? 'dark' : 'light'}
 				/>
-				<div className="flex justify-between items-center px-[10px] md:px-[20px] pt-0 pb-24">
+				<div
+					ref={bottomRef}
+					className="flex justify-between items-center px-[10px] md:px-[20px] pt-0 pb-24"
+				>
 					<div>
 						{prev && prev.show && (
 							<Link
