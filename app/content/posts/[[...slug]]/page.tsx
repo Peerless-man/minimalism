@@ -26,7 +26,6 @@ function Post({ params }: { params: { slug: string[] } }) {
 	const bottomRef = useRef<any>(null)
 	let observer: any = null
 	const { catalogShow, onSetMenuHide, onSetActiveId } = useCommonStore()
-	const [loading, setLoading] = useState<Boolean>(false)
 	const [post, setPost] = useState<PostType | undefined | null>(null)
 	const [prev, setPrev] = useState<PostType | undefined | null>(null)
 	const [next, setNext] = useState<PostType | undefined | null>(null)
@@ -55,8 +54,8 @@ function Post({ params }: { params: { slug: string[] } }) {
 	}, [post])
 
 	useEffect(() => {
-		setLoading(true)
 		if (params.slug && params.slug.length) {
+			// setInitNext(false)
 			getPostById(
 				params.slug[0],
 				decodeURIComponent(params.slug.join('/') + '.mdx'),
@@ -90,7 +89,6 @@ function Post({ params }: { params: { slug: string[] } }) {
 		onSetActiveId(id)
 
 		document.title = newPost.category + '-' + newPost.title
-		setLoading(false)
 		if (document.body.offsetWidth < 768) {
 			onSetMenuHide()
 		}
@@ -100,6 +98,7 @@ function Post({ params }: { params: { slug: string[] } }) {
 		observer = new IntersectionObserver(
 			entries => {
 				const loadingEntry = entries[0]
+
 				if (loadingEntry.isIntersecting) {
 					setPrevAndNext(
 						params.slug[0],
@@ -156,7 +155,7 @@ function Post({ params }: { params: { slug: string[] } }) {
 		}
 	}
 
-	if (loading || !post) {
+	if (!post) {
 		return (
 			<div className="w-full">
 				<div className="text-xl font-bold mt-20 ml-20">Loading...</div>
