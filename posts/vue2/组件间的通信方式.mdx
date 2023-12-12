@@ -4,7 +4,9 @@ date: 2023-12-12
 category: Vue2
 ---
 
-> TIPS 重点需要掌握 props、$emit、vuex、$bus、provide/inject 其他的了解就好 最好是会
+!!! success TIPS
+重点需要掌握 `props、$emit、vuex、$bus、provide/inject` 其他的了解就好 最好是会
+!!!
 
 # 父传子
 
@@ -105,13 +107,13 @@ provide + inject
 
 -   首先在祖先组件的provide选项里填入需要传给后代的数据、方法 - 最后在后代组件里使用inject选项获取祖先组件传入的数据、方法
 
-自定义属性 + <中间组件 v-bind="$attrs" /> + $attrs
+`自定义属性 + <中间组件 v-bind="$attrs" /> + $attrs`
 
 -   可以在每一代组件绑定v-bind="$attrs" 将组件的属性给透传下去 后代组件可以在$attrs里拿到属性 (element-ui源码里很多地方都使用了这个指令)
 
 # 孙传祖
 
-$emit + <中间组件 v-on="$listeners" /> + 自定义事件
+`$emit + <中间组件 v-on="$listeners" /> + 自定义事件`
 
 -   首先在后代组件中emit事件 通过中间组件使用 v-on="$listeners" 将emit的事件向上传递 最后在祖先自定义事件接收
 
