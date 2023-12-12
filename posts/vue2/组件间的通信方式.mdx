@@ -1,0 +1,133 @@
+---
+title: 组件间的通信方式
+date: 2023-12-12
+category: Vue2
+---
+
+> TIPS 重点需要掌握 props、$emit、vuex、$bus、provide/inject 其他的了解就好 最好是会
+
+# 父传子
+
+props
+
+-   子组件
+
+```vue
+<template>
+	<div>
+		{{ name }}
+	</div>
+</template>
+
+<script>
+export default {
+	name: 'Son',
+	props: {
+		name: {
+			type: String,
+			default: '',
+		},
+	},
+}
+</script>
+```
+
+-   父组件
+
+```vue
+<template>
+	<div>
+		Parent
+		<Son :name="name"></Son>
+		<!-- 还可以这样写 <Son name="XiaoZhang"></Son> -->
+	</div>
+</template>
+
+<script>
+import Son from './son.vue'
+
+export default {
+	name: 'Parent',
+	components: {
+		Son,
+	},
+	data() {
+		return {
+			name: 'XiaoZhang',
+		}
+	},
+}
+</script>
+```
+
+父组件通过给子组件定义好的 props 的属性传值 就可以将指定类型的值传到子组件进行展示
+以上代码就是父组件给子组件传入了一个 name 属性
+
+$attrs
+
+-   $attrs 可以接收所有来自于父组件定义的属性 但是和 props 是互斥的 也就是说 props 里定义好的属性 $attrs 里拿不到
+
+$parent
+
+-   $parent 可以获取到父组件的数据 调用父组件的方法
+
+# 子传父
+
+$emit
+
+-   使用$emit 可以自定义方法返回数据给父组件
+
+```js
+// 伪代码
+this.$emit('change', '123')
+// 父组件就可以通过@change事件拿到值123
+
+<Parent @change="handleChange" />
+
+handleChange(val){
+    console.log(val)
+    // 123
+}
+
+```
+
+$refs
+
+-   将 ref=sonRef"绑定在子组件的虚拟节点上 可以通过 this.$refs.sonRef 可以获取到子组件的数据 调用子组件的方法
+
+$children
+
+-   直接访问子组件实例的属性和方法(返回数组)
+
+# 祖传孙
+
+provide + inject
+
+-   首先在祖先组件的provide选项里填入需要传给后代的数据、方法 - 最后在后代组件里使用inject选项获取祖先组件传入的数据、方法
+
+自定义属性 + <中间组件 v-bind="$attrs" /> + $attrs
+
+-   可以在每一代组件绑定v-bind="$attrs" 将组件的属性给透传下去 后代组件可以在$attrs里拿到属性 (element-ui源码里很多地方都使用了这个指令)
+
+# 孙传祖
+
+$emit + <中间组件 v-on="$listeners" /> + 自定义事件
+
+-   首先在后代组件中emit事件 通过中间组件使用 v-on="$listeners" 将emit的事件向上传递 最后在祖先自定义事件接收
+
+# 兄弟间
+
+-   Vuex
+
+-   $bus 全局事件总线
+
+```js
+// 在main.js中定义$bus 为新的 Vue 实例
+Vue.prototype.$bus = new Vue()
+
+sendMsg() {
+  // 这里的this 指向Vue的实例 获取this.$bus 在实例上查找没找到
+  // 会到其原型链上查找 找到$bus属性。
+  this.$bus.$emit('bus-event', '123')
+ }
+```

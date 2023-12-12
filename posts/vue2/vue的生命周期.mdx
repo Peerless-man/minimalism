@@ -7,8 +7,7 @@ category: Vue2
 # 什么是生命周期
 
 生命周期 简单的来说就是一个事物从出生 到 消亡的全部过程
-例如 我们打开一个网站 首先是发起网络请求获取网站的静态资源到本地 然后浏览器进行网页的加载 网站数据的获取 随着网页加载完成
-用户与网站进行交互 最后到用户关闭浏览器 网站销毁 浏览器清理内存
+例如 我们打开一个网站 首先是发起网络请求获取网站的静态资源到本地 然后浏览器进行网页的加载 网站数据的获取 随着网页加载完成 用户与网站进行交互 最后到用户关闭浏览器 网站销毁 浏览器清理内存
 
 在前端里需要注重的是 浏览器加载网站资源 用户和网站交互 用户离开网站(或某个页面) 我们能做什么
 
@@ -19,16 +18,49 @@ category: Vue2
 -   beforeunload —— 当用户正在离开页面时。
 -   unload —— 用户几乎已经离开了
 
+# vue 的生命周期
+
 在Vue里我们有8个生命周期 意味着我们可以把生命周期分的更细 进行更多可能的事情
 
--   beforeCreate
--   created
--   beforeMount
--   mounted
--   beforeUpdate
--   updated
--   beforeDestroy
--   destroyed
+## 创建
+
+-   beforeCreate 实例创建前
+    此阶段的 data、methods、computed、watch 的数据和方法不能被访问
+
+-   created 实例创建完成后
+    此阶段完成数据监听，可以使用数据、更改数据。无法与 Dom 进行交互
+
+## 挂载
+
+-   beforeMount 页面渲染前
+    此阶段虚拟 Dom 创建完成，即将开始渲染。在此时也可以对数据进行更改，不会触发重新渲染
+
+-   mounted 页面渲染完成后
+    此阶段真实 Dom 渲染完毕，数据完成双向绑定，可以访问到 Dom 节点，对 Dom 进行操作。
+
+## 更新
+
+-   beforeUpdate 响应式数据更新前
+    此阶段更改数据，不会造成页面重新渲染。
+
+-   updated 响应式数据更新完成后
+    避免在此阶段更改数据，因为这可能会导致无限循环的更新。
+
+## 销毁
+
+-   beforeDestroy 实例销毁前
+    我们可以在这时进行收尾工作，比如清除定时器、解除绑定事件
+
+-   destroyed 实例销毁完成后
+
+> 拓展
+> keepAlive的生命周期
+> 组件第一次进入 就是执行正常的生命周期 但是会多执行activated、deactivated这两个生命周期 created-> mounted-> activated ->deactivated
+> 后续再进入就只执行 activated ->deactivated
+> activited:
+> keep-alive 专属，使用了 keepAlive 的组件进入时触发
+> deactivited:
+> keep-alive 专属，使用了 keepAlive 的组件离开时触发
 
 # 生命周期图示例
 
@@ -36,7 +68,7 @@ category: Vue2
 
 # 提问环节
 
-问：生命周期有哪些 我们在这些生命周期中能做些什么
+问：生命周期有哪些 我们在这些生命周期中能做些什么(敲重点)
 
 > 答：生命周期有 beforeCreate、created、beforeMount、mounted、beforeUpdate、updated、beforeDestroy、beforeDestroy、destroyed
 > 通常我们会使用的生命周期有（比较重要的）created、mounted、beforeDestroy 其他的生命周期当然也有用 但是我们相对用的较少
@@ -44,7 +76,17 @@ category: Vue2
 
 问：created 和 mounted 有什么区别
 
-> 答：最大的区别就是created是在dom挂载之前调用的 mounted是在网页挂载之后调用的 所以不能在created里进行dom操作 当然在mounted里也不一定能获取到一些动态渲染的dom元素
-> 比如 渲染异步获取的列表数据 如果在数据获取到之前就去获取元素 就会获取不到 此时就可以在获取到数据之后 使用nextTick回调 在回调函数内进行获取元素的操作 <a href="https://v2.cn.vuejs.org/v2/api/#vm-nextTick" target="\_blank">nextTick</a>
+> 答：最大的区别就是created是在dom挂载之前调用的 mounted是在网页挂载之后调用的 所以在没有特殊处理的情况下不能在created里进行dom操作 当然在mounted里也不一定能获取到一些动态渲染的dom元素
+> 比如 渲染异步获取的列表数据 如果在数据获取到之前去获取元素 就会获取不到 此时就可以在获取到数据之后 使用nextTick回调 在回调函数内进行获取元素的操作 <a href="https://v2.cn.vuejs.org/v2/api/#vm-nextTick" target="\_blank">nextTick</a>
+> 可能还是有很多童鞋会遇到获取不到dom元素的bug的 首先就是先检查一下代码是否写的又问题 其次再F12检查页面上是否有这个元素 然后再检查自己是否是在元素渲染完成后才去获取的这个元素
 
-> 还是有很多童鞋会遇到获取不到dom元素的bug的 首先就是先检查一下代码是否写的又问题 其次再F12检查页面上是否有这个元素 然后再检查自己是否是在元素渲染完成后才去获取的这个元素
+问： 父子组件的生命周期执行顺序
+
+> 答：组件渲染的顺序是先父后子，渲染完成的顺序是先子后父
+> 组件更新的顺序是先父后子，更新完成的顺序是先子后父
+> 组件销毁的顺序是先父后子，销毁完成的顺序是先子后父
+
+问：在 created、还是 mounted 里进行异步请求(敲重点)
+
+> 答：如果对页面布局影响不大的异步请求(比如页面布局无论内容大小都是撑满的) 放在 created 还是 mounted 里都无所谓 页面没有组件嵌套的情况下区别也不是很大
+> 如果是嵌套的组件 想让父组件先获得数据 就在 created 里异步获取数据 想让子组件先获取数据 就在 mounted 里异步获取数据(由父子组件的生命周期推出)
