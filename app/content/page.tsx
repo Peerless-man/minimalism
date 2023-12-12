@@ -1,5 +1,14 @@
 'use client'
+import { useCommonStore } from 'hooks/use-common-store'
+import { useEffect } from 'react'
+
 export default function ContentPage() {
+	const { onSetActiveId } = useCommonStore()
+
+	useEffect(() => {
+		onSetActiveId('')
+	}, [])
+
 	return (
 		<>
 			<div className="w-full h-full px-4 pt-16">

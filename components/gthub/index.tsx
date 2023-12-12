@@ -17,6 +17,7 @@ export default function GitHub() {
 
 	return isLoad && resolvedTheme == 'dark' ? (
 		<Image
+			className="cursor-pointer hover:scale-105 duration-300"
 			alt="github"
 			src="/image/githubDark.png"
 			width={28}
@@ -26,6 +27,7 @@ export default function GitHub() {
 		/>
 	) : (
 		<Image
+			className="cursor-pointer hover:scale-105 duration-300"
 			alt="github"
 			src="/image/githubLight.png"
 			width={28}

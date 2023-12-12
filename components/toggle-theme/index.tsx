@@ -8,7 +8,7 @@ import { useCommonStore } from 'hooks/use-common-store'
 import { useTheme } from 'next-themes'
 
 export default function ToggleTheme() {
-	const { setTheme, systemTheme, resolvedTheme, theme } = useTheme()
+	const { setTheme, resolvedTheme } = useTheme()
 	const { storageTheme, onSetStorageTheme } = useCommonStore()
 
 	// 只有 light dark两种
@@ -41,18 +41,18 @@ export default function ToggleTheme() {
 	return (
 		<>
 			<Listbox>
-				<div className="relative w-6 h-6 mr-3">
+				<div className="relative w-6 h-6 cursor-pointer">
 					<Listbox.Button className="focus:outline-none">
 						<SunIcon
 							className={`${
 								themeState == 'light' ? 'block' : 'hidden'
-							} focus:outline-none w-6 h-6 text-black dark:hover:text-violet-400 duration-500`}
+							} focus:outline-none w-6 h-6 text-black hover:text-violet-500 dark:hover:text-violet-400 duration-500`}
 							aria-hidden="true"
 						/>
 						<MoonIcon
 							className={`${
 								themeState == 'dark' ? 'block' : 'hidden'
-							} focus:outline-none w-6 h-6 text-white hover:text-violet-500  duration-500`}
+							} focus:outline-none w-6 h-6 text-white hover:text-violet-500 dark:hover:text-violet-400  duration-500`}
 							aria-hidden="true"
 						/>
 					</Listbox.Button>
@@ -73,7 +73,7 @@ export default function ToggleTheme() {
 								>
 									<ComputerDesktopIcon
 										onClick={() => toggleTheme('system')}
-										className={`focus:outline-none my-1 w-6 h-6 text-black dark:text-white  dark:hover:text-violet-400 duration-500 `}
+										className={`focus:outline-none my-1 w-6 h-6 text-black dark:text-white hover:text-violet-500 dark:hover:text-violet-400 duration-500 `}
 										aria-hidden="true"
 									/>
 								</div>
@@ -88,7 +88,7 @@ export default function ToggleTheme() {
 								>
 									<SunIcon
 										onClick={() => toggleTheme('light')}
-										className={`focus:outline-none my-1 w-6 h-6 text-black dark:text-white  dark:hover:text-violet-400 duration-500 `}
+										className={`focus:outline-none my-1 w-6 h-6 text-black dark:text-white hover:text-violet-500  dark:hover:text-violet-400 duration-500 `}
 										aria-hidden="true"
 									/>
 								</div>
@@ -103,7 +103,7 @@ export default function ToggleTheme() {
 								>
 									<MoonIcon
 										onClick={() => toggleTheme('dark')}
-										className={`focus:outline-none my-1 w-6 h-6 text-black dark:text-white  hover:text-violet-500  duration-500 `}
+										className={`focus:outline-none my-1 w-6 h-6 text-black dark:text-white  hover:text-violet-500 dark:hover:text-violet-400  duration-500 `}
 										aria-hidden="true"
 									/>
 								</div>

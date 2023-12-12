@@ -24,7 +24,7 @@ import Link from 'next/link'
 
 function Post({ params }: { params: { slug: string[] } }) {
 	const bottomRef = useRef<any>(null)
-	let observer: any = null
+	let observer: IntersectionObserver | null | undefined
 	const { catalogShow, onSetMenuHide, onSetActiveId } = useCommonStore()
 	const [post, setPost] = useState<PostType | undefined | null>(null)
 	const [prev, setPrev] = useState<PostType | undefined | null>(null)
@@ -47,15 +47,10 @@ function Post({ params }: { params: { slug: string[] } }) {
 
 	useEffect(() => {
 		observeNext()
-
-		return () => {
-			observer = null
-		}
 	}, [post])
 
 	useEffect(() => {
 		if (params.slug && params.slug.length) {
-			// setInitNext(false)
 			getPostById(
 				params.slug[0],
 				decodeURIComponent(params.slug.join('/') + '.mdx'),
@@ -87,7 +82,6 @@ function Post({ params }: { params: { slug: string[] } }) {
 
 		setPost(newPost)
 		onSetActiveId(id)
-
 		document.title = newPost.category + '-' + newPost.title
 		if (document.body.offsetWidth < 768) {
 			onSetMenuHide()
@@ -104,6 +98,9 @@ function Post({ params }: { params: { slug: string[] } }) {
 						params.slug[0],
 						decodeURIComponent(params.slug.join('/') + '.mdx'),
 					)
+
+					observer?.disconnect()
+					observer = null
 				}
 			},
 			{
