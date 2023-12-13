@@ -51,9 +51,7 @@ function Layout({ children }: any) {
 	}, [])
 
 	return (
-		<div
-			className={`${classes.layout} md:bg-transparent duration-300 bg-white dark:bg-slate-900 text-black dark:text-slate-400`}
-		>
+		<div className={`${classes.layout} md:bg-transparent`}>
 			<Header />
 			<div className={`${classes.body} overflow-scroll`}>
 				<div

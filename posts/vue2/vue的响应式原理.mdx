@@ -1,8 +1,13 @@
 ---
-title: Vue的数据双向绑定
+title: Vue的响应式原理
 date: 2023-12-7
 category: Vue2
 ---
+
+!!! success TIPS
+理解vue是如何使用Object.defineProperty()来进行数据劫持的就行 源码部分可以在对vue熟悉一些 并且js基础扎实的时候来学习
+B站推荐搜珠峰的源码教程学习 也可以找最新的源码讲解来学习 毕竟vue2都用ts重写了 有些教程也会过时
+!!!
 
 # Object.defineProperty()
 
@@ -49,13 +54,25 @@ object.name = 'daming'
 // Expected output: set!daming
 ```
 
-# Vue中使用Object.defineProperty()实现数据双向绑定
+由上图可以得知
+当用户通过修改`object.name = 'xxx'`时 可以知道属性的值被修改了 在使用`{{ object.name }}`的时候 也可以知道这个值被使用了
 
-其实Object.defineProperty()在Vue2里给data函数里的数据进行绑定时 只是起到一个挟持对象数据操作的一个作用
-让用户通过`object.name = 'xxx'` 时可以知道属性的值被修改了 在页面上使用值的时候 `{{ object.name }}` 可以知道这个值被使用了
+# 简单概述
 
-其实数据双向绑定就这么简单 剩下的数据驱动视图 就是用户在设置值的时候 vue感知到了用户在修改数据 并且这个值在页面上使用了 会影响页面内容
-vue就通过这个感知 通知页面哪里需要重新渲染 （简单的逻辑 实际实现起来涉及到的东西很多）
+vue采用数据代理、数据挟持、发布订阅模式实现响应式
+
+在vue里 我们的vm (vm = new Vue()) 会代理data里的数据
+比如 通过访问vm.name(或者是this.name) 就可以访问到data里的name 当然这并不是响应式 只是为了方便取值 将data里的数据代理到了vm上 如果通过其他方式去取值的话 就是this.$options.data().name 是不是很复杂
+以下就是vue2最新代码的总代理 大概意思就是通过vm或this可以访问data里的数据
+![](/posts/vue2/proxy.png)
+
+在vue里 我们通常使用this来代替vm访问数据
+![](/posts/vue2/vm.png)
+真正实现响应式的是 在vue初始化的时候 会将data里的数据进行递归遍历 将每一个未被冻结对象里的字段使用 Object.defineProperty 挟持一遍
+通过重写每个属性的get、set方法 在get方法里加上依赖收集 在set方法里加上数据更新的通知 当被挟持的属性被使用时 会触发Dep的依赖收集
+当用户修改数据时会通过set方法设置当前对象新的属性值 会触发当前被挟持对象的Dep的notify方法 通知页面需要更新
+
+然后在一段时间内 vue将需要更新的dom进行批处理更新(每次更新肯定都不止一处 批处理更新会好一些)
 
 # vue2 源码解读
 
@@ -75,10 +92,10 @@ export function defineReactive(
   mock?: boolean, // 暂时不知道是干嘛的 看样子应该是和ssr有关
   observeEvenIfShallow = false // 这个变量没有使用到
 ) {
-  // const dep = new Dep() 这个是依赖收集 可以先了解
+  // const dep = new Dep() 这个是依赖收集 可以先了解 从这可以看到 没个对象都有自己的dep
 
   const property = Object.getOwnPropertyDescriptor(obj, key)
-  // 先看看这个属性是否是可以设置的 如果被冻结了 就不可以挟持了 冻结方法 Object.freeze()
+  // 先看看这个属性是否是可以设置的 如果对象被冻结了 或者是属性被设置为不可配置 就不可以挟持了 对象冻结方法 Object.freeze()
   if (property && property.configurable === false) {
     return
   }
@@ -108,9 +125,9 @@ export function defineReactive(
       // 有get 方法就用get取值 没有就用obj[key] 取值
       const value = getter ? getter.call(obj) : val
 
-      // 中间是依赖收集 暂时先不看
-      // 简单来说就是这里收集了 需要在网页上展示的数据的记录/依赖 然后数据变化了就可以通过这些记录
-      // 比对哪些数据影响了网页内容 从而实现网页局部更新
+      dep.depend() // depend()就是依赖收集的方法 这里是简写的 感兴趣的可以自己去翻看源码
+      // 简单来说就是这里在收集 需要使用到的数据的依赖 然后数据变化了就可以通过这些记录
+      // 知道哪个数据变化了 是否需要更新页面
 
       // 这里使用了 isRef 应该是为了兼容V3
       return isRef(value) && !shallow ? value.value : value
@@ -142,8 +159,7 @@ export function defineReactive(
       // 这里可能会出现 用户添加了一些新的属性 这些属性没在data里 是后续通过方法调用加的 可能没被代理到 要进行重新代理
       childOb = shallow ? newVal && newVal.__ob__ : observe(newVal, false, mock)
 
-      // 接下来就是 数据发生变化 就需要进行消息通知 通知vue数据变化了 记得更新页面
-      ...
+      dep.notify() // notify()就是通知数据更新了 需要更新页面
     }
   })
 
