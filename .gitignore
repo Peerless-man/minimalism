@@ -37,3 +37,8 @@ next-env.d.ts
 
 # contentlayer
 .contentlayer
+
+# essay
+
+posts/essay/小张的打工日记11-28.mdx
+posts/essay/小张的打工日记12-7.mdx
