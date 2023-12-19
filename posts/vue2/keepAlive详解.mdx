@@ -1,91 +1,91 @@
-  ---
-  title: keepAlive详解
-  menuTitle: keepAlive详解(了解即可)
-  date: 2023-12-19
-  category: Vue2
-  ---
+---
+title: keepAlive详解
+menuTitle: keepAlive详解(了解即可)
+date: 2023-12-19
+category: Vue2
+---
 
-  # keepAlive 的作用
+# keepAlive 的作用
 
-  keepAlive用来缓存组件 当一个组件被keepAlive组件缓存时 切换路由不会导致组件的销毁组件仅失活 再次进入不会重新走渲染 而是激活
+keepAlive用来缓存组件 当一个组件被keepAlive组件缓存时 切换路由不会导致组件的销毁组件仅失活 再次进入不会重新走渲染 而是激活
 
-  # keepAlive 缓存组件的生命周期
+# keepAlive 缓存组件的生命周期
 
-  普通组件的生命周期（简单版的）
+普通组件的生命周期（简单版的）
 
-  - created、mounted、destroyed
+-   created、mounted、destroyed
 
-  被 keepAlive 包裹的组件的生命周期
-  第一次进入
+被 keepAlive 包裹的组件的生命周期
+第一次进入
 
-  - created、mounted、activated、deactivated
-  再次进入
-  - activated、deactivated
+-   created、mounted、activated、deactivated
+    再次进入
+-   activated、deactivated
 
-  从上面的生命周期可以看出 第一次进入会进行组件的初始化、挂载、激活、失活 第二次只走激活和失活
+从上面的生命周期可以看出 第一次进入会进行组件的初始化、挂载、激活、失活 第二次只走激活和失活
 
-  问：当我们进入这个页面时 我们可以在哪里进行数据请求
+问：当我们进入这个页面时 我们可以在哪里进行数据请求
 
-  > 答：因为我们无论是第一次还是后续再次进入 我们都会走activated 钩子 所以我们可以将数据请求放到这里来请求 就不必担心下次进来不走created和mounted的尴尬了 而且两边都加的话 第一次进入会请求重复 不过大部分这种页面都是静态数据 不必发起请求 还是有些时候会遇到这种情况的
+> 答：因为我们无论是第一次还是后续再次进入 我们都会走activated 钩子 所以我们可以将数据请求放到这里来请求 就不必担心下次进来不走created和mounted的尴尬了 而且两边都加的话 第一次进入会请求重复 不过大部分这种页面都是静态数据 不必发起请求 还是有些时候会遇到这种情况的
 
-  # keepAlive的使用方法
+# keepAlive的使用方法
 
-  关于使用keepAlive 我发生过的一些趣事
-  大家刚开始学 vue 的时候 肯定不会去注意 keepAlive 这个组件 毕竟这些内置组件相较于基本的语法来说 肯定是语法更重要 在工作中也是 keepAlive 在许多前后台管理框架里早就已经写好了 我们平时基本上不会碰这些代码
-  但是 如果在工作中 遇到一些特殊场景 比如客户老是忘记选完数据点提交、切换 tab 会导致用户数据丢失 大家不知道 keepAlive 这个缓存组件时 可能会要求后端在数据里加个状态之类的 用户离开页面就存草稿 然后再次进来就查一次(虽然很简单，但是那个事情可能指定了要前端解决，很可能出现这种情况) 或者还可以 使用本地缓存 客户离开页面时进行缓存 然后进来又去获取缓存来展示 这种方式还会涉及到用户提交表单后需要清理缓存 这不就很麻烦吗 我刚工作时 同事们都是这样写的 我在检索解决方案时 才发现 vue 还有 keepAlive 这个缓存组件 于是就开始使用这个组件去缓存一些用户需要缓存的页面 当然 使用的过程是煎熬的 还是需要踩坑才会使用
-  当时我遇到问题是因为 keepAlive 的缓存逻辑 已经写好了 通过路由元数据 meta 里的 keepAlive 是否为 true 来判断是否缓存的 这样当需要动态缓存时我就得去手动改路由的元数据 并且路由还是菜单生成的 从后端获取的 这在我们需要清除这个组件的缓存时 是很不方便的 毕竟要找到这个路由 把它的元数据 keepAlive 改为 false 当时我也是觉得太难了 就加了一个数组自定义了需要缓存的组件 这样方便一些 在每次用户需要清除这个组件的缓存时 我就去那个数组里把这个组件的名称/路径给干掉 然后就通过 v-if 判断是不是需要 keepAlive 可能这样说不是很好理解 看代码
+关于使用keepAlive 我发生过的一些趣事
+大家刚开始学 vue 的时候 肯定不会去注意 keepAlive 这个组件 毕竟这些内置组件相较于基本的语法来说 肯定是语法更重要 在工作中也是 keepAlive 在许多前后台管理框架里早就已经写好了 我们平时基本上不会碰这些代码
+但是 如果在工作中 遇到一些特殊场景 比如客户老是忘记选完数据点提交、切换 tab 会导致用户数据丢失 大家不知道 keepAlive 这个缓存组件时 可能会要求后端在数据里加个状态之类的 用户离开页面就存草稿 然后再次进来就查一次(虽然很简单，但是那个事情可能指定了要前端解决，很可能出现这种情况) 或者还可以 使用本地缓存 客户离开页面时进行缓存 然后进来又去获取缓存来展示 这种方式还会涉及到用户提交表单后需要清理缓存 这不就很麻烦吗 我刚工作时 同事们都是这样写的 我在检索解决方案时 才发现 vue 还有 keepAlive 这个缓存组件 于是就开始使用这个组件去缓存一些用户需要缓存的页面 当然 使用的过程是煎熬的 还是需要踩坑才会使用
+当时我遇到问题是因为 keepAlive 的缓存逻辑 已经写好了 通过路由元数据 meta 里的 keepAlive 是否为 true 来判断是否缓存的 这样当需要动态缓存时我就得去手动改路由的元数据 并且路由还是菜单生成的 从后端获取的 这在我们需要清除这个组件的缓存时 是很不方便的 毕竟要找到这个路由 把它的元数据 keepAlive 改为 false 当时我也是觉得太难了 就加了一个数组自定义了需要缓存的组件 这样方便一些 在每次用户需要清除这个组件的缓存时 我就去那个数组里把这个组件的名称/路径给干掉 然后就通过 v-if 判断是不是需要 keepAlive 可能这样说不是很好理解 看代码
 
-  ## v-if 的写法
+## v-if 的写法
 
-  ```vue
-  <template>
-    <div class="layout">
-      <!-- 只有路由路径在这个需要缓存的数组里 就缓存 -->
-      <keep-alive v-if="keepAlive.includes($route.path)">
-        <router-view />
-      </keep-alive>
-      <router-view v-else />
-    </div>
-  </template>
+```vue
+<template>
+	<div class="layout">
+		<!-- 只有路由路径在这个需要缓存的数组里 就缓存 -->
+		<keep-alive v-if="keepAlive.includes($route.path)">
+			<router-view />
+		</keep-alive>
+		<router-view v-else />
+	</div>
+</template>
 
-  <script>
-  export default {
-    name: "Layout",
-    data() {
-      return {
-        keepAlive: ["/home"], // 一般是放在在vueX里 方便维护 我这里就简单写
-      };
-    },
-  };
-  </script>
-  ```
+<script>
+export default {
+	name: 'Layout',
+	data() {
+		return {
+			keepAlive: ['/home'], // 一般是放在在vueX里 方便维护 我这里就简单写
+		}
+	},
+}
+</script>
+```
 
-  上面的代码看起来是没问题的 简单使用起来也没啥大问题 但是如果这样写的话 当嵌套了两层 keepAlive 及两层以上的情况时 会出现刷新页面请求多次的情况 就是因为其他页面缓存应该清除的 但是没清除 很邪门 应该是使用 v-if 的情况下 从数组里删除组件地址清缓存的时候 并没有触发到 keepAlive 的清理 所以只有下一次进入才发现那个组件已经不再缓存数组里了 那个时候才清理那个缓存 但是已经晚了 因为我在离开的时候已经明确修改了数组 不需要缓存了 并且还不好解决这个问题
-  因为之前没有人用 keepAlive 缓存过页面 我当时也很懵逼 而且当时有十多个页面需要缓存 缓存太多了就会出现缓存太多 占内存大 网站就卡 并且很多没被二次激活的组件 刷新时它还是发了自己的请求(关闭tab时就应该清楚了 我是从数组里去掉了这个组件的) 当时使用的写法也是官方推荐的 所以就卡了一两天 一直在优化这个功能 后来看更新一些小版本的 keepAlive 的写法 知道了还有使用include + 组件 name 数组的方法 使用这个方法可以解决重复渲染的问题 维护起来也方便 就是组件名称要唯一 所以大家要用 keepAlive 的话 最好使用include + 组件名称数组来缓存组件
+上面的代码看起来是没问题的 简单使用起来也没啥大问题 但是如果这样写的话 当嵌套了两层 keepAlive 及两层以上的情况时 会出现刷新页面请求多次的情况 就是因为其他页面缓存应该清除的 但是没清除 很邪门 应该是使用 v-if 的情况下 从数组里删除组件地址清缓存的时候 并没有触发到 keepAlive 的清理 所以只有下一次进入才发现那个组件已经不再缓存数组里了 那个时候才清理那个缓存 但是已经晚了 因为我在离开的时候已经明确修改了数组 不需要缓存了 并且还不好解决这个问题
+因为之前没有人用 keepAlive 缓存过页面 我当时也很懵逼 而且当时有十多个页面需要缓存 缓存太多了就会出现缓存太多 占内存大 网站就卡 并且很多没被二次激活的组件 刷新时它还是发了自己的请求(关闭tab时就应该清楚了 我是从数组里去掉了这个组件的) 当时使用的写法也是官方推荐的 所以就卡了一两天 一直在优化这个功能 后来看更新一些小版本的 keepAlive 的写法 知道了还有使用include + 组件 name 数组的方法 使用这个方法可以解决重复渲染的问题 维护起来也方便 就是组件名称要唯一 所以大家要用 keepAlive 的话 最好使用include + 组件名称数组来缓存组件
 
-  ## 使用include + 组件名称数组来实现 keepAlive
+## 使用include + 组件名称数组来实现 keepAlive
 
-  ```vue
-  <template>
-    <section>
-      <keep-alive :include="cachedViews">
-        <router-view :key="key" />
-      </keep-alive>
-    </section>
-  </template>
+```vue
+<template>
+	<section>
+		<keep-alive :include="cachedViews">
+			<router-view :key="key" />
+		</keep-alive>
+	</section>
+</template>
 
-  <script>
-  export default {
-    name: "AppMain",
-    computed: {
-      cachedViews() {
-        // ['Home', 'UserCenter'] 大概就是这样的一个组件名称数组 会缓存名称为这个的 当数据变化以后 就会把数组里不存在的缓存给清理了
-        return this.$store.state.tagsView.cachedViews;
-      },
-      key() {
-        return this.$route.path;
-      },
-    },
-  };
-  </script>
-  ```
+<script>
+export default {
+	name: 'AppMain',
+	computed: {
+		cachedViews() {
+			// ['Home', 'UserCenter'] 大概就是这样的一个组件名称数组 会缓存名称为这个的 当数据变化以后 就会把数组里不存在的缓存给清理了
+			return this.$store.state.tagsView.cachedViews
+		},
+		key() {
+			return this.$route.path
+		},
+	},
+}
+</script>
+```
