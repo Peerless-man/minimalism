@@ -18,6 +18,10 @@ export default function ContentPage() {
 				<h3 className="text-xl leading-loose py-3">
 					在这里我会分享vue、react、html、css、js的面试经验
 				</h3>
+				<h3 className="text-xl leading-loose">
+					如果菜单里标注了了解就好 那就是不容易被面试官考
+					但是开发中会遇到 了解就行 其他的一定要多去理解 都是高频率点
+				</h3>
 				<h3 className="text-xl leading-loose">持续更新中......</h3>
 				<h3 className="text-md py-3">
 					如果大家对知识点有什么疑问 或者是发现存在错误、不足的地方
