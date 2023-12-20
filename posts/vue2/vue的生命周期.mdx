@@ -13,10 +13,10 @@ category: Vue2
 
 在传统的html页面中 我们有四个生命周期
 
--   DOMContentLoaded —— 浏览器已完全加载 HTML，并构建了 DOM 树，但样式表之类的外部资源可能尚未加载完成。
--   load —— 浏览器不仅加载完成了 HTML，还加载完成了所有外部资源：图片，样式等。
--   beforeunload —— 当用户正在离开页面时。
--   unload —— 用户几乎已经离开了
+1.  DOMContentLoaded —— 浏览器已完全加载 HTML，并构建了 DOM 树，但样式表之类的外部资源可能尚未加载完成。
+2.  load —— 浏览器不仅加载完成了 HTML，还加载完成了所有外部资源：图片，样式等。
+3.  beforeunload —— 当用户正在离开页面时。
+4.  unload —— 用户几乎已经离开了
 
 # vue 的生命周期
 
@@ -24,34 +24,34 @@ category: Vue2
 
 ## 创建
 
--   beforeCreate 实例创建前
+1.  beforeCreate 实例创建前
     此阶段的 data、methods、computed、watch 的数据和方法不能被访问
 
--   created 实例创建完成后
+2.  created 实例创建完成后
     此阶段完成数据监听，可以使用数据、更改数据。无法与 Dom 进行交互
 
 ## 挂载
 
--   beforeMount 页面渲染前
+3.  beforeMount 页面渲染前
     此阶段虚拟 Dom 创建完成，即将开始渲染。在此时也可以对数据进行更改，不会触发重新渲染
 
--   mounted 页面渲染完成后
+4.  mounted 页面渲染完成后
     此阶段真实 Dom 渲染完毕，数据完成双向绑定，可以访问到 Dom 节点，对 Dom 进行操作。
 
 ## 更新
 
--   beforeUpdate 响应式数据更新前
+5.  beforeUpdate 响应式数据更新前
     此阶段更改数据，不会造成页面重新渲染。
 
--   updated 响应式数据更新完成后
+6.  updated 响应式数据更新完成后
     避免在此阶段更改数据，因为这可能会导致无限循环的更新。
 
 ## 销毁
 
--   beforeDestroy 实例销毁前
+7.  beforeDestroy 实例销毁前
     我们可以在这时进行收尾工作，比如清除定时器、解除绑定事件
 
--   destroyed 实例销毁完成后
+8.  destroyed 实例销毁完成后
 
 > 拓展
 > keepAlive的生命周期
@@ -71,6 +71,7 @@ category: Vue2
 问：生命周期有哪些 我们在这些生命周期中能做些什么(敲重点)
 
 > 答：生命周期有 beforeCreate、created、beforeMount、mounted、beforeUpdate、updated、beforeDestroy、beforeDestroy、destroyed
+>
 > 通常我们会使用的生命周期有（比较重要的）created、mounted、beforeDestroy 其他的生命周期当然也有用 但是我们相对用的较少
 > 比如 我们会经常在created、mounted 初始化信息及使用网络请求请求数据、在beforeDestroy里做一些清理数据、保存未提交的数据或是提示用户即将离开网页的操作之类的
 
@@ -82,11 +83,13 @@ category: Vue2
 
 问： 父子组件的生命周期执行顺序
 
-> 答：组件渲染的顺序是先父后子，渲染完成的顺序是先子后父
+> 答：
+> 组件渲染的顺序是先父后子，渲染完成的顺序是先子后父
 > 组件更新的顺序是先父后子，更新完成的顺序是先子后父
 > 组件销毁的顺序是先父后子，销毁完成的顺序是先子后父
 
 问：在 created、还是 mounted 里进行异步请求(敲重点)
 
-> 答：如果对页面布局影响不大的异步请求(比如页面布局无论内容大小都是撑满的) 放在 created 还是 mounted 里都无所谓 页面没有组件嵌套的情况下区别也不是很大
+> 答：
+> 如果对页面布局影响不大的异步请求(比如页面布局无论内容大小都是撑满的) 放在 created 还是 mounted 里都无所谓 页面没有组件嵌套的情况下区别也不是很大
 > 如果是嵌套的组件 想让父组件先获得数据 就在 created 里异步获取数据 想让子组件先获取数据 就在 mounted 里异步获取数据(由父子组件的生命周期推出)

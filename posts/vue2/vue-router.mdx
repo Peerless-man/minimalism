@@ -167,14 +167,19 @@ router-view是vue-router的组件 路由对应的组件就是由router-view渲�
 问：路由跳转有哪些方式 他们的区别
 
 > 答： push、replace、go
-> push、replace是跳转到新的指定路径页面 push会向路由栈添加路由 而replace不会添加
-> go是指跳转回之前的页面 比如跳转到当前页面、跳转到上一页、下一页 在用户注册、跳转到详情页编辑数据完成以后可以通过跳转上一页减少路由的添加
-> push和replace都可以携带参数跳转 go只能跳转回之前的页面
+>
+> 1.push、replace是跳转到新的指定路径页面 push会向路由栈添加路由 而replace不会添加
+>
+> 2.go是指跳转回之前的页面 比如跳转到当前页面、跳转到上一页、下一页 在用户注册、跳转到详情页编辑数据完成以后可以通过跳转上一页减少路由的添加
+>
+> 3.push和replace都可以携带参数跳转 go只能跳转回之前的页面
 
 问：路由守卫是什么 有什么用
 
 > 答：路由守卫分为全局路由守卫和组件路由守卫
+>
 > 全局路由守卫分为beforeEach路由进入之前 和 afterEach 路由进入之后两个钩子 我们可以在路由进入之前做一些权限校验、路由获取的操作
+>
 > 组件路由守卫分为 beforeRouteEnter、beforeRouteUpdate、beforeRouteLeave 我们用的比较多的是 beforeRouteEnter、beforeRouteLeave 可以用来在组件内做一些前置的操作 特别是遇到keepAlive组件时
 > 可以在beforeRouteEnter对组件的一些数据加载进行判断是否需要加载 beforeRouteLeave里判断当前页面是否需要缓存等
 
