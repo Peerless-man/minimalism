@@ -1,0 +1,229 @@
+---
+title: 如何封装 Axios
+date: 2023-12-21
+category: Vue2
+---
+
+# Axios 是什么
+
+## 官方解释
+
+<a href="https://www.axios-http.cn/" target="_blank">
+	Axios
+</a>
+
+Axios 是一个基于 promise 网络请求库，作用于 node.js 和浏览器中。 它是 isomorphic 的(即同一套代码可以运行在浏览器和 node.js 中)。在服务端它使用原生 node.js http 模块, 而在客户端 (浏览端) 则使用 XMLHttpRequests。
+
+[XMLHttpRequest](https://developer.mozilla.org/zh-CN/docs/Web/API/XMLHttpRequest/)
+
+# Axios 的优点
+
+1、上手简单 Axios 的 api 简单直观 基本上看一眼就会使用了
+2、Axios 支持 Promise 允许我们更容易地处理异步操作
+3、浏览器和 Node.js 都能使用
+4、Axios 二次封装简单 axios 允许我们修改它的拦截器 在请求前后对请求进行处理
+5、Axios 内置了 CSRF 保护，帮助您更好地保护应用程序免受跨站请求伪造攻击。
+
+# Axios 封装
+
+```js
+import axios from 'axios'
+
+// 设置默认的请求头 可以通过使用axios时 传入headers修改请求头以传入其他类型的参数
+axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
+
+// 创建axios实例
+const service = axios.create({
+	// axios中请求配置有baseURL选项，表示请求URL公共部分
+	baseURL: process.env.BASE_API,
+	// 超时时间 ms
+	timeout: 10000,
+})
+
+// request拦截器
+service.interceptors.request.use(
+	config => {
+		// 如果需要的话，可以在这里带上token
+		config.headers['Authorization'] = 'Bearer ' + getToken()
+
+		// 可以在这里面进行一些校验之类的 比如数据大小，请求重复
+		return config
+	},
+	error => {
+		console.log(error)
+		Promise.reject(error)
+	},
+)
+
+// 响应拦截器
+service.interceptors.response.use(
+	res => {
+		// 未设置状态码则默认成功状态 这里可以用请求的状态来判断 也可以用 后端返回的 code 来判断 还可以两者混合判断 具体要看使用场景 res 表示 response 里面有所有的请求信息 都可以取出来用
+		const code = res.data.code || 200
+		// 获取错误信息
+		const msg = res.data.msg
+		// 二进制数据则直接返回
+		if (
+			res.request.responseType === 'blob' ||
+			res.request.responseType === 'arraybuffer'
+		) {
+			return res.data
+		}
+		// 对错误的code进行展示
+		if (code === 401) {
+			return Promise.reject('无效的会话，或者会话已过期，请重新登录。')
+		} else if (code === 500) {
+			return Promise.reject(new Error(msg))
+		} else if (code === 601) {
+			return Promise.reject('error')
+		} else if (code !== 200) {
+			return Promise.reject('error')
+		} else {
+			return res.data
+		}
+	},
+	error => {
+		console.log('err' + error)
+		let { message } = error
+		if (message == 'Network Error') {
+			message = '后端接口连接异常'
+		} else if (message.includes('timeout')) {
+			message = '系统接口请求超时'
+		} else if (message.includes('Request failed with status code')) {
+			message = '系统接口' + message.substr(message.length - 3) + '异常'
+		}
+		Message({ message: message, type: 'error', duration: 5 * 1000 })
+		return Promise.reject(error)
+	},
+)
+
+export default service
+```
+
+在创建 axios 实例时配置我们需要配置的属性 就可以使用 axios 内部写好的一些规则、方法
+
+```js
+// 创建axios实例
+const service = axios.create({
+	// axios中请求配置有baseURL选项，表示请求URL公共部分
+	baseURL: process.env.BASE_API,
+	// 超时时间 ms
+	timeout: 10000,
+})
+```
+
+通过重写 axios 的 请求拦截器和响应拦截器 可以在请求发出去之前 带上我们想携带的参数 比如 token 之类的 在请求返回结果以后 先整体地对结果进行一次处理 因为不处理的话数据层级会有点多 在很多时候 抛出的异常比较常见时 可以在拦截器的异常里进行通用的拦截处理 加上弹窗之类的给用户提示
+
+```js
+service.interceptors.response.use(
+  (res) => {
+
+    // 二进制数据则直接返回
+    if (
+      res.request.responseType === "blob" ||
+      res.request.responseType === "arraybuffer"
+    ) {
+      return res.data;
+    }
+    // 请求正常 后端抛出了错误提示 对错误进行提示
+    if (code === xxx) {
+      // ......
+    } else {
+      // 没有报错才返回数据
+      return res.data;
+    }
+  },
+  (error) => {
+    console.log("err" + error);
+    let { message } = error;
+    if (message == "Network Error") {
+      message = "后端接口连接异常";
+    }
+    ......
+    return Promise.reject(error); // 请求异常 拒绝promise
+  }
+);
+```
+
+# Axios 使用方式
+
+```js
+// 上面封装方法的使用
+import request from "./request";
+
+// post请求 获取数据
+export function getData(data) {
+  return request({
+    url: '/xxx/xxxx', // 请求地址
+    method: 'post', // 请求方式
+    data: data  // 携带的数据
+  })
+}
+
+// get 请求获取数据
+export function getData(params) {
+  return request({
+    url: '/xxx/xxxx', // 请求地址
+    method: 'get', // 请求方式
+    params: params  // 携带的数据
+  })
+}
+
+// get 获取文件类型的数据
+export function getData(params) {
+  return request({
+    url: '/xxx/xxxx', // 请求地址
+    method: 'get', // 请求方式
+    params: params  // 携带的数据
+    responseType: "blob", // 返回的类型是 bolb
+  })
+}
+
+// 其他方式携带数据 通过headers 传入的数据 axios 会把传入的参数与自身的参数合并到最新的后再请求
+export function getData(params) {
+  return request({
+    url: '/xxx/xxxx', // 请求地址
+    method: 'get', // 请求方式
+    params: params  // 携带的数据
+    headers: {
+      // 传入token
+      Authorization: "Bearer " + getToken()
+    },
+  })
+}
+
+// 还有一些单独封装了axios 的各种方法 使用axios.post(url, data...) 方式调用
+```
+
+!!! success TIPS
+面试官问 axios 的封装 就是想考考你是不是真的做过这个功能 只要回答得上一些 axios 的 create 方法里的基础配置 比如 baseUrl、超时时长、怎么携带 token、重写拦截器(说说拦截器里做了些啥 就是对请求前做了哪些准备工作：比如携带 token 等 请求后做了哪些操作：比如对返回的数据进行简单处理后再返回 对异常进行全局的拦截等)
+
+我之前面试的时候 面试官问我知不知道取消请求用什么方法 我当时还真懵住了 没有取消过 后来才知道 axios 里有个取消请求的方法 cancelToken 它返回了一个函数 再次调用它就能取消请求 比如用户在做某一些数据量大的操作的时候 离开页面了可能就需要取消请求了 不然请求就会一直在后台运行 造成服务器压力大
+!!!
+
+```js
+const { CancelToken } = axios
+
+let cancel
+
+const getData = () => {
+	axios({
+		url: 'http://localhost:8080/test',
+		cancelToken: new CancelToken(c => {
+			//c是一个函数，调用c就可以关闭本次请求
+			cancel = c
+		}),
+	}).then(
+		response => {
+			console.log('成功了', response)
+		},
+		error => {
+			console.log('失败了', error)
+		},
+	)
+}
+
+setTimeout(() => {
+	cancel() // 3秒后取消请求
+}, 3000)
+```

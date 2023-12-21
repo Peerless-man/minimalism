@@ -1,0 +1,114 @@
+---
+title: 什么是插槽
+date: 2023-12-21
+category: Vue2
+---
+
+# 什么是插槽
+
+`Slot` 艺名插槽，花名“占坑” 我们可以理解为`solt`在组件模板中占好了位置 当使用该组件标签时候 组件标签里面的内容就会自动填坑（替换组件模板中 slot 位置） 作为承载分发内容的出口
+
+# 举个栗子 🌰
+
+```vue
+// alert 组件 的使用
+<alert-box>
+  Something bad happened.
+</alert-box>
+
+Vue.component('alert-box', { template: ` // 定义alert组件
+<div class="demo-alert-box">
+      <strong>Error!</strong>
+      <slot></slot>
+    </div>
+` }) // 通过slot alert-box会将内部的文本元素(Something bad happened.)
+插入到slot位置
+```
+
+# 默认插槽
+
+上面的例子 就是默认插槽 用 `<slot></slot>` 在组件内占一个位置 当使用这个组件时 在内部填入元素时组件会将填入的元素插入到 `slot` 位置
+
+# 具名插槽
+
+因为默认插槽只有一个 所以当需要往组件内部 不同的位置插入元素时 默认插槽无法知道具体插入哪里 使用具名插槽就可以将指定名称的插槽内的元素 放到指定名称的 `slot` 处
+
+```vue
+Vue.component('child', { template: ` // child组件
+<div class="child">
+    <slot>默认插槽</slot>
+    <slot name="haveName">具名插槽</slot>
+</div>
+` })
+<template></template>
+
+// 父组件
+<child>
+    <!-- <template>默认插槽</template> 没有名字的可以直接写 -->
+    <template v-slot:default>具名插槽</template>
+    <!-- 具名插槽需要使用v-slot:插槽名称 -->
+    <template v-slot:haveName>哈哈哈</template>
+</child>
+```
+
+# 作用域插槽
+
+当我们在使用插槽时 可能会使用到子组件的数据 可是我们需要在在父组件编写页面去展示它 我们总不能一个插槽写一个数据双向绑定吧 所以就出现了作用域插槽 可以在插槽里返回数据 用户拿到数据就能在父组件进行逻辑、页面 的编写 这样能提升组件可二次开发的能力 element-ui 很多组件都使用了 作用域插槽
+
+比如 `el-upload`
+
+```vue
+<el-upload action="#" list-type="picture-card" :auto-upload="false">
+    <i slot="default" class="el-icon-plus"></i>
+    <!-- 从slot-scope解构出来的file 就是从子组件传出来的 -->
+    <div slot="file" slot-scope="{file}">
+      <img
+        :src="file.url" alt=""
+      >
+    </div>
+</el-upload>
+```
+
+写一个使用了作用域插槽的组件
+
+```vue
+// child 组件
+<template>
+	<slot textProps="子组件的值">
+		<h3>child</h3>
+	</slot>
+
+	<slot name="haveName" nameProps="子组件的值">
+		<h3>xiaozhang</h3>
+	</slot>
+
+	<slot name="user" :user="{ name: '123' }"></slot>
+</template>
+
+// 父组件
+<child> 
+    <!-- 默认插槽如何获取返回值 -->
+    <template v-slot:default="slotProps">
+      来⾃⼦组件数据：{{slotProps.textProps}}
+    </template>
+    <!-- v-slot 的简写是 # -->
+    <template #default="slotProps">
+      来⾃⼦组件数据：{{slotProps.textProps}}
+    </template>
+    <!-- 具名插槽如何获取返回值 -->
+    <template #haveName="slotProps">
+      来⾃⼦组件数据：{{slotProps.nameProps}}
+    </template>
+    <!-- 插槽结构解构返回值 -->
+    <template #haveName="{ slotProps }">
+      来⾃⼦组件数据：{{slotProps.nameProps}}
+    </template>
+    <!-- 插槽结构解构返回值 tips: vue2.6以后的版本已经废弃这个写法 推荐使用v-slot -->
+    <template slot="user" slot-scope="{ user }"> 
+      来⾃⼦组件数据：{{ user.name }}
+    </template>
+    <template v-slot:user="{ user }">
+      来⾃⼦组件数据：{{ user.name }}
+    </template>
+</child>
+```
