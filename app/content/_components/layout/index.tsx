@@ -2,6 +2,7 @@
 import classes from './index.module.scss'
 
 import Header from '../header'
+import BackTop from '../backTop'
 import { useEffect, useState } from 'react'
 import { useCommonStore } from '../../../../hooks/use-common-store'
 
@@ -61,6 +62,7 @@ function Layout({ children }: any) {
 				</div>
 				<div className={`flex-1 h-full overflow-auto`}>{children}</div>
 			</div>
+			<BackTop />
 		</div>
 	)
 }

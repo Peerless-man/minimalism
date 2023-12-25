@@ -1,11 +1,9 @@
 'use client'
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import { Listbox, Transition } from '@headlessui/react'
 
 import GitHub from 'components/gthub'
 import ToggleTheme from '../../../../components/toggle-theme'
-import { HomeIcon, RocketLaunchIcon } from '@heroicons/react/24/outline'
 
 const RenderMenuIconShow = dynamic(() => import('./render-menu-icon'), {
 	ssr: false,
