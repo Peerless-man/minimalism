@@ -10,13 +10,18 @@ category: Vue2
 
 # 举个栗子 🌰
 
-```vue
-// alert 组件 的使用
+alert 组件 的使用
+
+```
 <alert-box>
   Something bad happened.
 </alert-box>
+```
 
-Vue.component('alert-box', { template: ` // 定义alert组件
+定义alert组件
+
+```
+Vue.component('alert-box', { template: `
 <div class="demo-alert-box">
       <strong>Error!</strong>
       <slot></slot>
@@ -33,16 +38,20 @@ Vue.component('alert-box', { template: ` // 定义alert组件
 
 因为默认插槽只有一个 所以当需要往组件内部 不同的位置插入元素时 默认插槽无法知道具体插入哪里 使用具名插槽就可以将指定名称的插槽内的元素 放到指定名称的 `slot` 处
 
-```vue
-Vue.component('child', { template: ` // child组件
+子组件
+
+```
+Vue.component('child', { template: `
 <div class="child">
     <slot>默认插槽</slot>
     <slot name="haveName">具名插槽</slot>
 </div>
 ` })
-<template></template>
+```
 
-// 父组件
+父组件
+
+```
 <child>
     <!-- <template>默认插槽</template> 没有名字的可以直接写 -->
     <template v-slot:default>具名插槽</template>
@@ -84,9 +93,12 @@ Vue.component('child', { template: ` // child组件
 
 	<slot name="user" :user="{ name: '123' }"></slot>
 </template>
+```
 
-// 父组件
-<child> 
+父组件
+
+```vue
+<child>
     <!-- 默认插槽如何获取返回值 -->
     <template v-slot:default="slotProps">
       来⾃⼦组件数据：{{slotProps.textProps}}
@@ -104,7 +116,7 @@ Vue.component('child', { template: ` // child组件
       来⾃⼦组件数据：{{slotProps.nameProps}}
     </template>
     <!-- 插槽结构解构返回值 tips: vue2.6以后的版本已经废弃这个写法 推荐使用v-slot -->
-    <template slot="user" slot-scope="{ user }"> 
+    <template slot="user" slot-scope="{ user }">
       来⾃⼦组件数据：{{ user.name }}
     </template>
     <template v-slot:user="{ user }">

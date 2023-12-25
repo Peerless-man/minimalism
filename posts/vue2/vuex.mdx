@@ -1,0 +1,85 @@
+---
+title: VueX
+date: 2023-12-22
+category: Vue2
+---
+
+# vueX 是什么
+
+官方解释：
+每一个 Vuex 应用的核心就是 store（仓库）。“store”基本上就是一个容器，它包含着你的应用中大部分的状态 (state)。Vuex 和单纯的全局对象有以下两点不同：
+
+1.Vuex 的状态存储是响应式的。当 Vue 组件从 store 中读取状态的时候，若 store 中的状态发生变化，那么相应的组件也会相应地得到高效更新。
+
+2.你不能直接改变 store 中的状态。改变 store 中的状态的唯一途径就是显式地提交 (commit) mutation。这样使得我们可以方便地跟踪每一个状态的变化，从而让我们能够实现一些工具帮助我们更好地了解我们的应用。
+
+个人理解：就是一个公共的存放数据的地方 通过在其他地方引入使用 调用其指定的方法更新数据
+
+# vueX 核心概念
+
+1.state 存放数据的对象
+2.getter 接受 state 作为其第一个参数 可以自定义获取 state 内数据的方法
+3.mutation 唯一可以修改 state 数据的地方
+4.action 异步调用 mutation 中的方法修改 state 数据
+5.module 模块化 如果 state 对象太大了 可以分模块使用
+
+# 使用场景
+
+1.存放一些公共数据 比如用户信息、购物车数据、菜单等
+
+# 提问环节
+
+问：我们在页面中如何获取 vueX 中的数据
+
+> 答：
+>
+> 1.使用 `this.$store.user.userName` 获取 state 为 user 的 userName 值
+> 2.mapState 和 mapGetter
+
+```
+import { mapGetters,mapState } from 'vuex'
+
+export default {
+  // ...
+  computed: {
+  // 使用对象展开运算符将 getter 混入 computed 对象中
+    ...mapGetters([
+      'getCount',
+    ])
+    mapState([
+    // 映射 this.count 为 store.state.count
+    'count'
+])
+  }
+}
+```
+
+问：vueX 的数据在刷新页面以后会不会失效 我们如何解决刷新页面 vueX 数据丢失的情况
+
+> 答：刷新页面会导致 vueX 的数据失效 我们可以使用一些持久化的插件对 vueX 的数据进行持久化 实际上持久化是使用了 localStorage 对数据进行本地存储 在用户刷新页面以后 获取本地数据赋值给 store
+
+!!! success TIPS
+以下内容属于拓展 了解就好 重点了解 mutations 和 actions 的区别 一个是同步的一个是异步的
+!!!
+
+问：如何修改数据
+
+答：
+1.commit
+
+```
+// commit
+this.$store.commit('COUNT_ADD', ...) // 调用mutations的COUNT_ADD方法修改数据
+```
+
+2.dispatch
+
+```
+this.$store.dispatch('addCount', ...) // 可能会先去服务器获取到增加的数据 再调用mutations里的COUNT_ADD方法修改count数据
+```
+
+问：如果有多个模块 如何使用指定模块的数据 或是 修改指定模块的方法
+
+> 答：
+> 如果有多个模块 并且都带有各自的命名空间 (nameSpace) 可以通过各自的名称去使用 比如在获取数据时加一个当前 state 的名称 `this.$store.user.userName` 或者是使用各自的 getter 获取数据 `...mapGetter(['user/getUserName'])` 或者是修改数据 `this.$commit('user/COUNT_ADD')` `...mapActions('user', ['addCount'])`
+> 如果嫌命名空间麻烦 可以自己手动合并每个模块的 getters 并且在主模块里导出 这样使用的时候就不用加命名空间
