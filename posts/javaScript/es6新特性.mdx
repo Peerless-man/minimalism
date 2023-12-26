@@ -1,0 +1,160 @@
+---
+title: ES6新特性
+date: 2023-12-26
+category: JavaScript
+---
+
+# 总结
+
+箭头函数、解构赋值、模板字符串、Promise、let、const、map、set、扩展运算符、模块化、Proxy、装饰器、Generator
+
+!!! success TIPS
+箭头函数、结构赋值、模板字符串、Promise、let、const、扩展运算符、模块化、Proxy 比较重要
+!!!
+
+## 箭头函数
+
+和普通函数比起来没有 this 和 arguments
+
+```js
+const func = () => {
+	console.log(123)
+}
+```
+
+## 解构赋值
+
+```js
+const obj = {
+	name: 'xiaozhang',
+	age: 20,
+}
+
+const { name, age } = obj
+
+// 模板字符串 `${}`
+console.log(`${name}今年${age}岁了`)
+// xiaozhang今年20岁了
+```
+
+## var let const
+
+面试中比较常见的问题是 var、let、const 他们之间的区别 我们可以通过两两比较来回答
+
+### var
+
+1. var 声明的变量会变量提升 也就是说 在声明 var 变量前使用变量 不会报错 因为它会将所有的声明提升到顶层 也就是代码的开头
+2. var 声明变量可以声明多次 但是后续的变量会覆盖之前的
+
+```js
+for (var i = 0; i < 5; i++) {
+	console.log(i)
+}
+// 期待的输出 0 1 2 3 4
+
+// 实际输出 4 4 4 4 4 因为每一次给i赋值 都会将之前的i值给覆盖 并且console.log()是异步执行的 所以会打印出五个4 使用let就不会了
+```
+
+3. var 的作用域是函数作用域
+
+### let
+
+1. let 不存在变量提升 所以不能在声明变量之前使用 专业术语叫暂时性死区
+2. let 定义的变量不能重复声明 会报错
+3. let 作用域是块级作用域
+
+```js
+// 下面if就是一个块 这样两个name是不会互相影响的
+const func1 = () => {
+	let name = '123'
+	if (true) {
+		let name = '234'
+		console.log(name)
+	}
+	console.log(name)
+
+	// 234
+	// 123
+}
+// if块内的 name会被提升到函数作用域里 所以name最终会变成234
+const func2 = () => {
+	var name = '123'
+	if (true) {
+		var name = '234'
+		console.log(name)
+	}
+	console.log(name)
+
+	// 234
+	// 234
+}
+```
+
+### const
+
+const 和 let 的作用域是一样的
+区别如下
+
+1. let 定义的变量可以修改 const 定义的不可以
+
+```js
+const name = '123'
+name = '234' // 会报错 不能修改
+
+let name = '123'
+name = '234' // 不会报错 name会变成234
+```
+
+!!! success TIPS
+const 实际上保证的并不是变量的值不得改动，而是变量指向的那个内存地址所保存的数据不得改动：
+
+对于简单类型的数据，值就保存在变量指向的那个内存地址，因此等同于常量
+对于复杂类型的数据，变量指向的内存地址，保存的只是一个指向实际数据的指针，const 只能保证这个指针是固定的，并不能确保改变量的结构不变
+!!!
+
+2. let/var 定义的变量可以不初始化 但是 const 不可以 必须初始化
+
+```js
+let name // 没问题
+const age // 会报错
+
+```
+
+!!! success TIPS
+使用优先级 const > let > var
+!!!
+
+## 扩展运算符
+
+扩展操作符 用于取出参数对象的所有可遍历属性
+
+```js
+const arr = [1, 2, 3]
+
+console.log(...arr)
+// 1 2 3
+```
+
+## 模块化
+
+ES6 提出的方案，使用 import 和 export 的形式来导入导出模块
+
+```money.js
+let money = -2000
+
+function happy(){
+    if(money > 1000) {
+        return 'I am happy'
+    }else {
+        return 'I am not happy'
+    }
+}
+
+export default happy
+```
+
+```js
+import happy from './money.js'
+```
+
+Proxy 和 Promise 放到后面文章里

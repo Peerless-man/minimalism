@@ -8,10 +8,7 @@ import {
 	allVue3Posts,
 	allEssayPosts,
 	allReactPosts,
-	ReactPosts,
-	EssayPosts,
-	Vue2Posts,
-	Vue3Posts,
+	allJavaScriptPosts,
 } from 'contentlayer/generated'
 import { compareDesc } from 'date-fns'
 
@@ -23,6 +20,10 @@ import { useCommonStore } from '../../../../hooks/use-common-store'
 const defaultMenuList: Menu = [
 	{
 		title: '随笔',
+		children: [],
+	},
+	{
+		title: 'JavaScript',
 		children: [],
 	},
 	{
@@ -55,7 +56,7 @@ function renderMenu({
 	}
 
 	return (
-		<div className="h-full duration-300 bg-white dark:bg-slate-900 text-black dark:text-slate-400">
+		<div className="min-h-[100vh] duration-300 bg-white dark:bg-slate-900 text-black dark:text-slate-400">
 			{menuList && menuList.length
 				? menuList.map(menu => {
 						return (
@@ -118,21 +119,18 @@ function MinimalismMenu() {
 	}, [])
 
 	// 组装菜单子项
-	const initMenuChildren = (
-		posts: EssayPosts[] | ReactPosts[] | Vue2Posts[] | Vue3Posts[],
-		order: boolean = true,
-	) => {
+	const initMenuChildren = (posts: any, order: boolean = true) => {
 		let list: MenuItem[] = []
 
 		// 排序
 		order
-			? posts.sort((a, b) =>
+			? posts.sort((a: any, b: any) =>
 					compareDesc(new Date(b.date), new Date(a.date)),
 			  )
-			: posts.sort((a, b) =>
+			: posts.sort((a: any, b: any) =>
 					compareDesc(new Date(a.date), new Date(b.date)),
 			  )
-		posts.forEach((v: EssayPosts | ReactPosts | Vue2Posts | Vue3Posts) => {
+		posts.forEach((v: any) => {
 			v.show &&
 				list.push({
 					id: v._id,
@@ -153,11 +151,14 @@ function MinimalismMenu() {
 		const vue2Posts = initMenuChildren(allVue2Posts)
 		// Vue3
 		const vue3Posts = initMenuChildren(allVue3Posts)
+		// JavaScript
+		const JavaScriptPosts = initMenuChildren(allJavaScriptPosts)
 
 		defaultMenuList[0].children = diaryPosts
-		defaultMenuList[1].children = vue2Posts
-		defaultMenuList[2].children = vue3Posts
-		defaultMenuList[3].children = reactPosts
+		defaultMenuList[1].children = JavaScriptPosts
+		defaultMenuList[2].children = vue2Posts
+		defaultMenuList[3].children = vue3Posts
+		defaultMenuList[4].children = reactPosts
 
 		setMenuList(defaultMenuList)
 	}
@@ -165,7 +166,7 @@ function MinimalismMenu() {
 	return (
 		<Transition
 			show={menuShow}
-			className={`fixed w-[100%] md:w-[15rem]  h-[calc(100vh-56px)] bg-transparent  z-40 overflow-auto`}
+			className={`fixed w-[100%] md:w-[15rem]  h-[calc(100vh-56px)] bg-transparent z-50 overflow-auto`}
 			enter="transition duration-300 ease-out"
 			enterFrom="transform scale-95 opacity-0"
 			enterTo="transform scale-100 opacity-100"

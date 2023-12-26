@@ -18,6 +18,7 @@ import {
 	allVue2Posts,
 	allVue3Posts,
 	allReactPosts,
+	allJavaScriptPosts,
 } from 'contentlayer/generated'
 import { Post as PostType } from 'contentlayer.config'
 import Link from 'next/link'
@@ -77,6 +78,9 @@ function Post({ params }: { params: { slug: string[] } }) {
 				break
 			case 'essay':
 				newPost = allEssayPosts.find(item => item._id == id)
+				break
+			case 'javaScript':
+				newPost = allJavaScriptPosts.find(item => item._id == id)
 				break
 		}
 

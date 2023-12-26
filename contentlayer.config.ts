@@ -105,7 +105,21 @@ const ReactPosts = defineDocumentType(() => ({
 	computedFields,
 }))
 
+const JavaScriptPosts = defineDocumentType(() => ({
+	name: 'JavaScriptPosts',
+	filePathPattern: `javaScript/**/*.mdx`,
+	contentType: 'mdx',
+	fields,
+	computedFields,
+}))
+
 export default makeSource({
 	contentDirPath: './posts',
-	documentTypes: [Vue2Posts, Vue3Posts, EssayPosts, ReactPosts],
+	documentTypes: [
+		Vue2Posts,
+		Vue3Posts,
+		EssayPosts,
+		ReactPosts,
+		JavaScriptPosts,
+	],
 })
