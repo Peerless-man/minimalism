@@ -12,14 +12,8 @@ import { useCommonStore } from '../../../../hooks/use-common-store'
 import { calcWorkCount } from 'utils/tool'
 import { CalendarDaysIcon, BookOpenIcon } from '@heroicons/react/24/outline'
 import { useTheme } from 'next-themes'
+import { getPostById, getCurrentPostArr } from 'hooks/use-posts'
 
-import {
-	allEssayPosts,
-	allVue2Posts,
-	allVue3Posts,
-	allReactPosts,
-	allJavaScriptPosts,
-} from 'contentlayer/generated'
 import { Post as PostType } from 'contentlayer.config'
 import Link from 'next/link'
 
@@ -52,7 +46,7 @@ function Post({ params }: { params: { slug: string[] } }) {
 
 	useEffect(() => {
 		if (params.slug && params.slug.length) {
-			getPostById(
+			initPostById(
 				params.slug[0],
 				decodeURIComponent(params.slug.join('/') + '.mdx'),
 			)
@@ -64,25 +58,8 @@ function Post({ params }: { params: { slug: string[] } }) {
 		}
 	}, [params.slug])
 
-	const getPostById = (type: string, id: string) => {
-		let newPost: any = null
-		switch (type) {
-			case 'vue2':
-				newPost = allVue2Posts.find(item => item._id == id)
-				break
-			case 'vue3':
-				newPost = allVue3Posts.find(item => item._id == id)
-				break
-			case 'react':
-				newPost = allReactPosts.find(item => item._id == id)
-				break
-			case 'essay':
-				newPost = allEssayPosts.find(item => item._id == id)
-				break
-			case 'javaScript':
-				newPost = allJavaScriptPosts.find(item => item._id == id)
-				break
-		}
+	const initPostById = (type: string, id: string) => {
+		let newPost = getPostById(type, id)
 
 		setPost(newPost)
 		onSetActiveId(id)
@@ -117,21 +94,7 @@ function Post({ params }: { params: { slug: string[] } }) {
 
 	const setPrevAndNext = (type: string = '', id: string = '') => {
 		if (!type || !id) return
-		let arr: any = []
-		switch (type) {
-			case 'vue2':
-				arr = allVue2Posts
-				break
-			case 'vue3':
-				arr = allVue3Posts
-				break
-			case 'react':
-				arr = allReactPosts
-				break
-			case 'essay':
-				arr = allEssayPosts
-				break
-		}
+		let arr: any = getCurrentPostArr(type)
 		let next = null,
 			prev = null,
 			index = -1

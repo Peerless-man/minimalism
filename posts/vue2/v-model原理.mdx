@@ -27,6 +27,10 @@ change(e){
 ```
 
 v-on 原理：通过获取子组件向上 emit 的事件 拿到子组件最新的值 然后更新 data 里的值
-v-bind 原理：通过绑定指定的属性 v-bind 指令获取绑定属性的值(data 最新的值) 然后给当前绑定的组件赋值
+v-bind 原理：通过绑定指定的属性 v-bind 指令获取绑定属性的值(data 里最新的值) 然后给当前绑定的组件赋值
 
 简单的来说 v-model 采用了 v-bind 的数据绑定和 v-on 的事件绑定功能 实现了数据双向绑定
+
+!!! warning TIPS
+注意区分vue的响应式原理和v-model的原理 不要提问的是vue的响应式原理(Object.defineProperty()) 回答成了 v-model的原理 得不偿失
+!!!
