@@ -1,0 +1,48 @@
+---
+title: ==和===的区别
+date: 2023-12-28
+category: JavaScript
+---
+
+## == 和 === 的相同点
+
+他们都用于判断两边的数据是否相等 相等返回 true 不相等返回 false
+
+## == 和 === 的不同点
+
+等于(==)操作符在比较两边的操作数时 会先将两边的数据进行隐式转换 然后再判断两边的值是否相等
+全等操作符不存在隐式转换 所以只有在操作数类型相同 值相同才会为 true 在引用类型比较时 还需要引用地址相同才为 true
+
+### 隐式转换的规则
+
+1.布尔值转数字
+如果任一操作数是布尔值 会将布尔值转为数值再比较
+
+2.字符串转数字
+如果任一操作数是字符串 另外一个操作数是数字 会将字符串转为数值再比较
+
+3.对象获取原始值
+如果一个操作数是对象 另外一个不是对象 会调用对象的 valueOf 方法获取其原始值 再进行前面的转换规则转换后进行比较
+
+4.null 和 undefined 相等
+
+5.NaN 不等于任何值 NaN == NaN 也是 false
+
+6.如果两个操作数都是对象 则比较他们的引用是不是指向同一个对象
+
+```js
+let obj = {
+	name: '123',
+}
+let obj1 = obj
+
+let obj2 = {
+	name: '123',
+}
+console.log(obj == obj1) // true
+console.log(obj === obj1) // true
+console.log(obj == obj2) // false
+console.log(obj === obj2) // false
+console.log(null === null) // true
+console.log(undefined === undefined) // true
+```

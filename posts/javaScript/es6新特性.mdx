@@ -4,7 +4,7 @@ date: 2023-12-26
 category: JavaScript
 ---
 
-# 总结
+## 总结
 
 箭头函数、解构赋值、模板字符串、Promise、let、const、map、set、扩展运算符、模块化、Proxy、生成器(Generator)
 
@@ -12,7 +12,7 @@ category: JavaScript
 箭头函数、结构赋值、模板字符串、Promise、let、const、扩展运算符、模块化、Proxy 比较重要
 !!!
 
-## 箭头函数
+### 箭头函数
 
 和普通函数比起来没有 this 和 arguments
 
@@ -22,7 +22,7 @@ const func = () => {
 }
 ```
 
-## 解构赋值
+### 解构赋值
 
 ```js
 const obj = {
@@ -37,11 +37,11 @@ console.log(`${name}今年${age}岁了`)
 // xiaozhang今年20岁了
 ```
 
-## var let const
+### var let const
 
 面试中比较常见的问题是 var、let、const 他们之间的区别 我们可以通过两两比较来回答
 
-### var
+#### var
 
 1. var 声明的变量会变量提升 也就是说 在声明 var 变量前使用变量 不会报错 因为它会将所有的声明提升到顶层 也就是代码的开头
 2. var 声明变量可以声明多次 但是后续的变量会覆盖之前的
@@ -57,7 +57,7 @@ for (var i = 0; i < 5; i++) {
 
 3. var 的作用域是函数作用域
 
-### let
+#### let
 
 1. let 不存在变量提升 所以不能在声明变量之前使用 专业术语叫暂时性死区
 2. let 定义的变量不能重复声明 会报错
@@ -90,7 +90,7 @@ const func2 = () => {
 }
 ```
 
-### const
+#### const
 
 const 和 let 的作用域是一样的
 区别如下
@@ -124,7 +124,7 @@ const age // 会报错
 使用优先级 const > let > var
 !!!
 
-## 扩展运算符
+### 扩展运算符
 
 扩展操作符 用于取出参数对象的所有可遍历属性
 
@@ -135,7 +135,7 @@ console.log(...arr)
 // 1 2 3
 ```
 
-## 模块化
+### 模块化
 
 ES6 提出的方案，使用 import 和 export 的形式来导入导出模块
 

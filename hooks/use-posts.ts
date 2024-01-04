@@ -7,91 +7,60 @@ import {
 } from 'contentlayer/generated'
 import { compareDesc } from 'date-fns'
 import { Menu, MenuItem } from '../type/menu.type'
+import { Post } from 'contentlayer.config'
 
-const defaultMenuList: Menu = [
-	{
+// 在这里定义 比如 essay 定义他的title 是 随笔 然后文章列表是 allEssayPosts 就可以自动生成菜单了
+const allPosts: Record<string, any> = {
+	essay: {
 		title: '随笔',
-		children: [],
+		posts: allEssayPosts,
 	},
-	{
+	javaScript: {
 		title: 'JavaScript',
-		children: [],
+		posts: allJavaScriptPosts,
 	},
-	{
+	vue2: {
 		title: 'Vue2',
-		children: [],
+		posts: allVue2Posts,
 	},
-	{
+	vue3: {
 		title: 'Vue3',
-		children: [],
+		posts: allVue3Posts,
 	},
-	{
+	react: {
 		title: 'React',
-		children: [],
+		posts: allReactPosts,
 	},
-]
+}
+
+let defaultMenuList: Menu = []
 
 const getPostById = (type: string, id: string) => {
-	let newPost: any = null
-	switch (type) {
-		case 'vue2':
-			newPost = allVue2Posts.find(item => item._id == id)
-			break
-		case 'vue3':
-			newPost = allVue3Posts.find(item => item._id == id)
-			break
-		case 'react':
-			newPost = allReactPosts.find(item => item._id == id)
-			break
-		case 'essay':
-			newPost = allEssayPosts.find(item => item._id == id)
-			break
-		case 'javaScript':
-			newPost = allJavaScriptPosts.find(item => item._id == id)
-			break
-	}
+	let newPost: any = allPosts[type].posts.find((item: Post) => item._id == id)
 
 	return newPost
 }
 
 const getCurrentPostArr = (type: string) => {
 	if (!type) return
-	let arr: any = []
-	switch (type) {
-		case 'vue2':
-			arr = allVue2Posts
-			break
-		case 'vue3':
-			arr = allVue3Posts
-			break
-		case 'react':
-			arr = allReactPosts
-			break
-		case 'essay':
-			arr = allEssayPosts
-			break
-	}
 
-	return arr
+	return allPosts[type].posts
 }
 
 const initMenu = () => {
-	// 日记
-	const diaryPosts = initMenuChildren(allEssayPosts, false)
-	// React
-	const reactPosts = initMenuChildren(allReactPosts)
-	// Vue2
-	const vue2Posts = initMenuChildren(allVue2Posts)
-	// Vue3
-	const vue3Posts = initMenuChildren(allVue3Posts)
-	// JavaScript
-	const JavaScriptPosts = initMenuChildren(allJavaScriptPosts)
-
-	defaultMenuList[0].children = diaryPosts
-	defaultMenuList[1].children = JavaScriptPosts
-	defaultMenuList[2].children = vue2Posts
-	defaultMenuList[3].children = vue3Posts
-	defaultMenuList[4].children = reactPosts
+	defaultMenuList = []
+	Object.keys(allPosts).forEach(v => {
+		let flag = true
+		if (v == 'essay') {
+			// 如果是随笔 则需要另外一种排序方式
+			flag = false
+		}
+		defaultMenuList.push({
+			id: allPosts[v].title,
+			title: allPosts[v].title,
+			children: initMenuChildren(allPosts[v].posts, flag),
+		})
+	})
 
 	return defaultMenuList
 }

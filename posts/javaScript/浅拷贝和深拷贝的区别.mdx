@@ -1,0 +1,84 @@
+---
+title: 浅拷贝和深拷贝的区别
+date: 2023-12-28
+category: JavaScript
+---
+
+## 数据类型
+
+`javascript` 中有两种数据类型
+基本类型 数据存储在栈中
+引用类型 引用地址存在栈中 数据存储在堆中
+
+拷贝就是将数据赋值一份出来放在其他地方
+
+## 浅拷贝
+
+浅拷贝：
+对于基本类型来说 拷贝的栈中的值
+对于引用类型来说 拷贝的是栈中的引用地址 引用地址指向堆内存中的数据 所以浅拷贝的对象修改值 会影响原始对象
+所以说浅拷贝只是拷贝了一层 深层次的引用类型则共享内存地址
+
+```js
+function shallowClone(obj) {
+	const target = {}
+	for (let prop in obj) {
+		if (obj.hasOwnProperty(prop)) {
+			// 只拷贝了第一层 深层次并没有继续拷贝
+			target[prop] = obj[prop]
+		}
+	}
+	return target
+}
+```
+
+浅拷贝的方法:
+Object.assign()
+Array.slice()
+... 扩展运算符等
+
+## 深拷贝
+
+深拷贝用于引用类型 会直接在堆中创建一个新对象 引用地址使用新对象的地址 和原对象没有任何关联 所以修改新对象的值 不会影响原对象
+
+深拷贝方法：
+JSON.stringify
+手写递归循环
+
+```js
+function deepClone (obj, map = new Map()) {
+    // 如果是null或者undefined我就不进行拷贝操作
+    if (obj === null) return obj;
+    //判断obj是不是对象
+    if (obj instanceof Object === false) return obj;
+    if (obj instanceof Date) return new Date(obj);
+    if (obj instanceof RegExp) return new RegExp(obj);
+    // 可能是对象或者普通的值  如果是函数的话是不需要深拷贝
+    if (typeof obj !== "object") return obj;
+​
+    //根据obj类型初始化结果变量
+    let target = Array.isArray(obj) ? [] : {};
+​
+    if (map.get(obj)) {
+        // 已存在则直接返回
+        return map.get(obj)
+    }
+    // 不存在则第一次设置
+    map.set(obj, target)
+​
+    for (let i in obj) {
+        // 判断是否是自身属性
+        if (obj.hasOwnProperty(i)) {
+            //判断数据i的类型
+            if (typeof obj[i] === 'object') {
+                // 👇传递map
+                target[i] = deepClone(obj[i], map);
+            } else {
+                target[i] = obj[i];
+            }
+        }
+    }
+    return target;
+}
+
+```

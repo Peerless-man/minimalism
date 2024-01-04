@@ -1,0 +1,119 @@
+---
+title: apply、call、bind的区别
+date: 2024-1-4
+category: JavaScript
+---
+
+## this
+
+this 是 JavaScript 的一个关键字
+他是函数运行时在函数内部自动生成的一个对象 只能在函数内部使用
+
+简单来说 this 就是函数运行时所在的环境对象
+
+## 为什么要使用 apply、call 、bind
+
+```js
+function Person(name, age) {
+	this.name = name
+	this.age = age
+}
+
+const p = new Person('xiaozhang', 24)
+console.log(p.name) // xiaozhang
+setTimeout(() => {
+	p.name // 没有任何输出
+}, 0)
+```
+
+为什么我们立即执行时 可以打印出来正确的 name 在使用 setTimeout 异步执行时 无法打印出对应的 name 因为我们立即执行时 函数内的 this 指向当前对象 也就是 p 而异步执行时 this 是在 window 环境(全局上下文)中执行的 所以 this 指向 window 不指向 p
+
+当我们遇到这种情况时 就需要使用改变 this 指向的方法来指定正确的 this
+
+### apply
+
+apply 接收两个参数 第一个参数 this 第二个参数 数组(将需要传入的参数以数组的形式传入) 如果第一个参数是 null/undefined 则默认指向 window(全局上下文) 使用 apply 的函数会立即执行 并且只是这一次临时改变 this 指向
+
+```js
+function Person(name, age) {
+	this.name = name
+	this.age = age
+}
+
+Person.prototype.say = function (str, str1) {
+	console.log(this.name + ' ' + str + ' ' + str1)
+}
+
+const p = new Person('xiaozhang', 24) // 其实使用{} js默认给你调用了一次new Function() 简化了操作
+
+const say = p.say // 这里将方法赋值一次 丢失了原型 this也就指向了window
+say('你好', '新年快乐') // 你好 新年快乐
+setTimeout(() => {
+	say('你好', '新年快乐') // 你好 新年快乐
+	// apply 传入数组
+	say.apply(p, ['你好', '新年快乐']) // xiaozhang 你好 新年快乐
+}, 0)
+```
+
+### call
+
+call 接收多个参数 第一个参数 this 后续参数以列表的形式传入(apply 传入的是数组) 如果第一个参数是 null/undefined 则默认指向 window(全局上下文) 使用 call 的函数会立即执行 并且只是这一次临时改变 this 指向
+
+```js
+function Person(name, age) {
+	this.name = name
+	this.age = age
+}
+
+Person.prototype.say = function (str, str1) {
+	console.log(this.name + ' ' + str + ' ' + str1)
+}
+
+const p = new Person('xiaozhang', 24) // 其实使用{} js默认给你调用了一次new Function() 简化了操作
+
+const say = p.say // 这里将方法赋值一次 丢失了原型 this也就指向了window
+say('你好', '新年快乐') // 你好 新年快乐
+setTimeout(() => {
+	say('你好', '新年快乐') // 你好 新年快乐
+	// call 传入参数列表
+	say.call(p, '你好', '新年快乐') // xiaozhang 你好 新年快乐
+}, 0)
+```
+
+### bind
+
+bind 接收多个参数 第一个参数 this 后续参数以列表的形式传入(和 call 一样) 如果第一个参数是 null/undefined 则默认指向 window(全局上下文) 使用 bind 的函数不会立即执行 会返回一个新的函数 this 指向的改变是永久的
+
+```js
+function Person(name, age) {
+	this.name = name
+	this.age = age
+}
+
+Person.prototype.say = function (str, str1) {
+	console.log(this.name + ' ' + str + ' ' + str1)
+}
+
+const p = new Person('xiaozhang', 24) // 其实使用{} js默认给你调用了一次new Function() 简化了操作
+
+const say = p.say // 这里将方法赋值一次 丢失了原型 this也就指向了window
+let newSay = say.bind(p)
+say('你好', '新年快乐') // 你好 新年快乐
+setTimeout(() => {
+	say('你好', '新年快乐') // 你好 新年快乐
+	// bind 传入参数列表 多加一个括号表示立即执行
+	say.bind(p, '你好', '新年快乐')() // xiaozhang 你好 新年快乐
+	newSay('你好', '新年快乐') // xiaozhang 你好 新年快乐
+}, 0)
+```
+
+## apply、call、bind 之间的区别
+
+相同点：
+
+> 1.都能改变函数运行时的 this 指向
+
+区别：
+
+> 1.apply 和 call 参数不同 apply 第二个参数需要传入数组 call 第一个参数以后需要传入参数列表(一个参数一个参数地传入) bind 和 call 的传参方式一致
+> 2.apply 和 call 在使用时会立即调用函数 只是当时可以改变函数的 this 指向 而 bind 不会调用函数 会返回一个新的函数 这个函数的 this 指向永久地被改变了

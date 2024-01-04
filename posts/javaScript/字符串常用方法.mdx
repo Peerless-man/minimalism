@@ -1,0 +1,214 @@
+---
+title: 字符串常用方法
+date: 2023-12-29
+category: JavaScript
+---
+
+## 操作方法
+
+### 增
+
+#### concat
+
+将一个或多个字符串进行拼接 返回一个新的字符串
+
+```js
+let str = 'abc'
+
+let newStr = str.concat('def', 'gh')
+
+console.log(newStr) // abcdefgh
+```
+
+### 截取
+
+#### slice
+
+截取字符串指定区间的字符 不会影响原字符串
+
+```js
+let str = 'abcdef'
+
+let newStr = str.slice(1, 3) // 截取索引(下标)为1到3之间的字符 包括索引(下标)1 不包括索引(下标)3
+
+console.log(newStr) // bc
+```
+
+#### substr
+
+截取字符串指定索引(下标)以后指定长度的字符串 不会影响原字符串
+
+```js
+let str = 'abcdef'
+
+let newStr = str.substr(1, 3) // 截取索引(下标)为1后的字符串 长度为3
+
+console.log(newStr) // bcd
+```
+
+#### substring
+
+截取字符串指定区间的字符 不会影响原字符串
+
+```js
+let str = 'ab cdef'
+
+let newStr = str.substring(1, 4) // 截取索引(下标)为1到4之间的字符 包括索引(下标)1 不包括索引(下标)4
+
+console.log(newStr) // b c
+```
+
+### 改
+
+#### trim、trimLeft、trimRight、trimStart
+
+删除字符串的空格 返回新的字符串 trim 删除字符串前后的所有空格 trimLeft、trimRight 删除字符串前/后的所有字符串 trimStart 删除字符串前的所有空格
+
+```js
+let str = ' abcd ef '
+
+let newStr1 = str.trim()
+let newStr2 = str.trimLeft()
+let newStr3 = str.trimRight()
+let newStr4 = str.trimStart()
+
+console.log('123' + newStr1 + '123') // 123abcd ef123
+console.log('123' + newStr2 + '123') // 123abcd ef 123
+console.log('123' + newStr3 + '123') // 123 abcd ef123
+console.log('123' + newStr4 + '123') // 123abcd ef 123
+```
+
+#### repeat
+
+传入一个参数 指定字符串需要重复多少次
+
+```js
+let str = '123'
+
+let newStr = str.repeat(2)
+
+console.log(newStr) // 123123
+```
+
+#### toLowerCase()、toUpperCase()
+
+切换大小写
+
+```js
+let str = 'aBc'
+
+let newStr1 = str.toLowerCase()
+let newStr2 = str.toUpperCase()
+
+console.log(newStr1) // abc
+console.log(newStr2) // ABC
+```
+
+### 查
+
+#### charAt
+
+返回指定索引(下标)位置的字符
+
+```js
+let str = 'abc'
+
+let s = str.charAt(0)
+
+console.log(s) // a
+```
+
+#### indexOf
+
+返回找到的第一个元素索引(下标)
+
+```js
+let str = 'abbc'
+
+let index = str.indexOf('b')
+
+console.log(index) // 1
+```
+
+#### startWith
+
+判断字符串是否以指定字符串开头 是返回 true 否则返回 false
+
+```js
+let str = 'abbc'
+
+let isStartWithab = str.startsWith('ab')
+let isStartWithbc = str.startsWith('bc')
+
+console.log(isStartWithab) // true
+console.log(isStartWithbc) // false
+```
+
+#### includes
+
+判断字符串是否包含指定字符串 是返回 true 否则返回 false
+
+```js
+let str = 'abbc'
+
+let isIncludeab = str.includes('ab')
+let isIncludebcd = str.includes('bcd')
+
+console.log(isIncludeab) // true
+console.log(isIncludebcd) // false
+```
+
+## 转换方法
+
+#### split
+
+将字符串按照指定字符分割 返回新的数组(split 和 join 配合使用 在很多校验数据、转换数据场景常见)
+
+```js
+let str1 = 'abc'
+
+let arr1 = str1.split('')
+
+let str2 = 'a,b,c'
+let arr2 = str2.split(',')
+
+console.log(arr1) // ['a', 'b', 'c']
+console.log(arr2) // ['a', 'b', 'c']
+```
+
+## 匹配方法
+
+#### replace
+
+传入两个参数 第一个参数是匹配的内容 可以是正则 第二个参数是替换匹配内容的元素 返回替换后的新字符串
+[String.prototype.replace()](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/String/replace)
+
+```js
+let str = '12-3'
+
+let newStr = str.replace('-', '')
+
+console.log(newStr) // 123
+```
+
+#### match
+
+传入一个参数 表示匹配的内容 可以是字符串也可以是正则 返回匹配的数组
+
+```js
+let str = 'abc'
+
+let match = str.match('a')
+console.log(match[0]) // match[0] 表示匹配到的元素
+```
+
+#### search
+
+传入一个参数 表示搜索的内容 可以是字符串也可以是正则 返回元素的索引(下标)
+
+```js
+let str = 'abc'
+
+let index = str.search('a')
+console.log(index) // 0
+```

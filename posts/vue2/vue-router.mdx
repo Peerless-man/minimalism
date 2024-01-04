@@ -4,9 +4,9 @@ date: 2023-12-14
 category: Vue2
 ---
 
-# 路由跳转方式
+## 路由跳转方式
 
-## this.$router.push()
+### this.$router.push()
 
 push方式每次都会在vue-router的路由栈加上一个路由 方便前进和后退
 
@@ -39,7 +39,7 @@ this.$router.push({
 params传参和query传参的区别就是 params不会显示在地址栏上 刷新会丢失 query会显示在地址栏上 刷新不会丢失
 !!!
 
-## this.$router.replace()
+### this.$router.replace()
 
 replace的意思是表示 替换当前的路由 所以不会在路由栈里添加路由 在不需要保存路由和不需要回退的情况下可以使用replace
 
@@ -47,7 +47,7 @@ replace的意思是表示 替换当前的路由 所以不会在路由栈里添�
 this.$router.replace('/user') // 传参数那些和push是一致的
 ```
 
-## this.$router.go()
+### this.$router.go()
 
 go() 就比较简单 参数是需要前进或后退几个路由
 
@@ -59,7 +59,7 @@ this.$router.go(1) // 前进一页
 this.$router.go(-1) // 后退一页
 ```
 
-## vue自定义路由的写法
+### vue自定义路由的写法
 
 ```js
 export const routes = [
@@ -79,9 +79,9 @@ export const routes = [
 ]
 ```
 
-# 路由守卫
+## 路由守卫
 
-## 全局守卫
+### 全局守卫
 
 ```js
 // 这是一个真实项目的路由守卫 一般在main.js里全局注册 这样就能拦截所有的路由跳转
@@ -111,12 +111,12 @@ router.afterEach(() => {
 })
 ```
 
-## $router 和 $route 的区别
+### $router 和 $route 的区别
 
 `$router` 用于路由跳转 可以调用路由跳转的方法 push、go......
 `$route` 用于获取路由的信息 path、name......
 
-## 组件内的守卫
+### 组件内的守卫
 
 ```js
 const Foo = {
@@ -144,7 +144,7 @@ const Foo = {
 组件路由守卫我们用 beforeRouteEnter、beforeRouteUpdate、beforeRouteLeave 在使用beforeRouteEnter时我们获取不到this 因为当前实例还没有被创建 但是我们可以获取vm
 !!!
 
-# 路由 hash模式和history模式的区别
+## 路由 hash模式和history模式的区别
 
 1、hash路由山带有 # 而 history 不带 history比较美观
 2、hash路由变化是通过hashChange来判断 # 后的url是否变化了 从而加载对应的页面内容 hash值的改变并不会对服务器发起页面的请求 而history是通过url变化来判断页面是否改变了 当url改变时会向服务器发起页面请求
@@ -152,7 +152,7 @@ const Foo = {
 4、hash路由不需要后端的配合就能刷新页面 因为是通过前端的路由来改变的视图 并没有请求后端 但是history需要后端的配合才能访问正确的页面
 5、hash兼容IE8以上 history兼容IE10以上
 
-# 小彩蛋
+## 小彩蛋
 
 router-view和keepAlive一起使用
 
@@ -167,7 +167,7 @@ router-view是vue-router的组件 路由对应的组件就是由router-view渲�
 </keep-alive>
 ```
 
-# 提问环节
+## 提问环节
 
 问：路由跳转有哪些方式 他们的区别
 

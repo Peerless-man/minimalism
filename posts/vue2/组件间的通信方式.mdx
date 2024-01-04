@@ -8,7 +8,7 @@ category: Vue2
 重点需要掌握 `props、$emit、vuex、$bus、provide/inject` 其他的了解就好 最好是会
 !!!
 
-# 父传子
+## 父传子
 
 props
 
@@ -73,7 +73,7 @@ $parent
 
 -   $parent 可以获取到父组件的数据 调用父组件的方法
 
-# 子传父
+## 子传父
 
 $emit
 
@@ -101,7 +101,7 @@ $children
 
 -   直接访问子组件实例的属性和方法(返回数组)
 
-# 祖传孙
+## 祖传孙
 
 provide + inject
 
@@ -111,13 +111,13 @@ provide + inject
 
 -   可以在每一代组件绑定v-bind="$attrs" 将组件的属性给透传下去 后代组件可以在$attrs里拿到属性 (element-ui源码里很多地方都使用了这个指令)
 
-# 孙传祖
+## 孙传祖
 
 `$emit + <中间组件 v-on="$listeners" /> + 自定义事件`
 
 -   首先在后代组件中emit事件 通过中间组件使用 v-on="$listeners" 将emit的事件向上传递 最后在祖先自定义事件接收
 
-# 兄弟间
+## 兄弟间
 
 -   Vuex
 

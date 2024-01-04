@@ -1,0 +1,66 @@
+---
+title: JavaScript原型链
+date: 2024-1-4
+category: JavaScript
+---
+
+## JS 原型
+
+在 js 中 其实没有面向对象语言的 class(类)的概念 设计者使用了构造函数来实现继承机制
+
+!!! success TIPS
+ES6 中出现的 class 仅仅只是一个语法糖 让用户在实现原型和继承时更清晰 并不是真正的类
+!!!
+
+### 构造函数
+
+在 JavaScript 中 构造函数和普通函数没有区别 只要是使用 new 关键字去调用一个函数 那么这个函数就是构造函数 在其他面向对象的编程语言里 构造函数是存在于类中的方法 是在创建对象时会调用的函数
+
+使用一个构造函数
+
+```js
+function Person(name, age) {
+	this.name = name
+	this.age = age
+}
+
+// 生成实例
+const p = new Person('xiaozhang', 24) //使用new关键字的函数 就会有构造函数
+console.log(p)
+```
+
+![](/posts/javaScript/prototype.png)
+
+JavaScript 通过构造函数来生成实例 在构造函数中通过 this 赋值的属性或方法 是每个实例的实例属性和实例方法 没有公共属性和方法 所以设计了原型(prototype)来存储公共属性和公共方法
+
+```js
+function Person(name, age) {
+	this.name = name
+	this.age = age
+}
+
+Person.prototype.say = function () {
+	console.log(this.name)
+}
+
+const p = new Person('xiaozhang', 24)
+console.log(p)
+```
+
+![](/posts/javaScript/prototype1.png)
+
+!!! success TIPS 构造函数创建一个实例的过程
+
+1. 创建一个新对象
+2. 赋值给新对象(this 就指向了新对象)
+3. 执行构造函数中的代码(为新对象添加实例属性和实例方法)
+4. 返回新对象
+   !!!
+
+### 原型
+
+JavaScript 在创建函数时 都会生成一个原型(prototype) 原型指向一个对象 就是这个函数的原型对象 原型对象中有一个属性为 constructor 指向该函数 原型对象和函数之间就产生了联系
+
+### 原型链
+
+`__proto__` 通过构造函数创建出来的对象 会带有一个`__proto__`属性(不同浏览器不同 但是都可以通过`__proto__`访问 有些浏览器是`[[prototype]]`) 这个属性会指向改实例对象的构造函数的原型对象 当前实例的原型就可以通过`__proto__`一直向上找 找到原型上的公共属性、公共方法来使用 如果没找到会一直向上查找 直到找到原型为 null 为止

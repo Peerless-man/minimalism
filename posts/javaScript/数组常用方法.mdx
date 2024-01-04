@@ -1,0 +1,290 @@
+---
+title: 数组常用方法
+date: 2023-12-29
+category: JavaScript
+---
+
+## 操作数组
+
+!!! success TIPS
+比较常用的方法 push、pop、shift、unshift、splice、map、forEach、includes、findIndex、join
+!!!
+
+### 增
+
+#### push
+
+向数组尾部添加元素 返回新数组长度
+
+```js
+let arr = [1]
+arr.push(2)
+let len = arr.push(3, 4) // 可以添加多个
+console.log(len) // 4
+console.log(arr) // [1, 2, 3 ,4]
+```
+
+#### unshift
+
+向数组头部添加元素 返回新数组长度
+
+```js
+let arr = [1]
+arr.unshift(2)
+let len = arr.unshift(3, 4) // 可以添加多个
+console.log(len) // 4
+console.log(arr) // [3, 4, 2, 1]
+```
+
+#### splice
+
+splice(index, num, e1, e2......)
+向数组指定位置之后添加/删除元素 index 表示从指定位置开始 num 要删除的元素个数 e1,e2......表示需要新增的元素 返回被删除的元素
+
+```js
+let arr = [1, 2]
+let deleteArr = arr.splice(1, 1, 3, 4)
+console.log(deleteArr) // [2]
+console.log(arr) // [1, 3, 4]
+```
+
+#### concat
+
+创建一个当前数组的副本 将需要添加的元素添加到副本尾部 最后返回新构建的数组 不会影响原数组
+
+```js
+let arr1 = [1]
+
+let arr2 = arr1.concat(2)
+let arr3 = arr1.concat([2, 3])
+let arr4 = arr1.concat(2, [3, 4])
+arr4[0] = 2
+
+console.log(arr1) // [1]
+console.log(arr2) // [1, 2]
+console.log(arr3) // [1, 2, 3]
+console.log(arr4) // [1, 2, 3, 4]
+```
+
+### 删
+
+#### pop
+
+pop 用于删除数组最后一项 并且返回删除的值
+
+```js
+let arr = [1, 2]
+let pop = arr.pop()
+
+console.log(pop) // 2
+console.log(arr) // [1]
+```
+
+#### shift
+
+用于弹出删除数组第一项的值 并且返回删除的值
+
+```js
+let arr = [1, 2]
+let shift = arr.shift()
+
+console.log(shift) // 1
+console.log(arr) // [2]
+```
+
+#### splice
+
+用于从指定位置开始删除数组的元素 返回被删除的数组
+
+```js
+let arr = [1, 2, 3]
+
+let deleteArr = arr.splice(1, 1)
+console.log(arr) // [1, 3]
+console.log(deleteArr) // [2]
+```
+
+#### slice
+
+返回从原数组中截取的部分元素 不会影响原始数组 (pop、shift、splice 都会影响原数组)
+
+```js
+let arr = [1, 2, 3]
+
+let newArr1 = arr.slice(1)
+let newArr2 = arr.slice(1, 2)
+console.log(newArr1) // [2, 3]
+console.log(newArr2) // [2]
+```
+
+### 改
+
+#### splice
+
+修改数组 <a href="#splice">参数</a>
+
+```js
+let arr = [1, 2, 3]
+
+arr.splice(1, 1, 5)
+console.log(arr) // [1, 5, 3]
+```
+
+### 查
+
+#### find/findIndex
+
+find 查找数组中满足指定要求的第一个元素 若未找到返回 undefined
+findIndex 查找数组中满足指定要求的第一个元素的索引(下标) 若未找到返回 -1
+
+```js
+let arr = [1, 2, 3]
+let find = arr.find(item => item == 1)
+let notFind = arr.find(item => item == 100)
+console.log(find) // 1
+console.log(notFind) // undefined
+let findIndex = arr.findIndex(item => item == 1)
+let notFindIndex = arr.findIndex(item => item == 100)
+console.log(findIndex) // 0
+console.log(notFindIndex) // -1
+```
+
+#### indexOf
+
+查找数组中满足指定要求的第一个元素的索引(下标) 若未找到返回 -1
+和 findIndex 比起来 findIndex 可以传入判断方法 indexOf 只能传入参数
+
+```js
+let arr = [1, 1, 2, 3]
+let find = arr.indexOf(1)
+let notFind = arr.indexOf(100)
+console.log(find) // 0
+console.log(notFind) // -1
+```
+
+#### includes
+
+判断要查找的元素是否在数组里 是返回 true 否则返回 false
+
+```js
+let arr = [1, 2, 3]
+
+let match = arr.includes(1)
+console.log(match) // true
+let notMatch = arr.includes(100)
+console.log(notMatch) // false
+```
+
+### 排序方法
+
+#### reverse
+
+反转数组
+
+```js
+let arr = [1, 2, 3]
+let reverse = arr.reverse()
+console.log(reverse) // [3, 2, 1]
+```
+
+#### sort
+
+对数组进行排序
+
+```js
+function compare(a, b) {
+	return a - b // a - b 升序 b - a 降序
+}
+let arr = [1, 3, 2]
+let reverse = arr.sort(compare)
+console.log(reverse) // [1, 2, 13]
+```
+
+[Array.prototype.sort()](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Global_Objects/Array/sort)
+
+### 转换方法
+
+#### join
+
+传入一个分隔符 将数组以分隔符为间隔返回分隔的字符串
+
+```js
+let arr = [1, 3, 2]
+let join = arr.join(',')
+console.log(join) // 1,3,2
+```
+
+### 迭代方法
+
+#### map
+
+循环遍历数组 对数组每一项循环调用传入的方法 返回每一次函数返回的结果组成的数组
+
+```js
+let arr = [1, 3, 2]
+let mapArr = arr.map(v => {
+	return v + 1
+})
+
+console.log(mapArr) // [2 , 4 ,3]
+```
+
+#### forEach
+
+循环遍历数组 对数组每一项循环调用传入的方法 无返回值
+
+```js
+let arr = [1, 3, 2]
+let result = 0
+arr.forEach(v => {
+	result += v
+})
+
+console.log(result) // 6
+```
+
+#### some
+
+循环遍历数组 对每一项都运行传入的函数 如果至少有一项满足函数 则返回 true 否则返回 false
+
+```js
+let arr = [1, 3, 2]
+let result = arr.some(v => v > 2)
+
+console.log(result) // true
+```
+
+#### every
+
+循环遍历数组 对每一项都运行传入的函数 如果每一项都满足函数 则返回 true 否则返回 false
+
+```js
+let arr = [1, 3, 2]
+let result = arr.every(v => v > 2)
+
+console.log(result) // false
+```
+
+#### filter
+
+循环遍历数组 过滤掉不满足的数据 (和 map 的区别就在于 map 每一项都得返回 filter 只返回满足需求的)
+
+```js
+let arr = [1, 3, 2]
+let filterArr = arr.filter(v => v > 2)
+
+console.log(filterArr) // [3]
+```
+
+#### reduce
+
+reduce() 方法对数组中的每个元素按序执行一个提供的 reducer 函数，每一次运行 reducer 会将先前元素的计算结果作为参数传入，最后将其结果汇总为单个返回值。
+
+```js
+let arr = [1, 3, 2]
+let result = arr.reduce((prev, next) => {
+	return prev + next
+}, 0)
+
+console.log(result) // 6
+```
