@@ -28,9 +28,22 @@ console.log(name) // 123 name没有被声明在函数、块代码里 所以在�
 
 #### 块级作用域
 
-块级作用域的变量只能在当前块里被访问 比如 {} 里的使用 let、const 声明变量只能在当前{}里使用 但是 var 申明的变量没有块级作用域 它会提升到最近的作用域里去
+块级作用域的变量只能在当前块里被访问 比如在 {} 里使用 let、const 声明的变量只能在当前 {} 里使用 var 申明的变量没有块级作用域 它会提升到最近的作用域里去
 
-!!! success TIPS
+```js
+const func = () => {
+	if (true) {
+		var name = '234'
+		let age = 20
+	}
+	// 由于 var 声明的 name 不存在块级作用域 被提升到了函数作用域 所以能访问 name
+	// let 声明的 age 存在块级作用域 不能被提升到函数作用域 所以 {} 外没有 age 的定义
+	console.log(name) // 234
+	console.log(age) // Uncaught ReferenceError: age is not defined
+}
+```
+
+!!! note TIPS
 面试回答的重点是什么是作用域 以及有哪些作用域(全局作用域、函数作用域、块级作用域) 解释各自的范围
 !!!
 

@@ -39,7 +39,7 @@ function BackTop() {
 	return (
 		<>
 			<ArrowUpCircleIcon
-				className="fixed bottom-8 right-1 md:right-20 focus:outline-none w-10 h-10 dark:text-violet-100 hover:text-violet-500 dark:hover:text-violet-300 duration-300"
+				className="fixed bottom-8 right-1 md:right-10 focus:outline-none cursor-pointer w-10 h-10 dark:text-violet-100 hover:text-violet-500 dark:hover:text-violet-300 duration-300"
 				aria-hidden="true"
 				onClick={scrollTop}
 			/>

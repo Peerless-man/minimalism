@@ -17,14 +17,6 @@ function renderMenu({
 	menuList: Menu
 	activeId: string
 }) {
-	if (!menuList.length) {
-		return (
-			<div className="hidden md:flex w-full h-full p-2 justify-center items-start">
-				<span className="text-xl font-bold">Loading...</span>
-			</div>
-		)
-	}
-
 	return (
 		<div className="min-h-[100vh] duration-300 bg-white dark:bg-slate-900 text-black dark:text-slate-400">
 			{menuList && menuList.length
@@ -87,6 +79,14 @@ function MinimalismMenu() {
 	useEffect(() => {
 		setMenuList(initMenu())
 	}, [])
+
+	if (!menuList.length) {
+		return (
+			<div className="hidden md:flex w-full h-full p-2 justify-center items-start">
+				<span className="text-xl font-bold">Loading...</span>
+			</div>
+		)
+	}
 
 	return (
 		<Transition

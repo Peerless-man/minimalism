@@ -1,0 +1,194 @@
+---
+title: JavaScript事件模型
+date: 2024-01-08
+category: JavaScript
+---
+
+## 事件
+
+事件是发生在你正在编程的系统中的事情——当事件发生时，系统产生（或“触发”）某种信号，并提供一种机制，当事件发生时，可以自动采取某种行动（即运行一些代码）。事件是在浏览器窗口内触发的，并倾向于附加到驻留在其中的特定项目。这可能是一个单一的元素，一组元素，当前标签中加载的 HTML 文档，或整个浏览器窗口。有许多不同类型的事件可以发生。 -- MDN
+
+## 事件流
+
+当浏览器内发生事件时 这些事件连起来就像一个流一样 按照一定的顺序执行
+
+事件流模型处理顺序：事件捕获 -> 事件处理 -> 事件冒泡(IE 的事件流模型没有事件捕获阶段)
+
+## 事件模型
+
+### 原始事件模型(DOM0 级)
+
+通过 html 绑定
+
+```html
+<button onclick="print()">点我！</button>
+<script>
+	function print() {
+		console.log('123')
+	}
+</script>
+```
+
+通过 js 绑定
+
+```html
+<button id="button">点我！</button>
+<script>
+	function print() {
+		console.log('123')
+	}
+
+	const btn = document.getElementById('button')
+	btn.onclick = print
+</script>
+```
+
+**优点**
+
+1. 绑定速度快
+
+**缺点**
+
+1. 同一个元素 只能绑定一次同类型事件 多次绑定后续绑定的方法会替换原来绑定的 删除事件绑定直接 btn.onclick = null 即可
+1. 仅支持事件冒泡 不支持事件捕获
+
+### 标准事件模型(DOM2 级)
+
+addEventListener 事件绑定
+`addEventListener(eventType, handler, options/useCapture)`
+removeEventListener 事件移除
+`removeEventListener(eventType, handler, options/useCapture)`
+eventType：事件类型 click、resize、mouse 事件等
+handler：回调函数 即触发这个事件时会调用的函数
+options:
+
+-   capture 是否开启事件捕获
+-   once 添加为 true 后 表示只能调用一次 调用后删除事件绑定
+-   passive 设置为 true 时，表示 listener 永远不会调用 preventDefault()
+-   signal AbortSignal，该 AbortSignal 的 abort() 方法被调用时，监听器会被移除。
+
+useCapture：是否启用事件捕获 默认 false
+
+```html
+<body>
+	<button id="button">点我！</button>
+	<script>
+		function print() {
+			console.log('123')
+		}
+
+		const btn = document.getElementById('button')
+		btn.addEventListener('click', print)
+	</script>
+</body>
+```
+
+### IE 事件模型(没人用了)
+
+事件流模型处理顺序： 事件处理 -> 事件冒泡 没有事件捕获阶段
+
+attachEvent 事件绑定
+`attachEvent(eventType, handler)`
+detachEvent 事件移除
+`detachEvent(eventType, handler)`
+
+```html
+<body>
+	<button id="button">点我！</button>
+	<script>
+		function print() {
+			console.log('123')
+		}
+
+		const btn = document.getElementById('button')
+		btn.attachEvent('click', print)
+	</script>
+</body>
+```
+
+## 事件流模型
+
+### 事件冒泡
+
+事件冒泡描述了浏览器如何处理针对嵌套元素的事件
+
+```html
+<body>
+	<div id="container">
+		<button>点我！</button>
+	</div>
+	<pre id="output"></pre>
+	<script>
+		const output = document.querySelector('#output')
+		function handleClick(e) {
+			output.textContent += `你在 ${e.currentTarget.tagName} 元素上进行了点击\n`
+		}
+
+		const container = document.querySelector('#container')
+		const button = document.querySelector('button')
+
+		document.body.addEventListener('click', handleClick)
+		container.addEventListener('click', handleClick)
+		button.addEventListener('click', handleClick)
+	</script>
+</body>
+```
+
+如图所示 虽然我们只点击了 button 按钮 但是还是触发了 #container 和 body 的点击事件 就像是冒泡一样 从内层冒出来
+
+![Alt text](/posts/javaScript/event1.png)
+
+当事件冒泡会触发多个事件处理器时 并且会影响程序的运行结果 我们可以使用 stopPropagation() 停止事件冒泡 点击内层的事件就不会冒泡触发外层的事件
+
+```html
+<body>
+	<div id="container">
+		<button>点我！</button>
+	</div>
+	<pre id="output"></pre>
+	<script>
+		const output = document.querySelector('#output')
+		function handleClick(e) {
+			e.stopPropagation()
+			output.textContent += `你在 ${e.currentTarget.tagName} 元素上进行了点击\n`
+		}
+
+		const container = document.querySelector('#container')
+		const button = document.querySelector('button')
+
+		document.body.addEventListener('click', handleClick)
+		container.addEventListener('click', handleClick)
+		button.addEventListener('click', handleClick)
+	</script>
+</body>
+```
+
+![Alt text](/posts/javaScript/event2.png)
+
+### 事件捕获
+
+事件捕获刚好和事件冒泡相反 它会先触发最外层元素的事件 然后一层一层向下捕获 直到目标位置事件触发 捕获默认是禁用的，你需要在 addEventListener() 的 capture 选项中启用它。
+
+```html
+<body>
+	<div id="container">
+		<button>点我！</button>
+	</div>
+	<pre id="output"></pre>
+	<script>
+		const output = document.querySelector('#output')
+		function handleClick(e) {
+			output.textContent += `你在 ${e.currentTarget.tagName} 元素上进行了点击\n`
+		}
+
+		const container = document.querySelector('#container')
+		const button = document.querySelector('button')
+
+		document.body.addEventListener('click', handleClick, { capture: true })
+		container.addEventListener('click', handleClick, { capture: true })
+		button.addEventListener('click', handleClick)
+	</script>
+</body>
+```
+
+![Alt text](/posts/javaScript/event3.png)

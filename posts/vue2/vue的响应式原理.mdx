@@ -4,7 +4,15 @@ date: 2023-12-07
 category: Vue2
 ---
 
-!!! success TIPS
+---
+
+title: Vue的响应式原理
+date: 2023-12-07
+category: Vue2
+
+---
+
+!!! note TIPS
 理解 vue 是如何使用 Object.defineProperty()来进行数据劫持的就行 源码部分可以在对 vue 熟悉一些 并且 js 基础扎实的时候来学习
 B 站推荐搜珠峰的源码教程学习 也可以找最新的源码讲解来学习 毕竟 vue2 都用 ts 重写了 有些教程也会过时
 !!!
@@ -57,16 +65,16 @@ object.name = 'daming'
 由上图可以得知
 当用户通过修改`object.name = 'xxx'`时 触发了 set 方法 可以知道属性的值被修改了 在使用`{{ object.name }}`的时候 触发了 get 方法 可以知道这个值被使用了
 
-## 简单概述
+## 响应式原理
 
 vue 采用数据代理、数据挟持、发布订阅模式实现响应式
 
 ### 数据挟持 + 发布订阅(重点)
 
-真正实现响应式的是 在 vue 初始化的时候 会将 data 里的数据进行递归遍历 将每一个未被冻结对象里的字段使用 `Object.defineProperty` 挟持一遍 通过自定义每个属性的 get、set 方法(也可以说 getter、setter) 在 get 方法里加上依赖收集 在 set 方法里加上数据更新的通知 当被挟持的属性被使用时 由于触发了 get、set 方法 我们可以知道数据发生了变化 从而达到数据响应式
-进阶(面试时达到重写 get、set 方法即可)：我们在 get 方法里增加了 Dep 依赖收集 当用户设置被挟持的对象的属性值时会触发当前对象的依赖收集(Dep)的 notify 方法 通知页面需要更新
+响应式流程 在 vue 初始化的时候 会将 data 里的数据进行递归遍历 将每一个未被冻结对象里的字段使用 `Object.defineProperty` 挟持一遍 通过自定义每个属性的 get、set 方法(也可以说 getter、setter) 当视图中使用了对象的某一项数据时 触发了对象的 get 方法 我们可以知道这个数据会影响视图 所以要收集他的依赖 当用户修改对象的数据时 触发了 set 方法 我们可以知道数据发生了变化 此时就需要判断这个数据会不会影响视图 也就是去依赖里去找这个数据的依赖 如果找到了就通知视图更新 从而达到数据响应式驱动视图更新
+进阶(面试时回答到重写 get、set 方法即可，如果了解可以多说说)：我们在 get 方法里增加了 Dep 依赖收集 收集了系统里被使用到的数据的依赖 当用户设置被挟持的对象的属性值时 set 会触发当前对象的依赖收集(Dep)的 notify 方法 通知页面需要更新
 
-然后在一段时间内 vue 将需要更新的 dom 进行批处理更新(每次更新肯定都不止一处 批处理更新会好一些)
+然后 vue 使用新的虚拟 dom 和旧的虚拟 dom 进行对比 操作真实 dom 对真实 dom 进行修改 (这里修改的地方不止一处时 会对 nodify 通知更新进行一次批处理更新 也就是一段时间内处理一部分更新 而不是每次有通知更新就立即更新一次)
 
 ### 数据代理(了解)
 
@@ -79,7 +87,7 @@ vue 采用数据代理、数据挟持、发布订阅模式实现响应式
 
 ## vue2 源码解读
 
-!!! success TIPS
+!!! note TIPS
 tip: 只包含了关键代码
 !!!
 
@@ -108,7 +116,10 @@ export function defineReactive(
   // cater for pre-defined getter/setters
   const getter = property && property.get;
   const setter = property && property.set;
-  if ((!getter || setter) && (val === NO_INITIAL_VALUE || arguments.length === 2)) {
+  if (
+    (!getter || setter) &&
+    (val === NO_INITIAL_VALUE || arguments.length === 2)
+  ) {
     // 获取到初始值
     val = obj[key];
   }
@@ -159,7 +170,9 @@ export function defineReactive(
         val = newVal;
       }
       // 这里可能会出现 用户添加了一些新的属性 这些属性没在data里 是后续通过方法调用加的 可能没被代理到 要进行重新代理
-      childOb = shallow ? newVal && newVal.__ob__ : observe(newVal, false, mock);
+      childOb = shallow
+        ? newVal && newVal.__ob__
+        : observe(newVal, false, mock);
 
       dep.notify(); // notify()就是通知数据更新了 需要更新页面
     },

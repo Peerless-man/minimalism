@@ -8,13 +8,13 @@ category: JavaScript
 
 在 js 中 其实没有面向对象语言的 class(类)的概念 设计者使用了构造函数来实现继承机制
 
-!!! success TIPS
+!!! note TIPS
 ES6 中出现的 class 仅仅只是一个语法糖 让用户在实现原型和继承时更清晰 并不是真正的类
 !!!
 
 ### 构造函数
 
-在 JavaScript 中 构造函数和普通函数没有区别 只要是使用 new 关键字去调用一个函数 那么这个函数就是构造函数 在其他面向对象的编程语言里 构造函数是存在于类中的方法 是在创建对象时会调用的函数
+在 JavaScript 中 构造函数和普通函数创建方式一样(构造函数习惯首字母大写) 主要区别是使用方式不同 构造函数需要使用 new 关键字调用 构造函数会创建实例对象并且返回 而普通函数直接调用即可 返回值根据 return 语句决定 在其他面向对象的编程语言里 构造函数是存在于类中的方法 在创建对象时会调用构造函数
 
 使用一个构造函数
 
@@ -25,13 +25,12 @@ function Person(name, age) {
 }
 
 // 生成实例
-const p = new Person('xiaozhang', 24) //使用new关键字的函数 就会有构造函数
+const p = new Person('xiaozhang', 24) //使用new关键字的函数 自带constructor 会返回生成的实例 不使用new 就是一个普通的函数 没有constructor
 console.log(p)
 ```
 
-![](/posts/javaScript/prototype.png)
-
-JavaScript 通过构造函数来生成实例 在构造函数中通过 this 赋值的属性或方法 是每个实例的实例属性和实例方法 没有公共属性和方法 所以设计了原型(prototype)来存储公共属性和公共方法
+![Alt text](/posts/javaScript/prototype.png)
+JavaScript 通过构造函数来生成实例 在构造函数中(constructor)通过 this 赋值的属性或方法 是每个实例的实例属性和实例方法 没有公共属性和方法 所以设计了原型(prototype)来存储公共属性和公共方法
 
 ```js
 function Person(name, age) {
@@ -44,12 +43,14 @@ Person.prototype.say = function () {
 }
 
 const p = new Person('xiaozhang', 24)
+// new Person的时候就会调用this.name = name ......
+
 console.log(p)
 ```
 
-![](/posts/javaScript/prototype1.png)
+![Alt text](/posts/javaScript/prototype1.png)
 
-!!! success TIPS 构造函数创建一个实例的过程
+!!! note TIPS 构造函数创建一个实例的过程
 
 1. 创建一个新对象
 2. 赋值给新对象(this 就指向了新对象)

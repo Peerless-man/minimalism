@@ -186,6 +186,7 @@ function Post({ params }: { params: { slug: string[] } }) {
 					editorId={id}
 					modelValue={post.body.raw}
 					theme={isDark ? 'dark' : 'light'}
+					previewTheme="github"
 				/>
 				<div
 					ref={bottomRef}
@@ -215,7 +216,7 @@ function Post({ params }: { params: { slug: string[] } }) {
 			</div>
 			<div className="w-[0] md:w-[20%] relative overflow-hidden">
 				<div
-					className={`fixed duration-300  h-[calc(100vh-56px)] overflow-auto bg-white dark:bg-slate-900 ${
+					className={`fixed duration-300  h-[calc(100vh-56px)] pb-8 overflow-auto bg-white dark:bg-slate-900 ${
 						catalogShow ? 'block' : 'hidden'
 					}`}
 					style={{ width: 'inherit' }}

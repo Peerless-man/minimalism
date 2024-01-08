@@ -35,7 +35,7 @@ this.$router.push({
 }) // 在路由上的展示为 /user 在当前页面 使用 this.$router.params 获取
 ```
 
-!!! success TIPS
+!!! note TIPS
 params传参和query传参的区别就是 params不会显示在地址栏上 刷新会丢失 query会显示在地址栏上 刷新不会丢失
 !!!
 
@@ -188,6 +188,6 @@ router-view是vue-router的组件 路由对应的组件就是由router-view渲�
 > 组件路由守卫分为 beforeRouteEnter、beforeRouteUpdate、beforeRouteLeave 我们用的比较多的是 beforeRouteEnter、beforeRouteLeave 可以用来在组件内做一些前置的操作 特别是遇到keepAlive组件时
 > 可以在beforeRouteEnter对组件的一些数据加载进行判断是否需要加载 beforeRouteLeave里判断当前页面是否需要缓存等
 
-!!! success TIPS
+!!! note TIPS
 以上路由守卫的使用只是我在工作中遇到过的场景 也许你们在遇到这类场景会有其他更好地解决方法 期待你们的反馈
 !!!

@@ -9,6 +9,22 @@ article {
 	color: #000 !important;
 }
 
+.hljs-comment {
+	color: #4ac448 !important;
+}
+
+.md-editor-catalog-active > span {
+	color: rgb(139 92 246 / var(--tw-text-opacity)) !important;
+}
+
+.md-editor-catalog-link span:hover {
+	color: rgb(139 92 246 / var(--tw-text-opacity)) !important;
+}
+
+blockquote {
+	border-left: 0.25em solid rgb(139 92 246 / var(--tw-text-opacity)) !important;
+}
+
 .dark {
 	h1,
 	h2,
@@ -20,12 +36,14 @@ article {
 	article {
 		color: #94a3b8 !important;
 	}
+	.hljs-comment {
+		color: #6ca448 !important;
+	}
 }
 
 #preview-only-preview-wrapper {
 	padding: 0px 20px 20px 20px;
 }
-
 @media (max-width: 768px) {
 	#preview-only-preview-wrapper {
 		padding: 0px 10px 20px 10px;
