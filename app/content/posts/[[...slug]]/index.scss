@@ -39,6 +39,18 @@ blockquote {
 	.hljs-comment {
 		color: #6ca448 !important;
 	}
+
+	.md-editor-catalog-active > span {
+		color: rgb(196 181 253 / var(--tw-text-opacity)) !important;
+	}
+
+	.md-editor-catalog-link span:hover {
+		color: rgb(196 181 253 / var(--tw-text-opacity)) !important;
+	}
+
+	blockquote {
+		border-left: 0.25em solid rgb(196 181 253 / var(--tw-text-opacity)) !important;
+	}
 }
 
 #preview-only-preview-wrapper {

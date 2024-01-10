@@ -195,7 +195,7 @@ function Post({ params }: { params: { slug: string[] } }) {
 					<div>
 						{prev && prev.show && (
 							<Link
-								className="px-5 py-2 ring-2 duration-500 ring-gray-500 dark:ring-slate-500  hover:text-green-400 dark:hover:text-green-400 hover:ring-green-400 dark:hover:ring-green-400 rounded-full "
+								className="px-5 py-2 ring-2 duration-300 ring-gray-500 dark:ring-slate-500  hover:text-violet-500 dark:hover:text-violet-300 hover:ring-violet-500 dark:hover:ring-violet-300 rounded-full "
 								href={'/content/posts/' + prev.url}
 							>
 								上一篇
@@ -205,7 +205,7 @@ function Post({ params }: { params: { slug: string[] } }) {
 					<div>
 						{next && next.show && (
 							<Link
-								className="px-5 py-2 ring-2 duration-500 ring-gray-500 dark:ring-slate-500 hover:text-green-400 dark:hover:text-green-400 hover:ring-green-400 dark:hover:ring-green-400 rounded-full "
+								className="px-5 py-2 ring-2 duration-300 ring-gray-500 dark:ring-slate-500 hover:text-violet-500 dark:hover:text-violet-300 hover:ring-violet-500 dark:hover:ring-violet-300 rounded-full "
 								href={'/content/posts/' + next.url}
 							>
 								下一篇
