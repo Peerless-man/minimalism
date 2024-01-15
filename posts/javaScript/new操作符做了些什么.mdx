@@ -1,0 +1,69 @@
+---
+title: new操作符做了些什么
+date: 2024-01-15
+category: JavaScript
+---
+
+## 什么是 new
+
+new 运算符允许开发人员创建一个用户定义的对象类型的实例或具有构造函数的内置对象的实例。
+
+简单来说 就是 new 操作符能够创建一个给定构造函数的实例对象
+
+```js
+function Person(name, age) {
+	this.name = name
+	this.age = age
+}
+
+Person.prototype.say = function () {
+	console.log(this.name + this.age + '岁了')
+}
+
+const p = new Person('小明', 20)
+p.say() // 小明20岁了
+console.log(p) // Person {name: '小明', age: 20}
+```
+
+**从上面可以看出**
+new 构造函数 Person 创建出来的实例 能访问构造函数中的属性
+new 构造函数 Person 创建出来的实例 能访问原型上的方法(原型链)
+
+## new 做了什么
+
+!!! note TIPS
+proto 和 [[Prototype]] 是等价的 在谷歌上看是 proto Edge 上看是 [[Prototype]]
+!!!
+
+1. 创建了一个空的新对象 我们可以称之为 newInstance
+2. 如果构造函数的原型(prototype)属性是一个对象 则将 newInstance 的[[Prototype]]指向构造函数的原型(prototype) 否则 newInstance 将保持为一个普通对象 其[[Prototype]]为 Object.prototype
+3. 使用给定参数执行构造函数(constructor) 并将 newInstance 绑定为 this 上下文(构造函数的 this 都指向 newInstance)
+4. 如果构造函数返回非原始值 则该返回值成为整个 new 表达式的结果 否则 如果构造函数未返回任何值或返回了一个原始值 则返回 newInstance（通常构造函数不返回值，但可以选择返回值，以覆盖正常的对象创建过程。）
+
+## 手写 new
+
+```js
+function myNew(Func, ...args) {
+	// 1. 创建新对象
+	const newInstance = {}
+	// 2. 将新对象的 __proto__ 指向原构造函数的原型
+	newInstance.__proto__ = Func.prototype
+	// 3. 执行原函数 绑定this 生成新实例
+	let res = Func.apply(newInstance, args)
+	// 4. 返回新实例 如果执行Func返回了对象 就返回对象 否砸返回新生成的对象
+	return res instanceof Object ? res : newInstance
+}
+
+function Person(name, age) {
+	this.name = name
+	this.age = age
+}
+
+Person.prototype.say = function () {
+	console.log(this.name + this.age + '岁了')
+}
+
+const p = myNew(Person, '小明', 20)
+p.say() // 小明20岁了
+console.log(p) // Person {name: '小明', age: 20}
+```
