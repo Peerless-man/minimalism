@@ -1,0 +1,115 @@
+---
+title: 事件循环
+date: 2024-01-16
+category: JavaScript
+---
+
+## 什么是事件循环
+
+Javascript 是一门单线程语言 单线程语言意味着同一时间内只能做一件事情 所以如何处理同步和异步操作 并且不阻塞线程 就需要使用到事件循环机制
+
+在 Javascript 中 任务可以分为
+
+-   同步任务：立即执行的任务 同步任务一般会直接进入到主线程中执行
+-   异步任务：异步执行的任务 比如定时器(setTimeout) 网络请求(ajax) 等 异步任务进入任务队列 当主线程中的任务执行完后 会将任务队列的任务推入主线程执行
+
+通过不断重复地执行同步任务和异步任务 就是事件循环
+
+## 宏任务和微任务
+
+异步任务分为宏任务和微任务
+
+```js
+console.log(1)
+
+setTimeout(() => {
+	console.log(2)
+})
+
+new Promise(resolve => {
+	console.log(3)
+	resolve('4')
+}).then(res => {
+	console.log(res)
+})
+console.log(5)
+```
+
+如果并不知道宏任务和微任务的情况下 可能会认为的执行顺序是
+1 -> 3 -> 5 -> 2 -> 4
+实际上的执行顺序是
+1 -> 3 -> 5 -> 4 -> 2
+
+由于微任务的优先级高于宏任务 所以 .then() 方法的执行会在 setTimeout 之前 同步任务的优先级高于微任务
+
+### 宏任务
+
+常见宏任务
+
+-   setTimeout/setInterval
+-   引入 script
+-   UI 交互事件/UI render
+-   setImmediate、I/O（Node.js）
+
+当下一个宏任务执行前 如果有微任务就会将微任务放到微任务事件队列里 在执行下一个宏任务之前 先查看微任务事件队列 将微任务依次执行完毕再执行宏任务
+
+### 微任务
+
+微任务执行时机是主函数执行结束之后 当前宏任务执行(指的是宏任务队列)结束之前
+
+常见微任务
+
+-   Promise.then
+-   MutaionObserver
+-   process.nextTick（Node.js）
+
+## async 和 await
+
+async(异步) 和 await 平时都是搭配使用的 可以理解为 async 声明了一个异步方法 await 则是等待异步方法执行 等到执行完成再往下执行代码
+
+### async
+
+async 返回一个 promise
+
+```js
+// func 和 asyncFunc 是等效的
+function func() {
+	return Promise.resolve('1')
+}
+
+async function asyncFunc() {
+	return '1'
+}
+```
+
+### await
+
+await 命令后面是一个 Promise 对象 返回该对象的结果 如果不是 Promise 就直接返回对应的值
+
+```js
+async function func() {
+	// 等同于
+	// return 123
+	return await 123
+}
+func().then(res => console.log(res)) // 123
+```
+
+await 会阻塞后面的代码执行 将后续的代码加入微任务队列 然后先执行同步代码再执行阻塞的代码
+
+```js
+async function func1() {
+	console.log(1)
+	await func2()
+	console.log(2) // 阻塞
+}
+
+async function func2() {
+	console.log('func2')
+}
+
+func1()
+console.log(3)
+```
+
+执行顺序是 1 -> func2 -> 3 -> 2
