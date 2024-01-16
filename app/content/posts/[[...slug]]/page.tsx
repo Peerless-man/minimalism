@@ -224,6 +224,8 @@ function Post({ params }: { params: { slug: string[] } }) {
 					<MdCatalog
 						style={{ maxWidth: 'inherit' }}
 						editorId={id}
+						offsetTop={80}
+						scrollElementOffsetTop={60}
 						scrollElement={scrollElement}
 					/>
 				</div>
