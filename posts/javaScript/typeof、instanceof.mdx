@@ -1,0 +1,95 @@
+---
+title: typeof、instanceof区别
+date: 2024-01-08
+category: JavaScript
+---
+
+## typeof
+
+`typeof` 操作符返回一个字符串 表示未经计算的操作数的类型
+
+```js
+console.log(typeof 1) // number
+console.log(typeof '1') // string
+console.log(typeof undefined) // undefined
+console.log(typeof true) // boolean
+console.log(typeof Symbol()) // symbol
+console.log(typeof null) // object
+console.log(typeof []) // object
+console.log(typeof {}) // object
+console.log(typeof console) // object
+console.log(typeof console.log) // function
+```
+
+typeof 对于普通类型来说 返回的是普通类型对应的类型 比如 对于数字返回 number 对于字符串返回 string 但是对于 null 会返回 object 这是特例 对于引用类型来说 数组、对象返回的是 object 只有方法会返回 function
+
+## instanceof
+
+`instanceof` 运算符用于检测构造函数的 `prototype` 是否出现在了某个实例对象的原型链上
+
+```js
+const Person = function () {}
+let p = new Person()
+console.log(p instanceof Person) // true
+let str = 'string'
+let str1 = new String('123')
+console.log(str instanceof String) // false
+console.log(str1 instanceof String) // true
+```
+
+手写 instanceof
+
+```js
+function myInstanceof(current, target) {
+	// 如果current不是对象或者是null 直接就返回了
+	if (typeof current !== 'object' || current === null) return false
+
+	// 获取current对象的原型
+	let proto = Object.getPrototypeOf(current)
+
+	while (true) {
+		if (proto === null) return false // 如果原型是null 返回false
+		if (proto === target.prototype) return true // 如果current的原型和target的原型相等 返回true
+		proto = Object.getPrototypeOf(proto) // 如果没return 就继续向上找
+	}
+}
+```
+
+## 相同
+
+都是判断数据类型的方法
+
+## 区别
+
+-   typeof 返回的是变量的基本类型 instanceof 返回的是布尔值
+-   instanceof 可以准确的判断引用数据类型 不能判断基础数据类型
+-   typeof 能准确地判断基础数据类型 但是判断引用数据类型时 只能返回 `object` 和 `function` 并且判断 null 的时候会判断成`object`
+
+如果需要通用的检测数据类型 可以使用 `Object.prototype.toString` 统一返回格式 `[object Xxx]` 的字符串
+
+```js
+console.log(Object.prototype.toString.call(1)) // [object Number] 不加上call返回的是[object Object]
+console.log(Object.prototype.toString.call('1')) //  [object String]
+console.log(Object.prototype.toString.call(undefined)) //  [object Undefined]
+console.log(Object.prototype.toString.call(true)) // [object Boolean]
+console.log(Object.prototype.toString.call(Symbol())) //  [object Symbol]
+console.log(Object.prototype.toString.call(null)) //  [object Null]
+console.log(Object.prototype.toString.call([])) //  [object Array]
+console.log(Object.prototype.toString.call({})) //  [object Object]
+console.log(Object.prototype.toString.call(console)) //  [object Object]
+console.log(Object.prototype.toString.call(console.log)) //  [object Function]
+```
+
+## 定义一个通用的判断数据类型的方法
+
+```js
+function returnType(target) {
+	if (typeof target !== 'object') {
+		return typeof target
+	}
+
+	return Object.prototype.toString
+		.call(target)
+		.replace(/^\[object (\S+)\]$/, '$1')
+}
+```

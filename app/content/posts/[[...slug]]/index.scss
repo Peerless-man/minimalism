@@ -25,6 +25,11 @@ blockquote {
 	border-left: 0.25em solid rgb(139 92 246 / var(--tw-text-opacity)) !important;
 }
 
+.medium-zoom-image {
+	border: 2px solid rgb(139 92 246 / 0.5);
+	border-radius: 3px;
+}
+
 .dark {
 	h1,
 	h2,
@@ -50,6 +55,10 @@ blockquote {
 
 	blockquote {
 		border-left: 0.25em solid rgb(196 181 253 / var(--tw-text-opacity)) !important;
+	}
+
+	.medium-zoom-image {
+		border: none;
 	}
 }
 

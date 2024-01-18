@@ -1,0 +1,59 @@
+---
+title: 事件委托
+date: 2024-01-12
+category: JavaScript
+---
+
+## 什么是事件委托
+
+事件委托 就是把子元素的事件(click 等事件) 委托到父元素上 当用户点击子元素(目标元素)时 会通过事件冒泡触发父元素绑定的事件
+前面说到 事件流一般会经过三个阶段 事件捕获阶段 -> 目标阶段 -> 事件冒泡阶段 事件委托就是通过事件冒泡完成的
+
+## 举个栗子 🌰
+
+像下面的代码那样 其实每一个 li 绑定的事件都是相同的 如果有很多 li 的话 我们需要循环去给每一个都加上点击事件 并且当 li 出现增加时 我们需要去再次添加点击事件 造成了代码冗余、复杂
+
+```html
+<ul>
+	<li>1</li>
+	<li>2</li>
+	<li>3</li>
+	<li>4</li>
+</ul>
+<script>
+	const liList = document.querySelectorAll('li')
+	liList.forEach(v => {
+		v.onclick = function (e) {
+			console.log(e.target.innerHTML)
+		}
+	})
+</script>
+```
+
+而当我们使用事件委托 我们就只需要在 ul 上绑定事件 点击 li 时 事件冒泡会触发 ul 绑定的事件 我们可以获取到触发点击事件的 li
+
+```html
+<ul id="ul">
+	<li>1</li>
+	<li>2</li>
+	<li>3</li>
+	<li>4</li>
+</ul>
+<script>
+	const ul = document.getElementById('ul')
+	ul.onclick = function (e) {
+		console.log(e.target.innerHTML)
+	}
+</script>
+```
+
+## 适用场景
+
+适合事件委托的事件
+
+-   click、mousedown、mouseup、keydown、keyup、keypress
+
+不适合事件委托的事件
+
+-   focus、blur 由于他们没有事件冒泡阶段 所以无法进行事件委托
+-   mousemove、mouseout 虽然有事件冒泡 但是只能通过不断变化的位置去计算定位 不做防抖的话很消耗性能

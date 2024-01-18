@@ -1,0 +1,255 @@
+---
+title: DOM常见操作
+date: 2024-01-18
+category: JavaScript
+---
+
+## DOM 是什么
+
+DOM（Document Object Model——文档对象模型）是用来呈现以及与任意 HTML 或 XML 文档交互的 API。DOM 是载入到浏览器中的文档模型，以节点树的形式来表现文档，每个节点代表文档的构成部分（例如：页面元素、字符串或注释等等）。
+
+## DOM 操作
+
+### 查找节点
+
+常用
+
+-   querySelector
+-   querySelectorAll
+-   getElementById
+-   getElementByClassName
+-   getElementByTagName
+
+#### querySelector
+
+传入任何有效的 css 选择器，即可返回第一个匹配的 DOM 元素 如果没有找到元素 返回 null
+
+```js
+document.querySelector('ul')
+document.querySelector('.test1')
+document.querySelector('#test3')
+document.querySelector('[name="username"]')
+document.querySelector('ul > li')
+```
+
+#### querySelectorAll
+
+传入任何有效的 css 选择器，即可返回所有匹配的 DOM 元素列表(NodeList) 如果没有找到元素 返回 空列表
+
+```js
+document.querySelectorAll('ul')
+document.querySelectorAll('.test1')
+document.querySelectorAll('#test3')
+document.querySelectorAll('[name="data"]')
+document.querySelectorAll('ul > li')
+```
+
+#### getElementById
+
+根据 id 获取目标元素 未找到目标元素返回 null
+
+```js
+const target = document.getElementById('test')
+```
+
+#### getElementsByClassName
+
+根据类名获取目标元素列表(HTMLCollection) 未找到目标元素返回空列表
+
+```js
+const testList = document.getElementsByClassName('test')
+```
+
+#### getElementsByTagName
+
+根据标签获取目标元素列表(HTMLCollection) 未找到目标元素返回空列表
+
+```js
+const testList = document.g('test')
+```
+
+### 创建节点
+
+#### createElement
+
+创建一个元素 接受一个参数 创建元素的标签名
+
+```js
+const div = document.createElement('div') // <div></div>
+```
+
+#### createTextNode
+
+创建一个文本元素 参数是文本
+
+```js
+const text = document.createTextNode('content') // "content"
+```
+
+#### createDocumentFragment
+
+创建一个文档片段 表示一种轻量级的文档 用来存储临时节点 然后把这些节点一次性加入文档中 但是片段本身不会被加入文档 只加入内部的节点
+
+```js
+const fragment = document.createDocumentFragment() // #document-fragment
+
+const div = document.createTextNode('123')
+fragment.appendChild(div)
+document.body.appendChild(fragment)
+// 页面内出现了 123 但是 123 外面是 body 没有fragment
+```
+
+#### createAttribute
+
+创建属性
+
+```js
+const div = document.createElement('div') // 创建一个div元素
+
+const attr = document.createAttribute('class') // 创建一个class属性
+attr.value = 'test' // 给 class 增加值
+
+div.setAttributeNode(attr) // 给div增加属性
+console.log(div) // <div class="test"></div>
+```
+
+### 新增节点
+
+#### innerHTML
+
+替换元素内部的内容 如果元素内部内容需要整体替换 可以使用 innerHTML 如果只是需要插入新的内容 保留旧的内容 则不可以
+
+```html
+<body>
+	<div>
+		<span>123</span>
+	</div>
+	<script>
+		const divList = document.getElementsByTagName('div')
+		divList[0].innerHTML = '<span>哈哈哈</span>' // 原本是 <span>123</span> 现在是 <span>哈哈哈</span>
+		document.body.appendChild(div)
+	</script>
+</body>
+```
+
+#### appendChild
+
+把一个子节点添加到父节点的最后一个子节点
+
+```html
+<body>
+	<ul>
+		<li>1</li>
+		<li>2</li>
+		<li>3</li>
+		<li>4</li>
+	</ul>
+	<script>
+		const ul = document.getElementsByTagName('ul')
+		const li = document.createElement('li')
+		li.innerHTML = '5'
+		ul[0].appendChild(li)
+	</script>
+</body>
+```
+
+![Alt text](/posts/javaScript/dom1.png)
+
+#### insertBefore
+
+将新的子元素插入到已有子元素的前面
+`parentElement.insertBefore(newElement, existingElement)`
+
+-   `parentElement` 父元素
+-   `newElement` 新的子元素
+-   `existingElement` 已经存在的子元素
+
+```html
+<body>
+	<ul>
+		<li>1</li>
+		<li>2</li>
+		<li>3</li>
+		<li>4</li>
+	</ul>
+	<script>
+		const ul = document.getElementsByTagName('ul')
+		const li1 = document.getElementsByTagName('li')[0]
+		const li = document.createElement('li')
+		li.innerHTML = '5'
+		ul[0].insertBefore(li, li1)
+	</script>
+</body>
+```
+
+![Alt text](/posts/javaScript/dom2.png)
+
+### setAttribute
+
+给元素增加属性
+`setAttribute(attr, value)`
+
+-   `attr` 属性
+-   `value` 属性值
+
+```js
+const div = document.createElement('div')
+div.setAttribute('class', 'test') // <div class="test"></div>
+```
+
+### 删除节点
+
+#### removeChild
+
+找到目标元素的父元素 然后通过父元素的 removeChild 把目标元素删除
+
+```html
+<body>
+	<ul>
+		<li>1</li>
+		<li>2</li>
+		<li>3</li>
+		<li>4</li>
+	</ul>
+	<script>
+		const ul = document.getElementsByTagName('ul')
+		const target = document.getElementsByTagName('li')[0]
+		ul[0].removeChild(target)
+	</script>
+</body>
+```
+
+![Alt text](/posts/javaScript/dom3.png)
+
+### 更新节点
+
+#### innerHTML
+
+直接替换元素内部内容 可以替换文本 和 HTML 片段
+
+```html
+<body>
+	<div>
+		<span>123</span>
+	</div>
+	<script>
+		const divList = document.getElementsByTagName('div')
+		divList[0].innerHTML = '<span>哈哈哈</span>' // 原本是 <span>123</span> 现在是 <span>哈哈哈</span>
+		document.body.appendChild(div)
+	</script>
+</body>
+```
+
+#### innerText textContent
+
+可以替换/获取元素内部所有(嵌套的也能取到)文本 区别是 innerText 只能获取到未设置隐藏的文本 textContent 可以获取所有的文本
+
+#### style
+
+可以获取/设置元素的 style
+
+```js
+const div = document.getElementById('text')
+div.style.color = 'red'
+console.log(div.style.color) // red
+```
